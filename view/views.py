@@ -77,6 +77,8 @@ def process_message(request):
             print("NN: " + NN)
         else: NN = None
 
+        print("connection successful!")
+
         #whoQuestion(actor, person, relationship)
         output_message = cont_plan.whoQuestion(NNP, None, NN)
 
