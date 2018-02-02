@@ -1,0 +1,485 @@
+*,
+*:after,
+*:before {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
+}
+
+/* Clearfix hack by Nicolas Gallagher: http://nicolasgallagher.com/micro-clearfix-hack/ */
+.clearfix:before,
+.clearfix:after {
+    content: " ";
+    display: table;
+}
+
+.clearfix:after {
+    clear: both;
+}
+
+@font-face {
+	font-family: 'OpenSans-Light';
+	src: 
+	url(font/OpenSans/OpenSans-Light.ttf) format('truetype');
+}
+
+@font-face {
+	font-family: 'Montserrat-Bold';
+	src: 
+	url(font/Montserrat/Montserrat-Bold.ttf) format('truetype');
+}
+
+@font-face {
+	font-family: 'Arrows';
+	src: 
+	url(font/Arrows/arrows.ttf) format('truetype');
+}
+
+html, body {
+	height: 100%;
+	width: 100%;
+	font-size: 100%;
+	font-family: OpenSans-Light;	
+	padding: 0; 
+	margin: 0; 
+	-webkit-font-smoothing: subpixel-antialiased;
+}
+
+a {
+	text-decoration: none;
+	color: #4e3c3e;
+	outline: none;
+}
+
+ul {
+	list-style: none;
+	position: relative;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 50px;
+}
+
+section {
+    display: -webkit-flex;
+    display: flex;
+    max-height: 2597px;
+    /* float: left; */
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-align-items: center;
+    align-items: center;
+}
+
+input, button {
+	outline: none;
+	border: none;
+	border-color: rgba(255, 255, 255, 0);
+}
+
+/* Scroll bar */
+::-webkit-scrollbar {
+    width: 8px;
+	background-color: #000000;
+}
+ 
+/* Track */
+::-webkit-scrollbar-track {
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background-color: #bfbfbf;
+    height: 2px;
+}
+::-webkit-scrollbar-thumb:window-inactive {
+	background-color: #bfbfbf; 
+	
+}
+
+.vertical-align {
+	position: absolute;
+	top: 50%;
+	-webkit-transform: translateY(-50%);
+	-ms-transform: translateY(-50%);
+	transform: translateY(-50%);
+}
+
+/* Login Page */
+.login-box {
+	position: relative;
+	margin: auto;
+	width: 350px;
+	height: 250px;
+}
+
+.login-container {
+	position: relative;
+	float: left;
+	/* height: 50%; */
+	padding: 0px 0px 10px 0px;
+	width: 100%;
+}
+
+.login-input {
+	width: 100%;
+	float: right;
+	height: 100px;
+	/* background-color: #fafafa; */
+	color: #343434;
+	font-size: 15px;
+	height: 30px;
+	font-family: OpenSans-Light;
+	/* padding: 5px 15px; */
+	margin: 20px 0px;
+	border-bottom: 2px solid #343434;
+}
+
+.login-text {
+	color: #343434;
+	font-size: 20px;
+	width: 30%;
+	font-size: 18px;
+	margin: 0px 20px 0px 0px;
+	font-family: Montserrat-Bold;
+	text-transform: uppercase;
+}
+
+.login-btn {
+	color: #ffffff;
+	background-color: #4974ed;
+	font-size: 15px;
+	font-family: Montserrat-Bold;
+	text-transform: uppercase;
+	padding: 10px 15px;
+	border-radius: 2px;
+	/* width: 80px; */
+	height: 40px;
+	margin: 10px 0px;
+	position: relative;
+	float: right;
+}
+
+.login-btn:hover, :active {
+	background-color: #0043ff;
+}
+
+.reg-link {
+	color: #4974ed;
+	margin-top: 10px;
+	position: relative;
+	float: left;
+	font-size: 15px;
+	width: 200px;
+}
+
+/* Chat Page */
+.story-container  {
+	position: relative;
+	float: left;
+	width: 70%;
+	height: 100%;
+}
+
+.story-box {
+	width: 100%;
+	height: 100%;
+	padding: 25px 50px;
+}
+
+.story-title {
+	font-size: 15px;
+	color: #343434;
+	text-transform: uppercase;
+	font-family: OpenSans-Light;
+}
+
+.chapter-title {
+	font-size: 30px;
+	position: relative;
+	float: left;
+	width: 100%;
+	padding: 20px 0px 0px 0px;
+	color: #343434;
+	font-family: Montserrat-Bold;
+}
+
+.story-header {
+	position: relative;
+	float: left;
+	width: 100%;
+}
+
+.story-footer {
+	position: absolute;
+	bottom: 0px;
+	height: 55px;
+	width: 100%;
+}
+
+.page-progress {
+	position: relative;
+	margin: auto;
+	width: 530px;
+	height: 55px;
+}
+
+.page-number {
+	font-size: 15px;
+	font-family: OpenSans-Light;
+	color: #343434;
+	position: relative;
+	float: left;
+}
+
+.next-page {
+	font-size: 20px;
+	color: #4974ed;
+	font-family: Arrows;
+	margin: 0px 100px;
+	position: relative;
+	float: left;
+}
+
+.next-page:before {
+	content: 'e';
+}
+
+.previous-page:before {
+	content: 'h';
+}
+
+.next-page:hover {
+	color: #134ff6;
+}
+
+.dropbtn {
+	color: #343434;
+	background-color: #ffffff;
+	border-color: #343434;
+	font-family: Montserrat-Bold;
+	/* padding: 16px; */
+	font-size: 16px;
+	border: none;
+	cursor: pointer;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+    position: relative;
+    float: right;
+    display: inline-block;
+    text-transform: uppercase;
+    font-size: 15px;
+    font-family: Montserrat-Bold;
+    margin: 0px 0px 0px 50px;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f6f6f6;
+    min-width: 160px;
+    /* margin-top: 10px; */
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+	font-family: Montserrat-Bold;
+	color: #343434;
+	padding: 12px 16px;
+	text-decoration: none;
+	display: block;
+	font-size: 12px;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #efefef}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {
+    color: #4974ed;
+}
+
+.bookmark-btn {
+	width: 150px;
+}
+
+.story-content {
+	font-size: 16px;
+	line-height: 1.8em;
+	font-family: OpenSans-Light;
+	position: relative;
+	float: left;
+	margin-top: 20px;
+}
+
+.chat-container {
+	position: relative;
+	float: left;
+	width: 30%;
+	height: 100%;
+	background-color: #f6f6f6;
+}
+
+.chat-box {
+	width: 100%;
+	height: 100%;
+}
+
+.chat-footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	border-top: 1px solid #e8e8e8;
+	background-color: #f6f6f6;
+}
+
+.message-container {
+	position: relative;
+	float: left;
+	height: 100%;
+	text-align: left;
+	padding: 20px;
+	color: #343434;
+	width: 90%;
+	overflow: hidden;
+	resize: none;
+	background-color: #f6f6f6;
+	border: none;
+	font-family: OpenSans-Light;
+	font-size: 14px;
+}
+
+.send-message {
+	position: absolute;
+	right: 15px;
+	width: 5%;
+	top: 36%;
+	color: #4974ed;
+	font-family: Arrows;
+}
+
+.send-message:before {
+	content: 'g';
+}
+
+.chat-bubble-container {
+	position: relative;
+	float: left;
+	width: 100%;
+	margin: 5px;
+}
+
+.chat-area {
+	position: relative;
+	float: left;
+	height: 69%;
+	width: 100%;
+	padding: 10px 25px;
+	background-color: #f6f6f6;
+	overflow: auto;
+}
+
+.chat-bubble {
+	border-radius: 0px 5px 5px 5px;
+	/* margin: 5px 0px; */
+	font-size: 14px;
+	overflow: visible;
+	max-width: 80%;
+	float: left;
+	padding: 10px 15px;
+	color: #343434;
+	background-color: #ffffff;
+	text-align: left;
+}
+
+.chat-bubble:before {
+	content: ' ';
+	position: absolute;
+	width: 0;
+	height: 0;
+}
+
+.chat-bubble:after{
+	content: ' ';
+	position: absolute;
+	width: 0;
+	height: 0;
+	left: -10px;
+	right: auto;
+	top: 0px;
+	bottom: auto;
+	border: 15px solid;
+	border-color: #4974ed transparent transparent transparent;
+}
+
+.user:after {
+	left: auto;
+	right: -10px;
+	border-color: #ffffff transparent transparent transparent;
+}
+
+.agent {
+	background-color: #4974ed;
+	color: #ffffff;
+}
+
+.user {
+	background-color: #ffffff;
+	float: right;
+}
+
+.chat-header {
+	position: relative;
+	float: left;
+	top: 0px;
+	height: 110px;
+	width: 100%;
+	padding: 15px 25px;
+}
+
+.agent-icon {
+	background-image: url('img/robot.png');
+	background-size: contain;
+	width: 80px;
+	height: 80px;
+	position: relative;
+	float: left;
+}
+
+.agent-name {
+	color: #343434;
+	position: relative;
+	float: left;
+	width: 100px;
+	padding: 25px;
+	font-size: 20px;
+}
+
+/* Register Page */
+.reg-container {
+	height: 460px;
+}
+
+.back-btn {
+	margin: 10px 20px;
+	background-color: #85a2f5;
+}
+
+.back-btn:hover {
+	background-color: #0043ff;
+}

@@ -1,0 +1,178 @@
+<html>
+	<head>
+        {% load static %}
+		<link rel = 'stylesheet' type = 'text/css' href = '{% static 'css/components.css' %}'>
+	</head>
+	
+	<script src='{% static 'js/jquery-3.2.1.min.js' %}'></script>
+    <script src='{% static "js/js.cookie.js" %}'></script>
+	
+	<script>
+		$(document).ready(function () {
+			var observe;
+			if (window.attachEvent) {
+				observe = function (element, event, handler) {
+					element.attachEvent('on'+event, handler);
+				};
+			}
+			else {
+				observe = function (element, event, handler) {
+					element.addEventListener(event, handler, false);
+				};
+			}
+			function init() {
+				var text = document.getElementById('message');
+				function resize () {
+					text.style.height = 'auto';
+					text.style.height = -15 + text.scrollHeight+'px';
+				}
+				/* 0-timeout to get the already changed text */
+				function delayedResize () {
+					window.setTimeout(resize, 0);
+				}
+				observe(text, 'change',  resize);
+				observe(text, 'cut',     delayedResize);
+				observe(text, 'paste',   delayedResize);
+				observe(text, 'drop',    delayedResize);
+				observe(text, 'keydown', delayedResize);
+
+				text.focus();
+				text.select();
+				resize();
+			}
+
+			var csrftoken = Cookies.get('csrftoken');
+
+			function csrfSafeMethod(method){
+			    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+            }
+
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings){
+                    if(!csrfSafeMethod(settings.type) && !this.crossDomain){
+                        xhr.setRequestHeader('X-CSRFToken', csrftoken);
+                    }
+                }
+            });
+
+			function sendMessage(){
+			    var message = $('#message').val();
+                $('#chat-area').append("<div class = 'chat-bubble-container'>\n" +
+                    "\t\t\t\t\t\t" + "<div class = 'chat-bubble user'>\n" +
+                    "\t\t\t\t\t\t\t" + message + "\n" +
+                    "\t\t\t\t\t\t" + "</div>\n" +
+                    "\t\t\t\t\t" + "</div>");
+
+			    var $submit = $.ajax({
+                    type: 'POST',
+                    url: '/view/ajax/process_message/',
+                    data: JSON.stringify({'message': message}),
+                    contentType: 'application/json'
+                })
+
+                $submit.done(function(statement){
+                    $('#chat-area').append("<div class = 'chat-bubble-container'>\n" +
+                        "\t\t\t\t\t" + "<div class = 'chat-bubble agent'>\n" +
+                        "\t\t\t\t\t\t" + statement.response + "\n" +
+                        "\t\t\t\t\t" + "</div>\n" +
+                        "\t\t\t\t" + "</div>");
+                    $('#chat-area')[0].scrollTop = $('#chat-area')[0].scrollHeight;
+                });
+
+			    $submit.fail(function(){
+
+                });
+
+
+			    $('#message').val('');
+            }
+
+            $('#message').keydown(function(event){
+                if(event.keyCode == 13){
+                    event.preventDefault();
+                    sendMessage();
+                }
+            });
+
+			$('#send-message').click(function(event){
+			    sendMessage();
+            });
+
+			window.onload = function () {init();}
+		});
+	</script>
+
+	
+	<body>
+		<div class = 'story-container'>
+			<div class = 'story-box'>
+				<div class = 'story-header'>
+					<label class = 'story-title'>78% done - Charlotte's Web / <b> Chapter 5 - Charlotte </b></label>
+					<div class = 'dropdown'>
+					  <span class = 'dropbtn'>Select a Chapter</span>
+					  <div class = 'dropdown-content'>
+						<a href="#">Chapter 1</a>
+						<a href="#">Chapter 2</a>
+						<a href="#">Chapter 3</a>
+						<a href="#">Chapter 4</a>
+						<a href="#">Chapter 5</a>
+					  </div>
+					</div>
+					<!--<div class = 'login-btn bookmark-btn'>Bookmark</div>-->
+				</div>
+				
+				<label class = 'chapter-title'>Chapter 5 - Charlotte</label>
+				
+				<div class = 'story-content'>
+				"Fern," said Mr. Arable, "I know more about raising a litter of pigs than you do. A weakling makes trouble. Now run along!" 
+				<br>
+				"But it's unfair," cried Fern. "The pig couldn't help being born small, could it? If I had been very small at birth, would you havekilled me?" 
+				<br>
+				Mr. Arable smiled. "Certainly not," he said, looking down at his daughter with love. "But this is different. A little girl is onething, a little runty pig is another." 
+				<br>
+				"I see no difference," replied Fern, still hanging on to the ax. "This is the most terrible case of injustice I ever heard of."
+				<br>
+				A queer look came over John Arable's face. He seemed almost ready to cry himself.
+				<br>
+				"All right," he said." You go back to the house and I will bring the runt when I come in. I'll let you start it on a bottle, like a baby. Then you'll see what trouble a pig can be."
+				<br>
+				When Mr. Arable returned to the house half an hour later, he carried a carton under his arm. Fern was upstairs changing her sneakers. The kitchen table was set for breakfast, and the room smelled of coffee, bacon, damp plaster, and wood smoke from the stove.
+				
+				</div>
+				
+			</div>
+			
+			<div class = 'story-footer'>
+				<div class = 'page-progress'>
+					<label class = 'next-page previous-page'></label>
+					<label class = 'page-number'>Page 1 of 5</label>
+					<label class = 'next-page'></label>
+				</div>
+			</div>
+		</div>
+		
+		<div class = 'chat-container'>
+			<div class = 'chat-box'>
+				<div class = 'chat-header'>
+					<div class = 'agent-icon'></div>
+					<label class = 'agent-name'>CHARM</label>
+				</div>
+				
+				<div class = 'chat-area' id = 'chat-area'>
+					<div class = 'chat-bubble-container'>
+						<div class = 'chat-bubble agent'>
+							Hey! Do you need help?
+						</div>
+					</div>
+
+				</div>
+				
+			</div>
+			
+			<div class = 'chat-footer'>
+				<textarea class = 'message-container' id = 'message' placeholder='Type a message...'></textarea>
+				<label class = 'send-message'></label>
+			</div>
+		</div>
+	</body>
+</html>
