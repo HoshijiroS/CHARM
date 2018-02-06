@@ -4,7 +4,7 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import ensure_csrf_cookie
 
-from model.manager import sentence_parser as parser
+from model.dialogue_manager import sentence_parser as parser
 
 # Create your views here.
 
