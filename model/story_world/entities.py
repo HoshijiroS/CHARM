@@ -1,21 +1,21 @@
-import model.Character as char
-
-import model.story_world.Location as loc
+import model.story_world.classes.Character as Char
+import model.story_world.classes.Item as Item
+import model.story_world.classes.Location as Loc
 
 # def generateAllchar.Characteracters():
-students = char.Character("Students", ["Student", "Townsperson"])
-girls = char.Character("girls", ["Student", "Townsperson"])
-wanda = char.Character("Wanda", ["Student", "Townsperson"])
-bill_byron = char.Character("Bill Byron", ["Student", "Townsperson"])
-peggy = char.Character("Peggy", ["Student", "Townsperson"])
-maddie = char.Character("Maddie", ["Student", "Townsperson"])
-people = char.Character("townspeople", ["Townsperson"])
-svenson = char.Character("Svenson", ["Townsperson"])
-cecile = char.Character("Cecile", ["Student"])
-miss_mason = char.Character("Miss Mason", ["Townsperson"])
-jake_petronski = char.Character("Jake Petronski", ["Student", "Townsperson"])
-jan_petronski = char.Character("Jan Petronski", ["Townsperson"])
-jack_beggles = char.Character("Jack Beggles", ["Townsperson"])
+students = Char.Character("Students", ["Student", "Townsperson"])
+girls = Char.Character("girls", ["Student", "Townsperson"])
+wanda = Char.Character("Wanda", ["Student", "Townsperson"])
+bill_byron = Char.Character("Bill Byron", ["Student", "Townsperson"])
+peggy = Char.Character("Peggy", ["Student", "Townsperson"])
+maddie = Char.Character("Maddie", ["Student", "Townsperson"])
+people = Char.Character("townspeople", ["Townsperson"])
+svenson = Char.Character("Svenson", ["Townsperson"])
+cecile = Char.Character("Cecile", ["Student"])
+miss_mason = Char.Character("Miss Mason", ["Townsperson"])
+jake_petronski = Char.Character("Jake Petronski", ["Student", "Townsperson"])
+jan_petronski = Char.Character("Jan Petronski", ["Townsperson"])
+jack_beggles = Char.Character("Jack Beggles", ["Townsperson"])
 
 # Wanda#
 wanda.hasRelationship(jake_petronski.name, "brother")
@@ -86,9 +86,9 @@ miss_mason.hasRelationship(bill_byron.name, "student")
 miss_mason.hasRelationship(jack_beggles.name, "student")
 
 charList = {"students": students, "girls": girls, "wanda": wanda, "bill byron": bill_byron, "peggy": peggy,
-                      "maddie": maddie, "people": people, "svenson": svenson, "cecile": cecile,
-                      "miss mason": miss_mason,
-                      "jake petronski": jake_petronski, "jan petronski": jan_petronski, "jack beggles": jack_beggles}
+            "maddie": maddie, "people": people, "svenson": svenson, "cecile": cecile,
+            "miss mason": miss_mason,
+            "jake petronski": jake_petronski, "jan petronski": jan_petronski, "jack beggles": jack_beggles}
 
 # def generateAllitem.Items():
 friend = Item.Item("friend")
@@ -110,21 +110,22 @@ frame_house = Item.Item("frame house")
 friendly_letter = Item.Item("friendly letter")
 
 itemList = {"friend": friend, "shoes": shoes, "clothes": clothes, "mother": mother, "name": name, "dress": dress,
-                 "game": game, "hun dresses": hun_dresses, "note": note, "drawing contest": contest, "drawing": drawing,
-                 "medal": medal, "letter": letter, "house": house, "friendly letter": friendly_letter, "grades": grades, "frame house": frame_house}
+            "game": game, "hun dresses": hun_dresses, "note": note, "drawing contest": contest, "drawing": drawing,
+            "medal": medal, "letter": letter, "house": house, "friendly letter": friendly_letter, "grades": grades,
+            "frame house": frame_house}
 
 # def generateAllloc.Locationations():
-school = loc.Location("School")
-rm13 = loc.Location("Room 13")
-corner_of_room = loc.Location("corner of the room")
-front_row = loc.Location("front row")
-boggins_heights = loc.Location("Boggins Heights")
+school = Loc.Location("School")
+rm13 = Loc.Location("Room 13")
+corner_of_room = Loc.Location("corner of the room")
+front_row = Loc.Location("front row")
+boggins_heights = Loc.Location("Boggins Heights")
 boggins_heights_road = Item.Item("road")
-neighborhood = loc.Location("neighborhood")
+neighborhood = Loc.Location("neighborhood")
 svenson_house = Item.Item("Svenson's house")
-oliver_street = loc.Location("Oliver Street")
+oliver_street = Loc.Location("Oliver Street")
 
 locList = {"school": school, "rm13": rm13, "corner of room": corner_of_room, "front row": front_row,
-                    "boggins heights": boggins_heights, "boggins heights road": boggins_heights_road,
-                    "neighborhood": neighborhood, "svenson house": svenson_house,
-                    "oliver street": oliver_street}
+           "boggins heights": boggins_heights, "boggins heights road": boggins_heights_road,
+           "neighborhood": neighborhood, "svenson house": svenson_house,
+           "oliver street": oliver_street}

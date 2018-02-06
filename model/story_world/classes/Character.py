@@ -107,14 +107,14 @@ class Character:
         # entity[2] = scene
         if loc_name is not None:
             for entity in self.loc:
-                #print("entity: ")
-                #print(entity[1].name)
-                #print("loc name: ")
-                #print(loc_name)
+                # print("entity: ")
+                # print(entity[1].name)
+                # print("loc name: ")
+                # print(loc_name)
                 if entity[1].name == loc_name:
                     for action in entity[0]:
-                        #print("action: ")
-                        #print(action)
+                        # print("action: ")
+                        # print(action)
                         if action == act_name:
                             return entity[1], entity[2]
         else:
@@ -133,7 +133,8 @@ class Character:
             for action in entity[0]:
                 if action == act_name:
                     return entity[1], entity[2]
-                else: return None
+                else:
+                    return None
 
         return None
 

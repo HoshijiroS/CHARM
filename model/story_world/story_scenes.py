@@ -1,7 +1,7 @@
-import model.Relations as rel
-
-import model.story_world.entities as ent
-import model.story_world.rules as rule
+import model.story_world.classes.Relations as Rel
+import model.story_world.classes.Scene as Scene
+import model.story_world.entities as Entity
+import model.story_world.rules as Rule
 
 lookup = []
 
@@ -26,74 +26,77 @@ scene_18 = Scene.Scene("Scene 18", "Christmas Time")
 
 
 def startScene1():
-    scene_1.hasLocation([ent.locList["school"], ent.locList["rm13"]])
-    scene_1.hasCharacter([ent.charList["wanda"], ent.charList["students"]])
+    scene_1.hasLocation([Entity.locList["school"], Entity.locList["rm13"]])
+    scene_1.hasCharacter([Entity.charList["wanda"], Entity.charList["students"]])
 
-    rel_for_sc_1 = rel.Relations("Relation for Scene 1")
+    rel_for_sc_1 = Rel.Relations("Relation for Scene 1")
 
     ####
-    ent.charList["students"].hasAction(rule.getVerbList("notice", negator="not"), ent.charList["wanda"].name,
-                                       scene_1.time + "ev1")
-    lookup.append([scene_1.time + "ev1", ent.charList["students"].name, "action"])
+    Entity.charList["students"].hasAction(Rule.getVerbList("notice", negator="not"), Entity.charList["wanda"].name,
+                                          scene_1.time + "ev1")
+    lookup.append([scene_1.time + "ev1", Entity.charList["students"].name, "action"])
 
-    ent.charList["wanda"].hasState(rule.getAdjList("absent"), scene_1.time)
-    lookup.append([scene_1.time, ent.charList["wanda"].name, "state"])
+    Entity.charList["wanda"].hasState(Rule.getAdjList("absent"), scene_1.time)
+    lookup.append([scene_1.time, Entity.charList["wanda"].name, "state"])
 
     rel_for_sc_1.causedBy(scene_1.time + "ev1", scene_1.time)
 
-    ent.charList["wanda"].hasAttribute(ent.itemList["friend"], rule.getVerbList("have"),
-                                       scene_1.time + "inf1").hasProperty("no", scene_1.time + "inf1ext")
-    lookup.append([scene_1.time + "inf1", ent.charList["wanda"].name, "attribute"])
+    Entity.charList["wanda"].hasAttribute(Entity.itemList["friend"], Rule.getVerbList("have"),
+                                          scene_1.time + "inf1").hasProperty("no", scene_1.time + "inf1ext")
+    lookup.append([scene_1.time + "inf1", Entity.charList["wanda"].name, "attribute"])
 
     rel_for_sc_1.elaborationFor(scene_1.time + "ev1", scene_1.time + "inf1")
     ####
 
     ####
-    ent.charList["wanda"].hasLocation(ent.locList["corner of room"], rule.getVerbList("sit"), scene_1.time + "ev2")
-    lookup.append([scene_1.time + "ev2", ent.charList["wanda"].name, "location"])
+    Entity.charList["wanda"].hasLocation(Entity.locList["corner of room"], Rule.getVerbList("sit"),
+                                         scene_1.time + "ev2")
+    lookup.append([scene_1.time + "ev2", Entity.charList["wanda"].name, "location"])
 
-    ent.locList["boggins heights"].hasAttribute(ent.locList["boggins heights road"],
-                                                rule.getVerbList("have"), scene_1.time + "inf4")
+    Entity.locList["boggins heights"].hasAttribute(Entity.locList["boggins heights road"],
+                                                   Rule.getVerbList("have"), scene_1.time + "inf4")
 
-    lookup.append([scene_1.time + "inf4", ent.locList["boggins heights"].name, "attribute"])
+    lookup.append([scene_1.time + "inf4", Entity.locList["boggins heights"].name, "attribute"])
 
-    rule.assignPropBySeating(ent.charList["wanda"], scene_1.time + "inf2")
-    lookup.append([scene_1.time + "inf2", ent.charList["wanda"].name, "property"])
+    Rule.assignPropBySeating(Entity.charList["wanda"], scene_1.time + "inf2")
+    lookup.append([scene_1.time + "inf2", Entity.charList["wanda"].name, "property"])
 
     rel_for_sc_1.causedBy(scene_1.time + "ev2", scene_1.time + "inf2")
     ####
 
     ####
-    ent.charList["wanda"].hasLocation(ent.locList["boggins heights"], rule.getVerbList("live"), scene_1.time + "inf3")
-    lookup.append([scene_1.time + "inf3", ent.charList["wanda"].name, "location"])
+    Entity.charList["wanda"].hasLocation(Entity.locList["boggins heights"], Rule.getVerbList("live"),
+                                         scene_1.time + "inf3")
+    lookup.append([scene_1.time + "inf3", Entity.charList["wanda"].name, "location"])
 
-    ent.charList["wanda"].hasAttribute(ent.itemList["shoes"], rule.getVerbList("wear"),
-                                       scene_1.time + "inf5").hasProperty("muddy", scene_1.time + "inf5ext")
+    Entity.charList["wanda"].hasAttribute(Entity.itemList["shoes"], Rule.getVerbList("wear"),
+                                          scene_1.time + "inf5").hasProperty("muddy", scene_1.time + "inf5ext")
 
-    lookup.append([scene_1.time + "inf5", ent.charList["wanda"].name, "attribute"])
+    lookup.append([scene_1.time + "inf5", Entity.charList["wanda"].name, "attribute"])
 
     rel_for_sc_1.causedBy(scene_1.time + "inf5", [scene_1.time + "inf3", scene_1.time + "inf4"])
     ####
 
 
 def startScene2():
-    scene_2.hasLocation([ent.locList["school"], ent.locList["rm13"]])
-    scene_2.hasCharacter([ent.charList["wanda"], ent.charList["bill byron"]])
+    scene_2.hasLocation([Entity.locList["school"], Entity.locList["rm13"]])
+    scene_2.hasCharacter([Entity.charList["wanda"], Entity.charList["bill byron"]])
 
-    rel_for_sc_2 = rel.Relations("Relation for Scene 2")
+    rel_for_sc_2 = Rel.Relations("Relation for Scene 2")
 
     ####
-    ent.charList["bill byron"].hasAction(rule.getVerbList("notice"), ent.charList["wanda"].name, scene_2.time + "ev1")
-    lookup.append([scene_2.time + "ev1", ent.charList["bill byron"].name, "action"])
+    Entity.charList["bill byron"].hasAction(Rule.getVerbList("notice"), Entity.charList["wanda"].name,
+                                            scene_2.time + "ev1")
+    lookup.append([scene_2.time + "ev1", Entity.charList["bill byron"].name, "action"])
 
-    ent.charList["wanda"].hasState(rule.getAdjList("absent"), scene_2.time)
-    lookup.append([scene_2.time, ent.charList["wanda"].name, "state"])
+    Entity.charList["wanda"].hasState(Rule.getAdjList("absent"), scene_2.time)
+    lookup.append([scene_2.time, Entity.charList["wanda"].name, "state"])
 
     rel_for_sc_2.sequence(scene_2.time, scene_2.time + "ev1")
 
-    ent.charList["bill byron"].hasLocation("behind " + ent.charList["wanda"].name, rule.getVerbList("sit"),
-                                           scene_2.time + "inf1")
-    lookup.append([scene_2.time + "inf1", ent.charList["bill byron"].name, "location"])
+    Entity.charList["bill byron"].hasLocation("behind " + Entity.charList["wanda"].name, Rule.getVerbList("sit"),
+                                              scene_2.time + "inf1")
+    lookup.append([scene_2.time + "inf1", Entity.charList["bill byron"].name, "location"])
 
     rel_for_sc_2.causedBy(scene_2.time + "ev1", scene_2.time + "inf1")
     # rel_for_sc_2.sequence(startScene1.scene_1.time + "ev2", scene_2.time + "ev1")
@@ -101,57 +104,57 @@ def startScene2():
 
 
 def startScene3():
-    scene_3.hasLocation([ent.locList["school"], ent.locList["rm13"]])
-    scene_3.hasCharacter([ent.charList["wanda"], ent.charList["maddie"], ent.charList["peggy"]])
+    scene_3.hasLocation([Entity.locList["school"], Entity.locList["rm13"]])
+    scene_3.hasCharacter([Entity.charList["wanda"], Entity.charList["maddie"], Entity.charList["peggy"]])
 
-    rel_for_sc_3 = rel.Relations("Relation for Scene 3")
+    rel_for_sc_3 = Rel.Relations("Relation for Scene 3")
 
     ####
-    ent.charList["maddie"].hasState("late to school", scene_3.time + "ev1a")
-    lookup.append([scene_3.time + "ev1a", ent.charList["maddie"].name, "state"])
+    Entity.charList["maddie"].hasState("late to school", scene_3.time + "ev1a")
+    lookup.append([scene_3.time + "ev1a", Entity.charList["maddie"].name, "state"])
 
-    ent.charList["peggy"].hasState("late to school", scene_3.time + "ev1b")
-    lookup.append([scene_3.time + "ev1b", ent.charList["peggy"].name, "state"])
+    Entity.charList["peggy"].hasState("late to school", scene_3.time + "ev1b")
+    lookup.append([scene_3.time + "ev1b", Entity.charList["peggy"].name, "state"])
 
-    ent.charList["maddie"].hasAction(rule.getVerbList("wait"), ent.charList["wanda"].name, scene_3.time + "inf1a")
-    lookup.append([scene_3.time + "inf1a", ent.charList["maddie"].name, "action"])
+    Entity.charList["maddie"].hasAction(Rule.getVerbList("wait"), Entity.charList["wanda"].name, scene_3.time + "inf1a")
+    lookup.append([scene_3.time + "inf1a", Entity.charList["maddie"].name, "action"])
 
-    ent.charList["peggy"].hasAction(rule.getVerbList("wait"), ent.charList["wanda"].name, scene_3.time + "inf1b")
-    lookup.append([scene_3.time + "inf1b", ent.charList["peggy"].name, "action"])
+    Entity.charList["peggy"].hasAction(Rule.getVerbList("wait"), Entity.charList["wanda"].name, scene_3.time + "inf1b")
+    lookup.append([scene_3.time + "inf1b", Entity.charList["peggy"].name, "action"])
 
-    ent.charList["wanda"].hasState(rule.getVerbList("absent"), scene_3.time + "inf2")
-    lookup.append([scene_3.time + "inf2", ent.charList["wanda"].name, "state"])
+    Entity.charList["wanda"].hasState(Rule.getVerbList("absent"), scene_3.time + "inf2")
+    lookup.append([scene_3.time + "inf2", Entity.charList["wanda"].name, "state"])
 
-    ent.charList["peggy"].hasDesire(rule.getVerbList("bully"), ent.charList["wanda"].name, scene_3.time + "ev2")
-    lookup.append([scene_3.time + "ev2", ent.charList["peggy"].name, "desire"])
+    Entity.charList["peggy"].hasDesire(Rule.getVerbList("bully"), Entity.charList["wanda"].name, scene_3.time + "ev2")
+    lookup.append([scene_3.time + "ev2", Entity.charList["peggy"].name, "desire"])
 
     rel_for_sc_3.causedBy(scene_3.time + "ev1", [scene_3.time + "inf1", scene_3.time + "inf2"])
     rel_for_sc_3.causedBy(scene_3.time + "inf1", scene_3.time + "ev2")
     ####
 
     ####
-    ent.charList["peggy"].hasLocation(ent.locList["front row"], rule.getVerbList("sit"), scene_3.time + "inf4")
-    lookup.append([scene_3.time + "inf4", ent.charList["peggy"].name, "location"])
+    Entity.charList["peggy"].hasLocation(Entity.locList["front row"], Rule.getVerbList("sit"), scene_3.time + "inf4")
+    lookup.append([scene_3.time + "inf4", Entity.charList["peggy"].name, "location"])
 
-    ent.charList["maddie"].hasLocation(ent.locList["front row"], rule.getVerbList("sit"), scene_3.time + "inf5")
-    lookup.append([scene_3.time + "inf5", ent.charList["maddie"].name, "location"])
+    Entity.charList["maddie"].hasLocation(Entity.locList["front row"], Rule.getVerbList("sit"), scene_3.time + "inf5")
+    lookup.append([scene_3.time + "inf5", Entity.charList["maddie"].name, "location"])
 
-    rule.assignPropBySeating(ent.charList["maddie"], scene_3.time + "inf6")
-    lookup.append([scene_3.time + "inf6", ent.charList["maddie"].name, "property"])
+    Rule.assignPropBySeating(Entity.charList["maddie"], scene_3.time + "inf6")
+    lookup.append([scene_3.time + "inf6", Entity.charList["maddie"].name, "property"])
 
-    rule.assignPropBySeating(ent.charList["peggy"], scene_3.time + "inf7")
-    lookup.append([scene_3.time + "inf7", ent.charList["peggy"].name, "property"])
+    Rule.assignPropBySeating(Entity.charList["peggy"], scene_3.time + "inf7")
+    lookup.append([scene_3.time + "inf7", Entity.charList["peggy"].name, "property"])
 
-    ent.charList["peggy"].hasProperty("pretty", scene_3.time + "inf8")
-    lookup.append([scene_3.time + "inf8", ent.charList["peggy"].name, "property"])
+    Entity.charList["peggy"].hasProperty("pretty", scene_3.time + "inf8")
+    lookup.append([scene_3.time + "inf8", Entity.charList["peggy"].name, "property"])
 
-    ent.charList["peggy"].hasAttribute(ent.itemList["clothes"], rule.getVerbList("wear"),
-                                       scene_3.time + "inf9").hasProperty(
+    Entity.charList["peggy"].hasAttribute(Entity.itemList["clothes"], Rule.getVerbList("wear"),
+                                          scene_3.time + "inf9").hasProperty(
         ["many", "pretty"], scene_3.time + "inf9ext")
-    lookup.append([scene_3.time + "inf9", ent.charList["peggy"].name, "attribute"])
+    lookup.append([scene_3.time + "inf9", Entity.charList["peggy"].name, "attribute"])
 
-    ent.charList["peggy"].hasProperty("popular", scene_3.time + "inf10")
-    lookup.append([scene_3.time + "inf10", ent.charList["peggy"].name, "property"])
+    Entity.charList["peggy"].hasProperty("popular", scene_3.time + "inf10")
+    lookup.append([scene_3.time + "inf10", Entity.charList["peggy"].name, "property"])
 
     rel_for_sc_3.causedBy(scene_3.time + "inf10", [scene_3.time + "inf8", scene_3.time + "inf9"])
 
@@ -165,71 +168,74 @@ def startScene3():
 
 
 def startScene4():
-    scene_4.hasLocation([ent.locList["school"], ent.locList["rm13"]])
-    scene_4.hasCharacter([ent.charList["wanda"], ent.charList["maddie"], ent.charList["peggy"], ent.charList["people"],
-                          ent.charList["svenson"]])
+    scene_4.hasLocation([Entity.locList["school"], Entity.locList["rm13"]])
+    scene_4.hasCharacter(
+        [Entity.charList["wanda"], Entity.charList["maddie"], Entity.charList["peggy"], Entity.charList["people"],
+         Entity.charList["svenson"]])
 
-    rel_for_sc_4 = rel.Relations("Relation for Scene 4")
+    rel_for_sc_4 = Rel.Relations("Relation for Scene 4")
 
     ####
-    ent.charList["wanda"].hasLocation(ent.itemList["frame house"], rule.getVerbList("live"), scene_4.time + "ev1")
-    lookup.append([scene_4.time + "ev1", ent.charList["wanda"].name, "location"])
+    Entity.charList["wanda"].hasLocation(Entity.itemList["frame house"], Rule.getVerbList("live"), scene_4.time + "ev1")
+    lookup.append([scene_4.time + "ev1", Entity.charList["wanda"].name, "location"])
 
-    rule.checkIfPersonIsPoor(ent.charList["wanda"], scene_4.time + "inf2")
-    lookup.append([scene_4.time + "inf2", ent.charList["wanda"].name, "property"])
+    Rule.checkIfPersonIsPoor(Entity.charList["wanda"], scene_4.time + "inf2")
+    lookup.append([scene_4.time + "inf2", Entity.charList["wanda"].name, "property"])
 
     rel_for_sc_4.causedBy(scene_4.time + "ev1", scene_4.time + "inf2")
     ####
 
     ####
-    ent.charList["wanda"].hasAttribute(ent.itemList["mother"], rule.getVerbList("have"),
-                                       scene_4.time + "inf3").hasProperty("no", scene_4.time + "inf3ext")
-    lookup.append([scene_4.time + "inf3", ent.charList["wanda"].name, "attribute"])
+    Entity.charList["wanda"].hasAttribute(Entity.itemList["mother"], Rule.getVerbList("have"),
+                                          scene_4.time + "inf3").hasProperty("no", scene_4.time + "inf3ext")
+    lookup.append([scene_4.time + "inf3", Entity.charList["wanda"].name, "attribute"])
 
-    ent.charList["svenson"].hasLocation(ent.locList["svenson house"], "live",
-                                        scene_4.time + "inf6").hasProperty("yellow", scene_4.time + "inf6ext")
-    lookup.append([scene_4.time + "inf6", ent.charList["svenson"].name, "location"])
+    Entity.charList["svenson"].hasLocation(Entity.locList["svenson house"], "live",
+                                           scene_4.time + "inf6").hasProperty("yellow", scene_4.time + "inf6ext")
+    lookup.append([scene_4.time + "inf6", Entity.charList["svenson"].name, "location"])
 
-    ent.charList["people"].hasAction("avoid", ent.locList["svenson house"].name, scene_4.time + "inf4")
-    lookup.append([scene_4.time + "inf4", ent.charList["people"].name, "action"])
+    Entity.charList["people"].hasAction("avoid", Entity.locList["svenson house"].name, scene_4.time + "inf4")
+    lookup.append([scene_4.time + "inf4", Entity.charList["people"].name, "action"])
 
-    ent.charList["people"].hasAction("gossip", ent.charList["svenson"].name, scene_4.time + "inf5")
-    lookup.append([scene_4.time + "inf5", ent.charList["people"].name, "action"])
+    Entity.charList["people"].hasAction("gossip", Entity.charList["svenson"].name, scene_4.time + "inf5")
+    lookup.append([scene_4.time + "inf5", Entity.charList["people"].name, "action"])
 
     rel_for_sc_4.causedBy(scene_4.time + "inf4", scene_4.time + "inf5")
     ####
 
 
 def startScene5():
-    scene_5.hasLocation([ent.locList["school"], ent.locList["rm13"]])
-    scene_5.hasCharacter([ent.charList["wanda"], ent.charList["maddie"], ent.charList["peggy"], ent.charList["girls"]])
+    scene_5.hasLocation([Entity.locList["school"], Entity.locList["rm13"]])
+    scene_5.hasCharacter(
+        [Entity.charList["wanda"], Entity.charList["maddie"], Entity.charList["peggy"], Entity.charList["girls"]])
 
-    rel_for_sc_5 = rel.Relations("Relation for Scene 5")
+    rel_for_sc_5 = Rel.Relations("Relation for Scene 5")
 
     ####
-    ent.charList["wanda"].hasAttribute(ent.itemList["name"],
-                                       "has", scene_5.time + "inf1").hasProperty(["weird", "not easy to say"],
-                                                                                 scene_5.time + "inf1ext")
-    lookup.append([scene_5.time + "inf1", ent.charList["wanda"].name, "attribute"])
+    Entity.charList["wanda"].hasAttribute(Entity.itemList["name"],
+                                          "has", scene_5.time + "inf1").hasProperty(["weird", "not easy to say"],
+                                                                                    scene_5.time + "inf1ext")
+    lookup.append([scene_5.time + "inf1", Entity.charList["wanda"].name, "attribute"])
 
     rel_for_sc_5.causedBy(scene_1.time + "inf1", scene_5.time + "inf1")
     ####
 
     ####
-    ent.charList["wanda"].hasAttribute(ent.itemList["dress"],
-                                       "wear", scene_5.time + "inf2").hasProperty(["blue", "not ironed properly"],
-                                                                                  scene_5.time + "inf2ext")
-    lookup.append([scene_5.time + "inf2", ent.charList["wanda"].name, "attribute"])
+    Entity.charList["wanda"].hasAttribute(Entity.itemList["dress"],
+                                          "wear", scene_5.time + "inf2").hasProperty(["blue", "not ironed properly"],
+                                                                                     scene_5.time + "inf2ext")
+    lookup.append([scene_5.time + "inf2", Entity.charList["wanda"].name, "attribute"])
 
     rel_for_sc_5.causedBy(scene_5.time + "inf2", scene_4.time + "inf3")
     ####
 
     ####
-    ent.charList["girls"].hasLocation(ent.locList["oliver street"], rule.getVerbList("wait"), scene_5.time + "ev1")
-    lookup.append([scene_5.time + "ev1", ent.charList["girls"].name, "location"])
+    Entity.charList["girls"].hasLocation(Entity.locList["oliver street"], Rule.getVerbList("wait"),
+                                         scene_5.time + "ev1")
+    lookup.append([scene_5.time + "ev1", Entity.charList["girls"].name, "location"])
 
-    ent.charList["girls"].hasAction("bully", ent.charList["wanda"].name, scene_5.time + "ev2")
-    lookup.append([scene_5.time + "ev2", ent.charList["girls"].name, "action"])
+    Entity.charList["girls"].hasAction("bully", Entity.charList["wanda"].name, scene_5.time + "ev2")
+    lookup.append([scene_5.time + "ev2", Entity.charList["girls"].name, "action"])
 
     rel_for_sc_5.causedBy(scene_5.time + "ev1", scene_5.time + "ev2")
     rel_for_sc_5.causedBy(scene_5.time + "ev2",
@@ -237,20 +243,20 @@ def startScene5():
     ####
 
     ####
-    ent.charList["wanda"].hasAction(rule.getVerbList("say"), "something", scene_5.time + "ev3")
-    lookup.append([scene_5.time + "ev3", ent.charList["wanda"].name, "action"])
+    Entity.charList["wanda"].hasAction(Rule.getVerbList("say"), "something", scene_5.time + "ev3")
+    lookup.append([scene_5.time + "ev3", Entity.charList["wanda"].name, "action"])
 
-    ent.charList["wanda"].hasAttribute(ent.itemList["hun dresses"], rule.getVerbList("have"), scene_5.time)
-    lookup.append([scene_5.time, ent.charList["wanda"].name, "attribute"])
+    Entity.charList["wanda"].hasAttribute(Entity.itemList["hun dresses"], Rule.getVerbList("have"), scene_5.time)
+    lookup.append([scene_5.time, Entity.charList["wanda"].name, "attribute"])
 
     rel_for_sc_5.causedBy(scene_5.time + "ev3", scene_5.time)
 
-    ent.charList["girls"].hasAction(rule.getVerbList("believe", negator="not"), "Wanda's statement",
-                                    scene_5.time + "ev4")
-    lookup.append([scene_5.time + "ev4", ent.charList["girls"].name, "action"])
+    Entity.charList["girls"].hasAction(Rule.getVerbList("believe", negator="not"), "Wanda's statement",
+                                       scene_5.time + "ev4")
+    lookup.append([scene_5.time + "ev4", Entity.charList["girls"].name, "action"])
 
-    ent.charList["wanda"].hasAttribute(ent.itemList["hun dresses"], rule.getVerbList("have"), scene_5.time)
-    lookup.append([scene_5.time, ent.charList["wanda"].name, "attribute"])
+    Entity.charList["wanda"].hasAttribute(Entity.itemList["hun dresses"], Rule.getVerbList("have"), scene_5.time)
+    lookup.append([scene_5.time, Entity.charList["wanda"].name, "attribute"])
     rel_for_sc_5.causedBy(scene_5.time + "ev4", [scene_5.time + "ev3", scene_5.time])
 
     rel_for_sc_5.causedBy(scene_5.time + "ev2", [scene_5.time + "ev3", scene_5.time + "ev4"])
@@ -258,177 +264,179 @@ def startScene5():
 
 
 def startScene6():
-    scene_6.hasLocation([ent.locList["school"], ent.locList["rm13"]])
-    scene_6.hasCharacter([ent.charList["wanda"], ent.charList["maddie"], ent.charList["girls"]])
+    scene_6.hasLocation([Entity.locList["school"], Entity.locList["rm13"]])
+    scene_6.hasCharacter([Entity.charList["wanda"], Entity.charList["maddie"], Entity.charList["girls"]])
 
-    rel_for_sc_6 = rel.Relations("Relation for Scene 6")
+    rel_for_sc_6 = Rel.Relations("Relation for Scene 6")
 
     ####
-    ent.charList["maddie"].hasState(rule.getAdjList("guilty"), scene_6.time + "ev1")
-    lookup.append([scene_6.time + "ev1", ent.charList["maddie"].name, "state"])
+    Entity.charList["maddie"].hasState(Rule.getAdjList("guilty"), scene_6.time + "ev1")
+    lookup.append([scene_6.time + "ev1", Entity.charList["maddie"].name, "state"])
 
     rel_for_sc_6.causedBy(scene_6.time + "ev1", scene_5.time + "ev2")
     ####
 
     ####
-    ent.charList["maddie"].hasProperty("poor", scene_6.time + "inf1")
-    lookup.append([scene_6.time + "inf1", ent.charList["maddie"].name, "property"])
+    Entity.charList["maddie"].hasProperty("poor", scene_6.time + "inf1")
+    lookup.append([scene_6.time + "inf1", Entity.charList["maddie"].name, "property"])
 
-    ent.charList["maddie"].hasAttribute(ent.itemList["clothes"],
-                                        rule.getVerbList("wear"), scene_6.time + "inf2").hasProperty(
+    Entity.charList["maddie"].hasAttribute(Entity.itemList["clothes"],
+                                           Rule.getVerbList("wear"), scene_6.time + "inf2").hasProperty(
         "peggy's hand-me-down", scene_6.time + "inf2ext")
-    lookup.append([scene_6.time + "inf2", ent.charList["maddie"].name, "attribute"])
+    lookup.append([scene_6.time + "inf2", Entity.charList["maddie"].name, "attribute"])
 
-    ent.charList["maddie"].hasAction(rule.getVerbList("sympathize"), ent.charList["wanda"].name, scene_6.time + "ev2")
-    lookup.append([scene_6.time + "ev2", ent.charList["maddie"].name, "action"])
+    Entity.charList["maddie"].hasAction(Rule.getVerbList("sympathize"), Entity.charList["wanda"].name,
+                                        scene_6.time + "ev2")
+    lookup.append([scene_6.time + "ev2", Entity.charList["maddie"].name, "action"])
 
     rel_for_sc_6.causedBy(scene_6.time + "ev1", scene_6.time + "ev2")
     rel_for_sc_6.causedBy(scene_6.time + "ev2", [scene_6.time + "inf1", scene_6.time + "inf2"])
     ####
 
     ####
-    ent.charList["girls"].hasAction(rule.getVerbList("bully", negator="not"), ent.charList["maddie"].name,
-                                    scene_6.time + "ev3")
-    lookup.append([scene_6.time + "ev3", ent.charList["girls"].name, "action"])
+    Entity.charList["girls"].hasAction(Rule.getVerbList("bully", negator="not"), Entity.charList["maddie"].name,
+                                       scene_6.time + "ev3")
+    lookup.append([scene_6.time + "ev3", Entity.charList["girls"].name, "action"])
 
-    ent.charList["maddie"].hasAttribute(
-        ent.itemList["name"], rule.getVerbList("have"), scene_6.time + "inf3").hasProperty(
+    Entity.charList["maddie"].hasAttribute(
+        Entity.itemList["name"], Rule.getVerbList("have"), scene_6.time + "inf3").hasProperty(
         ["not weird", "not hard to say"], scene_6.time + "inf3ext")
-    lookup.append([scene_6.time + "inf3", ent.charList["maddie"].name, "attribute"])
+    lookup.append([scene_6.time + "inf3", Entity.charList["maddie"].name, "attribute"])
 
-    ent.charList["maddie"].hasLocation("not Boggins Heights", rule.getVerbList("live"), scene_6.time + "inf4")
-    lookup.append([scene_6.time + "inf4", ent.charList["maddie"].name, "location"])
+    Entity.charList["maddie"].hasLocation("not Boggins Heights", Rule.getVerbList("live"), scene_6.time + "inf4")
+    lookup.append([scene_6.time + "inf4", Entity.charList["maddie"].name, "location"])
 
     rel_for_sc_6.causedBy(scene_6.time + "ev3", [scene_6.time + "inf3", scene_6.time + "inf4"])
     ####
 
     ####
-    ent.charList["maddie"].hasState(rule.getAdjList("guilty"), scene_6.time + "ev4")
-    lookup.append([scene_6.time + "ev4", ent.charList["maddie"].name, "state"])
+    Entity.charList["maddie"].hasState(Rule.getAdjList("guilty"), scene_6.time + "ev4")
+    lookup.append([scene_6.time + "ev4", Entity.charList["maddie"].name, "state"])
 
-    ent.charList["maddie"].hasAction(rule.getVerbList("defend", negator="not"), ent.charList["wanda"].name,
-                                     scene_6.time + "inf5")
-    lookup.append([scene_6.time + "inf5", ent.charList["maddie"].name, "action"])
+    Entity.charList["maddie"].hasAction(Rule.getVerbList("defend", negator="not"), Entity.charList["wanda"].name,
+                                        scene_6.time + "inf5")
+    lookup.append([scene_6.time + "inf5", Entity.charList["maddie"].name, "action"])
 
     rel_for_sc_6.causedBy(scene_6.time + "ev4", scene_6.time + "inf5")
     ####
 
 
 def startScene7():
-    scene_7.hasLocation([ent.locList["school"], ent.locList["rm13"]])
-    scene_7.hasCharacter([ent.charList["wanda"], ent.charList["maddie"], ent.charList["cecile"], ent.charList["peggy"],
-                          ent.charList["girls"]])
+    scene_7.hasLocation([Entity.locList["school"], Entity.locList["rm13"]])
+    scene_7.hasCharacter(
+        [Entity.charList["wanda"], Entity.charList["maddie"], Entity.charList["cecile"], Entity.charList["peggy"],
+         Entity.charList["girls"]])
 
-    rel_for_sc_7 = rel.Relations("Relation for Scene 7")
+    rel_for_sc_7 = Rel.Relations("Relation for Scene 7")
 
     ####
-    ent.charList["maddie"].hasState(rule.getAdjList("troubled"), scene_7.time + "ev1")
-    lookup.append([scene_7.time + "ev1", ent.charList["maddie"].name, "state"])
+    Entity.charList["maddie"].hasState(Rule.getAdjList("troubled"), scene_7.time + "ev1")
+    lookup.append([scene_7.time + "ev1", Entity.charList["maddie"].name, "state"])
 
     rel_for_sc_7.causedBy(scene_7.time + "ev1", [scene_3.time + "ev1", scene_6.time + "ev1"])
     ####
 
     ####
-    ent.charList["maddie"].hasAction(rule.getVerbList("think"), ent.charList["wanda"].name, scene_7.time + "ev2")
-    lookup.append([scene_7.time + "ev2", ent.charList["maddie"].name, "action"])
+    Entity.charList["maddie"].hasAction(Rule.getVerbList("think"), Entity.charList["wanda"].name, scene_7.time + "ev2")
+    lookup.append([scene_7.time + "ev2", Entity.charList["maddie"].name, "action"])
 
-    ent.charList["maddie"].hasAction(rule.getVerbList("think"), ent.itemList["game"].name, scene_7.time + "ev3")
-    lookup.append([scene_7.time + "ev3", ent.charList["maddie"].name, "action"])
+    Entity.charList["maddie"].hasAction(Rule.getVerbList("think"), Entity.itemList["game"].name, scene_7.time + "ev3")
+    lookup.append([scene_7.time + "ev3", Entity.charList["maddie"].name, "action"])
 
     rel_for_sc_7.causedBy(scene_7.time + "ev1", [scene_7.time + "ev2", scene_7.time + "ev3"])
     ####
 
     ####
-    ent.itemList["game"].hasState(rule.getAdjList("start"), scene_7.time + "ev4")
-    lookup.append([scene_7.time + "ev4", ent.itemList["game"].name, "state"])
+    Entity.itemList["game"].hasState(Rule.getAdjList("start"), scene_7.time + "ev4")
+    lookup.append([scene_7.time + "ev4", Entity.itemList["game"].name, "state"])
 
-    ent.charList["cecile"].hasAction(rule.getVerbList("wear"),
-                                     ent.itemList["dress"].hasProperty(["pretty", "red"], scene_7.time),
-                                     scene_7.time + "ev5")
-    lookup.append([scene_7.time + "ev5", ent.charList["cecile"].name, "action"])
+    Entity.charList["cecile"].hasAction(Rule.getVerbList("wear"),
+                                        Entity.itemList["dress"].hasProperty(["pretty", "red"], scene_7.time),
+                                        scene_7.time + "ev5")
+    lookup.append([scene_7.time + "ev5", Entity.charList["cecile"].name, "action"])
 
-    ent.charList["girls"].hasAction(rule.getVerbList("admire"), ent.charList["cecile"].name, scene_7.time + "ev6")
-    lookup.append([scene_7.time + "ev6", ent.charList["girls"].name, "action"])
+    Entity.charList["girls"].hasAction(Rule.getVerbList("admire"), Entity.charList["cecile"].name, scene_7.time + "ev6")
+    lookup.append([scene_7.time + "ev6", Entity.charList["girls"].name, "action"])
 
-    ent.charList["cecile"].hasAttribute(ent.itemList["clothes"],
-                                        rule.getVerbList("wear"), scene_7.time + "inf1").hasProperty(
+    Entity.charList["cecile"].hasAttribute(Entity.itemList["clothes"],
+                                           Rule.getVerbList("wear"), scene_7.time + "inf1").hasProperty(
         "prettier than others", scene_7.time + "inf1ext")
-    lookup.append([scene_7.time + "inf1", ent.charList["cecile"].name, "attribute"])
+    lookup.append([scene_7.time + "inf1", Entity.charList["cecile"].name, "attribute"])
 
-    ent.charList["cecile"].hasProperty(["tall", "slender"], scene_7.time + "inf2")
-    lookup.append([scene_7.time + "inf2", ent.charList["cecile"].name, "property"])
+    Entity.charList["cecile"].hasProperty(["tall", "slender"], scene_7.time + "inf2")
+    lookup.append([scene_7.time + "inf2", Entity.charList["cecile"].name, "property"])
 
     rel_for_sc_7.causedBy(scene_7.time + "ev4", [scene_7.time + "ev5", scene_7.time + "ev6"])
     rel_for_sc_7.causedBy(scene_7.time + "ev6", [scene_7.time + "inf1", scene_7.time + "inf2"])
     ####
 
     ####
-    ent.charList["wanda"].hasDesire(rule.getVerbList("join"), ent.charList["girls"].name, scene_7.time + "ev8")
-    lookup.append([scene_7.time + "ev8", ent.charList["wanda"].name, "desire"])
+    Entity.charList["wanda"].hasDesire(Rule.getVerbList("join"), Entity.charList["girls"].name, scene_7.time + "ev8")
+    lookup.append([scene_7.time + "ev8", Entity.charList["wanda"].name, "desire"])
 
     rel_for_sc_7.causedBy(scene_5.time + "ev3", scene_7.time + "ev8")
 
-    ent.charList["peggy"].hasAction(rule.getVerbList("tease"), ent.charList["wanda"].name, scene_7.time + "ev9")
-    lookup.append([scene_7.time + "ev9", ent.charList["peggy"].name, "action"])
+    Entity.charList["peggy"].hasAction(Rule.getVerbList("tease"), Entity.charList["wanda"].name, scene_7.time + "ev9")
+    lookup.append([scene_7.time + "ev9", Entity.charList["peggy"].name, "action"])
 
     rel_for_sc_7.causedBy(scene_7.time + "ev9", scene_5.time + "ev3")
     ####
 
 
 def startScene8():
-    scene_8.hasLocation([ent.locList["school"], ent.locList["rm13"]])
-    scene_8.hasCharacter([ent.charList["wanda"], ent.charList["maddie"], ent.charList["peggy"]])
+    scene_8.hasLocation([Entity.locList["school"], Entity.locList["rm13"]])
+    scene_8.hasCharacter([Entity.charList["wanda"], Entity.charList["maddie"], Entity.charList["peggy"]])
 
-    rel_for_sc_8 = rel.Relations("Relation for Scene 8")
+    rel_for_sc_8 = Rel.Relations("Relation for Scene 8")
 
     ####
-    ent.charList["maddie"].hasDesire(rule.getVerbList("wish"), "stop" + ent.charList["peggy"].name,
-                                     scene_8.time + "ev1")
-    lookup.append([scene_8.time + "ev1", ent.charList["maddie"].name, "desire"])
+    Entity.charList["maddie"].hasDesire(Rule.getVerbList("wish"), "stop" + Entity.charList["peggy"].name,
+                                        scene_8.time + "ev1")
+    lookup.append([scene_8.time + "ev1", Entity.charList["maddie"].name, "desire"])
 
-    ent.charList["peggy"].hasAction(rule.getVerbList("bully"), ent.charList["wanda"].name, scene_8.time + "ev1a")
-    lookup.append([scene_8.time + "ev1a", ent.charList["peggy"].name, "action"])
+    Entity.charList["peggy"].hasAction(Rule.getVerbList("bully"), Entity.charList["wanda"].name, scene_8.time + "ev1a")
+    lookup.append([scene_8.time + "ev1a", Entity.charList["peggy"].name, "action"])
 
     rel_for_sc_8.causedBy(scene_8.time + "ev1", scene_8.time + "ev1a")
 
-    ent.charList["maddie"].hasAction(rule.getVerbList("write"), ent.itemList["note"].name, scene_8.time + "ev2")
-    lookup.append([scene_8.time + "ev2", ent.charList["maddie"].name, "action"])
+    Entity.charList["maddie"].hasAction(Rule.getVerbList("write"), Entity.itemList["note"].name, scene_8.time + "ev2")
+    lookup.append([scene_8.time + "ev2", Entity.charList["maddie"].name, "action"])
 
     rel_for_sc_8.causedBy(scene_8.time + "ev2", scene_8.time + "ev1")
     ####
 
     ####
-    ent.charList["maddie"].hasAction(rule.getVerbList("destroy"), ent.itemList["note"].name, scene_8.time + "ev3")
-    lookup.append([scene_8.time + "ev3", ent.charList["maddie"].name, "action"])
+    Entity.charList["maddie"].hasAction(Rule.getVerbList("destroy"), Entity.itemList["note"].name, scene_8.time + "ev3")
+    lookup.append([scene_8.time + "ev3", Entity.charList["maddie"].name, "action"])
 
-    ent.charList["maddie"].hasDesire(rule.getVerbList("want", negator="not"),
-                                     "argue with " + ent.charList["peggy"].name, scene_8.time + "ev4")
-    lookup.append([scene_8.time + "ev4", ent.charList["maddie"].name, "desire"])
+    Entity.charList["maddie"].hasDesire(Rule.getVerbList("want", negator="not"),
+                                        "argue with " + Entity.charList["peggy"].name, scene_8.time + "ev4")
+    lookup.append([scene_8.time + "ev4", Entity.charList["maddie"].name, "desire"])
 
-    ent.charList["peggy"].hasAction("hate", ent.charList["maddie"].name, scene_8.time + "ev4a")
-    lookup.append([scene_8.time + "ev4a", ent.charList["peggy"].name, "action"])
+    Entity.charList["peggy"].hasAction("hate", Entity.charList["maddie"].name, scene_8.time + "ev4a")
+    lookup.append([scene_8.time + "ev4a", Entity.charList["peggy"].name, "action"])
 
     rel_for_sc_8.causedBy(scene_8.time + "ev3", [scene_8.time + "ev4", scene_8.time + "ev4a"])
     ####
 
 
 def startScene9():
-    scene_9.hasLocation([ent.locList["school"], ent.locList["rm13"]])
-    scene_9.hasCharacter([ent.charList["wanda"], ent.charList["maddie"]])
+    scene_9.hasLocation([Entity.locList["school"], Entity.locList["rm13"]])
+    scene_9.hasCharacter([Entity.charList["wanda"], Entity.charList["maddie"]])
 
-    rel_for_sc_9 = rel.Relations("Relation for Scene 9")
+    rel_for_sc_9 = Rel.Relations("Relation for Scene 9")
 
     ####
-    ent.charList["wanda"].hasAction(rule.getVerbList("struggle"), "read paragraphs",
-                                    scene_9.time + "ev1")
+    Entity.charList["wanda"].hasAction(Rule.getVerbList("struggle"), "read paragraphs",
+                                       scene_9.time + "ev1")
 
-    lookup.append([scene_9.time + "", ent.charList["wanda"].name, "action"])
+    lookup.append([scene_9.time + "", Entity.charList["wanda"].name, "action"])
 
-    ent.charList["wanda"].hasProperty("timid", scene_9.time + "inf1")
-    lookup.append([scene_9.time + "inf1", ent.charList["wanda"].name, "property"])
+    Entity.charList["wanda"].hasProperty("timid", scene_9.time + "inf1")
+    lookup.append([scene_9.time + "inf1", Entity.charList["wanda"].name, "property"])
 
-    ent.charList["wanda"].hasProperty("not smart", scene_9.time + "inf2")
-    lookup.append([scene_9.time + "inf2", ent.charList["wanda"].name, "property"])
+    Entity.charList["wanda"].hasProperty("not smart", scene_9.time + "inf2")
+    lookup.append([scene_9.time + "inf2", Entity.charList["wanda"].name, "property"])
 
     rel_for_sc_9.causedBy(scene_9.time + "ev1", [scene_9.time + "inf1", scene_9.time + "inf2"])
     ####
@@ -437,93 +445,96 @@ def startScene9():
     # ent.charList["wanda"].hasAction("describe", ent.itemList["dress"].hasProperty(["jungle green", "with red sash"]), scene_9.time + "ev3")
 
     ####
-    ent.charList["peggy"].hasProperty("artistic", scene_9.time + "ev2")
-    lookup.append([scene_9.time + "ev2", ent.charList["peggy"].name, "property"])
+    Entity.charList["peggy"].hasProperty("artistic", scene_9.time + "ev2")
+    lookup.append([scene_9.time + "ev2", Entity.charList["peggy"].name, "property"])
 
-    ent.charList["maddie"].hasAction(rule.getAdjList("know"), "winner", scene_9.time + "ev3")
-    lookup.append([scene_9.time + "ev3", ent.charList["maddie"].name, "action"])
+    Entity.charList["maddie"].hasAction(Rule.getAdjList("know"), "winner", scene_9.time + "ev3")
+    lookup.append([scene_9.time + "ev3", Entity.charList["maddie"].name, "action"])
 
-    ent.charList["peggy"].hasAction(rule.getVerbList("win"), ent.itemList["drawing contest"].name, scene_9.time + "ev4")
-    lookup.append([scene_9.time, ent.charList["peggy"].name, "action"])
+    Entity.charList["peggy"].hasAction(Rule.getVerbList("win"), Entity.itemList["drawing contest"].name,
+                                       scene_9.time + "ev4")
+    lookup.append([scene_9.time, Entity.charList["peggy"].name, "action"])
 
     rel_for_sc_9.causedBy(scene_9.time + "ev3", [scene_9.time + "ev4", scene_9.time + "ev2"])
     ####
 
 
 def startScene10():
-    scene_10.hasLocation([ent.locList["school"], ent.locList["rm13"]])
+    scene_10.hasLocation([Entity.locList["school"], Entity.locList["rm13"]])
     scene_10.hasCharacter(
-        [ent.charList["wanda"], ent.charList["maddie"], ent.charList["peggy"], ent.charList["miss mason"]])
+        [Entity.charList["wanda"], Entity.charList["maddie"], Entity.charList["peggy"], Entity.charList["miss mason"]])
 
-    rel_for_sc_10 = rel.Relations("Relation for Scene 10")
+    rel_for_sc_10 = Rel.Relations("Relation for Scene 10")
 
     ####
-    ent.charList["maddie"].hasState(rule.getAdjList("shocked"), scene_10.time + "ev1a")
-    lookup.append([scene_10.time + "ev1a", ent.charList["maddie"].name, "state"])
+    Entity.charList["maddie"].hasState(Rule.getAdjList("shocked"), scene_10.time + "ev1a")
+    lookup.append([scene_10.time + "ev1a", Entity.charList["maddie"].name, "state"])
 
-    ent.charList["peggy"].hasState(rule.getAdjList("shocked"), scene_10.time + "ev1b")
-    lookup.append([scene_10.time + "ev1b", ent.charList["peggy"].name, "state"])
+    Entity.charList["peggy"].hasState(Rule.getAdjList("shocked"), scene_10.time + "ev1b")
+    lookup.append([scene_10.time + "ev1b", Entity.charList["peggy"].name, "state"])
 
-    ent.locList["rm13"].hasAttribute(ent.itemList["drawing"].hasProperty(["100 pieces", "pretty"],
-                                                                         scene_10.time + "inf1ext"),
-                                     rule.getVerbList("post"), scene_10.time + "inf1")
-    lookup.append([scene_10.time + "inf1", ent.locList["rm13"].name, "attribute"])
+    Entity.locList["rm13"].hasAttribute(Entity.itemList["drawing"].hasProperty(["100 pieces", "pretty"],
+                                                                               scene_10.time + "inf1ext"),
+                                        Rule.getVerbList("post"), scene_10.time + "inf1")
+    lookup.append([scene_10.time + "inf1", Entity.locList["rm13"].name, "attribute"])
 
     rel_for_sc_10.causedBy(scene_10.time + "ev1", scene_10.time + "inf1")
     ####
 
     ####
-    ent.charList["miss mason"].hasAction(rule.getVerbList("announce"), "winner", scene_10.time + "ev2")
-    lookup.append([scene_10.time + "ev2", ent.charList["miss mason"].name, "action"])
+    Entity.charList["miss mason"].hasAction(Rule.getVerbList("announce"), "winner", scene_10.time + "ev2")
+    lookup.append([scene_10.time + "ev2", Entity.charList["miss mason"].name, "action"])
 
-    ent.charList["wanda"].hasAction(rule.getVerbList("win"), ent.itemList["drawing contest"].name, scene_10.time + "ev6")
-    lookup.append([scene_10.time + "ev6", ent.charList["wanda"].name, "action"])
+    Entity.charList["wanda"].hasAction(Rule.getVerbList("win"), Entity.itemList["drawing contest"].name,
+                                       scene_10.time + "ev6")
+    lookup.append([scene_10.time + "ev6", Entity.charList["wanda"].name, "action"])
 
     rel_for_sc_10.sequence(scene_10.time + "ev2", scene_10.time + "ev6")
 
-    ent.charList["wanda"].hasAction(rule.getVerbList("submit"),
-                                    ent.itemList["drawing"].hasProperty(["100 pieces", "pretty"],
-                                                                        scene_10.time + "ev3ext"),
-                                    scene_10.time + "ev3")
-    lookup.append([scene_10.time + "ev3", ent.charList["wanda"].name, "action"])
+    Entity.charList["wanda"].hasAction(Rule.getVerbList("submit"),
+                                       Entity.itemList["drawing"].hasProperty(["100 pieces", "pretty"],
+                                                                              scene_10.time + "ev3ext"),
+                                       scene_10.time + "ev3")
+    lookup.append([scene_10.time + "ev3", Entity.charList["wanda"].name, "action"])
 
     rel_for_sc_10.causedBy(scene_10.time + "ev2", scene_10.time + "ev3")
     ####
 
     ####
-    ent.charList["wanda"].hasAction(rule.getVerbList("receive", negator="not"), ent.itemList["medal"].name,
-                                    scene_10.time + "ev4")
-    lookup.append([scene_10.time + "ev4", ent.charList["wanda"].name, "action"])
+    Entity.charList["wanda"].hasAction(Rule.getVerbList("receive", negator="not"), Entity.itemList["medal"].name,
+                                       scene_10.time + "ev4")
+    lookup.append([scene_10.time + "ev4", Entity.charList["wanda"].name, "action"])
 
-    ent.charList["wanda"].hasState(rule.getAdjList("absent"), scene_10.time + "ev5")
-    lookup.append([scene_10.time + "ev5", ent.charList["wanda"].name, "state"])
+    Entity.charList["wanda"].hasState(Rule.getAdjList("absent"), scene_10.time + "ev5")
+    lookup.append([scene_10.time + "ev5", Entity.charList["wanda"].name, "state"])
 
     rel_for_sc_10.causedBy(scene_10.time + "ev4", scene_10.time + "ev5")
     ####
 
 
 def startScene11():
-    scene_11.hasLocation([ent.locList["school"], ent.locList["rm13"]])
-    scene_11.hasCharacter([ent.charList["wanda"], ent.charList["students"], ent.charList["miss mason"]])
+    scene_11.hasLocation([Entity.locList["school"], Entity.locList["rm13"]])
+    scene_11.hasCharacter([Entity.charList["wanda"], Entity.charList["students"], Entity.charList["miss mason"]])
 
-    rel_for_sc_11 = rel.Relations("Relation for Scene 11")
+    rel_for_sc_11 = Rel.Relations("Relation for Scene 11")
 
     ####
-    ent.charList["miss mason"].hasAction(rule.getVerbList("receive"), ent.itemList["note"].name, scene_11.time + "ev1")
-    lookup.append([scene_11.time + "ev1", ent.charList["miss mason"].name, "action"])
+    Entity.charList["miss mason"].hasAction(Rule.getVerbList("receive"), Entity.itemList["note"].name,
+                                            scene_11.time + "ev1")
+    lookup.append([scene_11.time + "ev1", Entity.charList["miss mason"].name, "action"])
 
-    ent.charList["miss mason"].hasState(rule.getAdjList("serious"), scene_11.time + "ev2")
-    lookup.append([scene_11.time + "ev2", ent.charList["miss mason"].name, "state"])
+    Entity.charList["miss mason"].hasState(Rule.getAdjList("serious"), scene_11.time + "ev2")
+    lookup.append([scene_11.time + "ev2", Entity.charList["miss mason"].name, "state"])
 
-    ent.charList["wanda"].hasState(rule.getAdjList("hurt"), scene_11.time + "inf1")
-    lookup.append([scene_11.time + "inf1", ent.charList["wanda"].name, "state"])
+    Entity.charList["wanda"].hasState(Rule.getAdjList("hurt"), scene_11.time + "inf1")
+    lookup.append([scene_11.time + "inf1", Entity.charList["wanda"].name, "state"])
 
-    ent.itemList["note"].hasPurpose(rule.getVerbList("say"), ent.charList["wanda"].name + "'s wherabouts",
-                                    scene_11.time + "ev3")
-    lookup.append([scene_11.time + "ev3", ent.itemList["note"].name, "action"])
+    Entity.itemList["note"].hasPurpose(Rule.getVerbList("say"), Entity.charList["wanda"].name + "'s wherabouts",
+                                       scene_11.time + "ev3")
+    lookup.append([scene_11.time + "ev3", Entity.itemList["note"].name, "action"])
 
-    ent.charList["wanda"].hasAction(rule.getVerbList("move"), "town", scene_11.time)
-    lookup.append([scene_11.time, ent.charList["wanda"].name, "action"])
+    Entity.charList["wanda"].hasAction(Rule.getVerbList("move"), "town", scene_11.time)
+    lookup.append([scene_11.time, Entity.charList["wanda"].name, "action"])
 
     rel_for_sc_11.sequence(scene_11.time + "ev3", scene_11.time)
 
@@ -534,22 +545,27 @@ def startScene11():
     ####
 
     ####
-    ent.charList["miss mason"].hasAction(rule.getVerbList("defend"), ent.charList["students"].name, scene_11.time + "ev4")
-    lookup.append([scene_11.time + "ev4", ent.charList["miss mason"].name, "action"])
+    Entity.charList["miss mason"].hasAction(Rule.getVerbList("defend"), Entity.charList["students"].name,
+                                            scene_11.time + "ev4")
+    lookup.append([scene_11.time + "ev4", Entity.charList["miss mason"].name, "action"])
 
-    ent.charList["miss mason"].hasAction("state", ent.charList["students"].name + "' defense", scene_11.time + "ev6")
-    lookup.append([scene_11.time + "ev6", ent.charList["miss mason"].name, "action"])
+    Entity.charList["miss mason"].hasAction("state", Entity.charList["students"].name + "' defense",
+                                            scene_11.time + "ev6")
+    lookup.append([scene_11.time + "ev6", Entity.charList["miss mason"].name, "action"])
 
-    ent.charList["students"].hasAction(rule.getVerbList("desire", negator="not"), "sadden " + ent.charList["wanda"].name, scene_11.time + "ev7")
-    lookup.append([scene_11.time + "ev7", ent.charList["students"].name, "action"])
+    Entity.charList["students"].hasAction(Rule.getVerbList("desire", negator="not"),
+                                          "sadden " + Entity.charList["wanda"].name, scene_11.time + "ev7")
+    lookup.append([scene_11.time + "ev7", Entity.charList["students"].name, "action"])
 
     rel_for_sc_11.causedBy(scene_11.time + "ev6", scene_11.time + "ev7")
 
-    ent.charList["miss mason"].hasAction(rule.getVerbList("talk"), ent.charList["students"].name, scene_11.time + "ev5")
-    lookup.append([scene_11.time + "ev5", ent.charList["miss mason"].name, "action"])
+    Entity.charList["miss mason"].hasAction(Rule.getVerbList("talk"), Entity.charList["students"].name,
+                                            scene_11.time + "ev5")
+    lookup.append([scene_11.time + "ev5", Entity.charList["miss mason"].name, "action"])
 
-    ent.charList["students"].hasAction(rule.getVerbList("reflect"), ent.itemList["note"].name, scene_11.time + "ev7"),
-    lookup.append([scene_11.time + "ev6", ent.charList["students"].name, "action"])
+    Entity.charList["students"].hasAction(Rule.getVerbList("reflect"), Entity.itemList["note"].name,
+                                          scene_11.time + "ev7"),
+    lookup.append([scene_11.time + "ev6", Entity.charList["students"].name, "action"])
 
     rel_for_sc_11.sequence(scene_11.time + "ev5", scene_11.time + "ev7")
 
@@ -559,35 +575,36 @@ def startScene11():
 
 
 def startScene12():
-    scene_12.hasLocation([ent.locList["school"], ent.locList["rm13"]])
-    scene_12.hasCharacter([ent.charList["wanda"], ent.charList["maddie"]])
+    scene_12.hasLocation([Entity.locList["school"], Entity.locList["rm13"]])
+    scene_12.hasCharacter([Entity.charList["wanda"], Entity.charList["maddie"]])
 
-    rel_for_sc_12 = rel.Relations("Relation for Scene 12")
+    rel_for_sc_12 = Rel.Relations("Relation for Scene 12")
 
     ####
-    ent.charList["maddie"].hasState(rule.getAdjList("distracted"), scene_12.time + "ev1")
-    lookup.append([scene_12.time + "ev1", ent.charList["maddie"].name, "state"])
+    Entity.charList["maddie"].hasState(Rule.getAdjList("distracted"), scene_12.time + "ev1")
+    lookup.append([scene_12.time + "ev1", Entity.charList["maddie"].name, "state"])
 
-    ent.charList["maddie"].hasState(rule.getAdjList("sick"), scene_12.time + "ev2")
-    lookup.append([scene_12.time + "ev2", ent.charList["maddie"].name, "state"])
+    Entity.charList["maddie"].hasState(Rule.getAdjList("sick"), scene_12.time + "ev2")
+    lookup.append([scene_12.time + "ev2", Entity.charList["maddie"].name, "state"])
 
     rel_for_sc_12.causedBy(scene_11.time + "ev3", [scene_12.time + "ev1", scene_12.time + "ev2"])
     ####
 
     ####
-    ent.charList["maddie"].hasAction(rule.getVerbList("defend", negator="not"), ent.charList["wanda"].name, scene_12.time + "ev4")
-    lookup.append([scene_12.time + "ev4", ent.charList["maddie"].name, "action"])
+    Entity.charList["maddie"].hasAction(Rule.getVerbList("defend", negator="not"), Entity.charList["wanda"].name,
+                                        scene_12.time + "ev4")
+    lookup.append([scene_12.time + "ev4", Entity.charList["maddie"].name, "action"])
 
-    ent.charList["maddie"].hasAction(rule.getAdjList("sorry"), "actions", scene_12.time + "ev5")
-    lookup.append([scene_12.time + "ev5", ent.charList["maddie"].name, "state"])
+    Entity.charList["maddie"].hasAction(Rule.getAdjList("sorry"), "actions", scene_12.time + "ev5")
+    lookup.append([scene_12.time + "ev5", Entity.charList["maddie"].name, "state"])
 
     rel_for_sc_12.causedBy(scene_12.time + "ev5", scene_11.time + "ev4")
 
-    ent.charList["girls"].hasAction(rule.getVerbList("bully"), ent.charList["wanda"].name,
-                                    scene_12.time),
+    Entity.charList["girls"].hasAction(Rule.getVerbList("bully"), Entity.charList["wanda"].name,
+                                       scene_12.time),
 
-    ent.charList["maddie"].hasAction(rule.getVerbList("condone", negator="not"), "bullying", scene_12.time + "inf1")
-    lookup.append([scene_12.time + "inf1", ent.charList["maddie"].name, "action"])
+    Entity.charList["maddie"].hasAction(Rule.getVerbList("condone", negator="not"), "bullying", scene_12.time + "inf1")
+    lookup.append([scene_12.time + "inf1", Entity.charList["maddie"].name, "action"])
 
     rel_for_sc_12.contradiction(scene_12.time + "ev5", scene_12.time + "ev4")
     rel_for_sc_12.causedBy(scene_12.time + "ev4", scene_8.time + "ev4")
@@ -597,17 +614,18 @@ def startScene12():
 
 
 def startScene13():
-    scene_13.hasLocation([ent.locList["school"], ent.locList["rm13"]])
-    scene_13.hasCharacter([ent.charList["wanda"], ent.charList["maddie"], ent.charList["peggy"]])
+    scene_13.hasLocation([Entity.locList["school"], Entity.locList["rm13"]])
+    scene_13.hasCharacter([Entity.charList["wanda"], Entity.charList["maddie"], Entity.charList["peggy"]])
 
-    rel_for_sc_13 = rel.Relations("Relation for Scene 13")
+    rel_for_sc_13 = Rel.Relations("Relation for Scene 13")
 
     ####
-    ent.charList["maddie"].hasDesire(rule.getVerbList("apologize"), ent.charList["wanda"].name, scene_13.time + "ev1")
-    lookup.append([scene_13.time + "ev1", ent.charList["maddie"].name, "desire"])
+    Entity.charList["maddie"].hasDesire(Rule.getVerbList("apologize"), Entity.charList["wanda"].name,
+                                        scene_13.time + "ev1")
+    lookup.append([scene_13.time + "ev1", Entity.charList["maddie"].name, "desire"])
 
-    ent.charList["maddie"].hasDesire(rule.getVerbList("visit"), ent.charList["wanda"].name, scene_13.time + "ev2")
-    lookup.append([scene_13.time + "ev2", ent.charList["maddie"].name, "desire"])
+    Entity.charList["maddie"].hasDesire(Rule.getVerbList("visit"), Entity.charList["wanda"].name, scene_13.time + "ev2")
+    lookup.append([scene_13.time + "ev2", Entity.charList["maddie"].name, "desire"])
 
     rel_for_sc_13.causedBy(scene_13.time + "ev2", scene_13.time + "ev1")
     rel_for_sc_13.causedBy(scene_13.time + "ev1",
@@ -615,52 +633,54 @@ def startScene13():
     ####
 
     ####
-    ent.charList["peggy"].hasAction(rule.getVerbList("say"), "request", scene_13.time + "ev3")
-    lookup.append([scene_13.time + "ev3", ent.charList["peggy"].name, "action"])
+    Entity.charList["peggy"].hasAction(Rule.getVerbList("say"), "request", scene_13.time + "ev3")
+    lookup.append([scene_13.time + "ev3", Entity.charList["peggy"].name, "action"])
 
-    ent.charList["peggy"].hasDesire(rule.getVerbList("visit"), ent.charList["wanda"].name, scene_13.time),
-    lookup.append([scene_13.time, ent.charList["peggy"].name, "desire"])
+    Entity.charList["peggy"].hasDesire(Rule.getVerbList("visit"), Entity.charList["wanda"].name, scene_13.time),
+    lookup.append([scene_13.time, Entity.charList["peggy"].name, "desire"])
 
-    rel_for_sc_13.sequence(scene_13.time  + "ev3", scene_13.time)
+    rel_for_sc_13.sequence(scene_13.time + "ev3", scene_13.time)
 
-    ent.charList["maddie"].hasState(rule.getAdjList("overjoyed"), scene_13.time + "ev5")
-    lookup.append([scene_13.time + "ev5", ent.charList["maddie"].name, "state"])
+    Entity.charList["maddie"].hasState(Rule.getAdjList("overjoyed"), scene_13.time + "ev5")
+    lookup.append([scene_13.time + "ev5", Entity.charList["maddie"].name, "state"])
 
     rel_for_sc_13.causedBy(scene_13.time + "ev5", [scene_13.time + "ev3", scene_13.time + "ev2"])
     ####
 
 
 def startScene14():
-    scene_14.hasLocation([ent.locList["school"], ent.locList["boggins heights"]])
-    scene_14.hasCharacter([ent.charList["wanda"], ent.charList["maddie"], ent.charList["peggy"]])
+    scene_14.hasLocation([Entity.locList["school"], Entity.locList["boggins heights"]])
+    scene_14.hasCharacter([Entity.charList["wanda"], Entity.charList["maddie"], Entity.charList["peggy"]])
 
-    rel_for_sc_14 = rel.Relations("Relation for Scene 14")
+    rel_for_sc_14 = Rel.Relations("Relation for Scene 14")
 
     ####
-    ent.charList["maddie"].hasDesire(rule.getVerbList("go_back"), "time", scene_14.time + "ev1")
-    lookup.append([scene_14.time + "ev1", ent.charList["maddie"].name, "desire"])
+    Entity.charList["maddie"].hasDesire(Rule.getVerbList("go_back"), "time", scene_14.time + "ev1")
+    lookup.append([scene_14.time + "ev1", Entity.charList["maddie"].name, "desire"])
 
-    ent.itemList["game"].hasState(rule.getVerbList("exist", negator="not"), scene_14.time + "inf1")
-    lookup.append([scene_14.time + "inf1", ent.itemList["game"].name, "state"])
+    Entity.itemList["game"].hasState(Rule.getVerbList("exist", negator="not"), scene_14.time + "inf1")
+    lookup.append([scene_14.time + "inf1", Entity.itemList["game"].name, "state"])
 
     rel_for_sc_14.causedBy(scene_14.time + "ev1", scene_14.time + "inf1")
     rel_for_sc_14.causedBy(scene_14.time + "inf1", scene_11.time + "ev3")
     ####
 
     ####
-    ent.charList["peggy"].hasAction(rule.getVerbList("avoid"), ent.locList["svenson house"].name, scene_14.time + "ev5")
-    lookup.append([scene_14.time + "ev5", ent.charList["peggy"].name, "action"])
+    Entity.charList["peggy"].hasAction(Rule.getVerbList("avoid"), Entity.locList["svenson house"].name,
+                                       scene_14.time + "ev5")
+    lookup.append([scene_14.time + "ev5", Entity.charList["peggy"].name, "action"])
 
-    ent.charList["maddie"].hasAction(rule.getVerbList("avoid"), ent.locList["svenson house"].name, scene_14.time + "ev6")
-    lookup.append([scene_14.time + "ev6", ent.charList["maddie"].name, "action"])
+    Entity.charList["maddie"].hasAction(Rule.getVerbList("avoid"), Entity.locList["svenson house"].name,
+                                        scene_14.time + "ev6")
+    lookup.append([scene_14.time + "ev6", Entity.charList["maddie"].name, "action"])
 
-    ent.charList["peggy"].hasDesire(rule.getVerbList("meet", negator="not"), ent.charList["svenson"].name,
-                                    scene_14.time + "ev7")
-    lookup.append([scene_14.time + "ev7", ent.charList["peggy"].name, "desire"])
+    Entity.charList["peggy"].hasDesire(Rule.getVerbList("meet", negator="not"), Entity.charList["svenson"].name,
+                                       scene_14.time + "ev7")
+    lookup.append([scene_14.time + "ev7", Entity.charList["peggy"].name, "desire"])
 
-    ent.charList["maddie"].hasDesire(rule.getVerbList("meet", negator="not"), ent.charList["svenson"].name,
-                                     scene_14.time + "ev8")
-    lookup.append([scene_14.time + "ev8", ent.charList["maddie"].name, "desire"])
+    Entity.charList["maddie"].hasDesire(Rule.getVerbList("meet", negator="not"), Entity.charList["svenson"].name,
+                                        scene_14.time + "ev8")
+    lookup.append([scene_14.time + "ev8", Entity.charList["maddie"].name, "desire"])
 
     rel_for_sc_14.causedBy(scene_14.time + "ev5", scene_14.time + "ev7")
     rel_for_sc_14.causedBy(scene_14.time + "ev6", scene_14.time + "ev8")
@@ -669,16 +689,17 @@ def startScene14():
     ####
 
     ####
-    ent.charList["maddie"].hasState(rule.getVerbList("worry"), scene_14.time + "ev9")
-    lookup.append([scene_14.time + "ev9", ent.charList["maddie"].name, "state"])
+    Entity.charList["maddie"].hasState(Rule.getVerbList("worry"), scene_14.time + "ev9")
+    lookup.append([scene_14.time + "ev9", Entity.charList["maddie"].name, "state"])
 
-    ent.charList["maddie"].hasAction(rule.getVerbList("meet", negator="might not"), ent.charList["wanda"].name,
-                                     scene_14.time + "inf3")
-    lookup.append([scene_14.time + "inf3", ent.charList["maddie"].name, "action"])
+    Entity.charList["maddie"].hasAction(Rule.getVerbList("meet", negator="might not"), Entity.charList["wanda"].name,
+                                        scene_14.time + "inf3")
+    lookup.append([scene_14.time + "inf3", Entity.charList["maddie"].name, "action"])
 
-    ent.charList["maddie"].hasAction(rule.getVerbList("apologize", negator="might not"), ent.charList["wanda"].name,
-                                     scene_14.time + "inf1")
-    lookup.append([scene_14.time + "inf1", ent.charList["maddie"].name, "action"])
+    Entity.charList["maddie"].hasAction(Rule.getVerbList("apologize", negator="might not"),
+                                        Entity.charList["wanda"].name,
+                                        scene_14.time + "inf1")
+    lookup.append([scene_14.time + "inf1", Entity.charList["maddie"].name, "action"])
 
     rel_for_sc_14.causedBy(scene_14.time + "ev9", scene_14.time + "inf3")
     rel_for_sc_14.causedBy(scene_14.time + "inf1", scene_14.time + "inf3")
@@ -686,46 +707,51 @@ def startScene14():
 
 
 def startScene15():
-    scene_15.hasLocation([ent.locList["school"], ent.locList["boggins heights"]])
-    scene_15.hasCharacter([ent.charList["wanda"], ent.charList["maddie"], ent.charList["peggy"]])
+    scene_15.hasLocation([Entity.locList["school"], Entity.locList["boggins heights"]])
+    scene_15.hasCharacter([Entity.charList["wanda"], Entity.charList["maddie"], Entity.charList["peggy"]])
 
-    rel_for_sc_15 = rel.Relations("Relation for Scene 15")
+    rel_for_sc_15 = Rel.Relations("Relation for Scene 15")
 
     ####
-    ent.charList["peggy"].hasState([rule.getAdjList("downcast"), rule.getAdjList("discouraged")], scene_15.time + "ev1")
-    lookup.append([scene_15.time + "ev1", ent.charList["peggy"].name, "state"])
+    Entity.charList["peggy"].hasState([Rule.getAdjList("downcast"), Rule.getAdjList("discouraged")],
+                                      scene_15.time + "ev1")
+    lookup.append([scene_15.time + "ev1", Entity.charList["peggy"].name, "state"])
 
-    ent.charList["maddie"].hasState([rule.getAdjList("downcast"), rule.getAdjList("discouraged")],
-                                    scene_15.time + "ev2")
-    lookup.append([scene_15.time + "ev2", ent.charList["maddie"].name, "state"])
+    Entity.charList["maddie"].hasState([Rule.getAdjList("downcast"), Rule.getAdjList("discouraged")],
+                                       scene_15.time + "ev2")
+    lookup.append([scene_15.time + "ev2", Entity.charList["maddie"].name, "state"])
 
-    ent.itemList["frame house"].hasState(rule.getAdjList("empty"), scene_15.time + "inf1")
-    lookup.append([scene_15.time + "inf1", ent.itemList["frame house"].name, "state"])
+    Entity.itemList["frame house"].hasState(Rule.getAdjList("empty"), scene_15.time + "inf1")
+    lookup.append([scene_15.time + "inf1", Entity.itemList["frame house"].name, "state"])
 
-    ent.charList["peggy"].hasAction(rule.getVerbList("meet", negator="not"), ent.charList["wanda"].name,
-                                    scene_15.time + "ev3")
-    lookup.append([scene_15.time + "ev3", ent.charList["peggy"].name, "action"])
+    Entity.charList["peggy"].hasAction(Rule.getVerbList("meet", negator="not"), Entity.charList["wanda"].name,
+                                       scene_15.time + "ev3")
+    lookup.append([scene_15.time + "ev3", Entity.charList["peggy"].name, "action"])
 
-    ent.charList["maddie"].hasAction(rule.getVerbList("meet", negator="not"), ent.charList["wanda"].name,
-                                     scene_15.time + "ev4")
-    lookup.append([scene_15.time + "ev4", ent.charList["maddie"].name, "action"])
+    Entity.charList["maddie"].hasAction(Rule.getVerbList("meet", negator="not"), Entity.charList["wanda"].name,
+                                        scene_15.time + "ev4")
+    lookup.append([scene_15.time + "ev4", Entity.charList["maddie"].name, "action"])
 
     rel_for_sc_15.causedBy(scene_15.time + "ev1", [scene_15.time + "inf1", scene_15.time + "ev3"])
     rel_for_sc_15.causedBy(scene_15.time + "ev2", [scene_15.time + "inf1", scene_15.time + "ev4"])
     ####
 
     ####
-    ent.charList["peggy"].hasAction(rule.getVerbList("write"), ent.itemList["friendly letter"].name, scene_15.time + "ev5")
-    lookup.append([scene_15.time + "ev5", ent.charList["peggy"].name, "action"])
+    Entity.charList["peggy"].hasAction(Rule.getVerbList("write"), Entity.itemList["friendly letter"].name,
+                                       scene_15.time + "ev5")
+    lookup.append([scene_15.time + "ev5", Entity.charList["peggy"].name, "action"])
 
-    ent.charList["maddie"].hasAction(rule.getVerbList("write"), ent.itemList["friendly letter"].name, scene_15.time + "ev6")
-    lookup.append([scene_15.time + "ev6", ent.charList["maddie"].name, "action"])
+    Entity.charList["maddie"].hasAction(Rule.getVerbList("write"), Entity.itemList["friendly letter"].name,
+                                        scene_15.time + "ev6")
+    lookup.append([scene_15.time + "ev6", Entity.charList["maddie"].name, "action"])
 
-    ent.charList["peggy"].hasDesire(rule.getVerbList("apologize"), ent.charList["wanda"].name, scene_15.time + "ev7")
-    lookup.append([scene_15.time + "ev7", ent.charList["peggy"].name, "desire"])
+    Entity.charList["peggy"].hasDesire(Rule.getVerbList("apologize"), Entity.charList["wanda"].name,
+                                       scene_15.time + "ev7")
+    lookup.append([scene_15.time + "ev7", Entity.charList["peggy"].name, "desire"])
 
-    ent.charList["maddie"].hasDesire(rule.getVerbList("apologize"), ent.charList["wanda"].name, scene_15.time + "ev8")
-    lookup.append([scene_15.time + "ev8", ent.charList["maddie"].name, "desire"])
+    Entity.charList["maddie"].hasDesire(Rule.getVerbList("apologize"), Entity.charList["wanda"].name,
+                                        scene_15.time + "ev8")
+    lookup.append([scene_15.time + "ev8", Entity.charList["maddie"].name, "desire"])
 
     rel_for_sc_15.causedBy(scene_15.time + "ev5", [scene_15.time + "ev3", scene_15.time + "ev7"])
     rel_for_sc_15.causedBy(scene_15.time + "ev6", [scene_15.time + "ev4", scene_15.time + "ev8"])
@@ -737,29 +763,33 @@ def startScene15():
 
 
 def startScene16():
-    scene_16.hasLocation([ent.locList["school"], ent.locList["rm13"]])
-    scene_16.hasCharacter([ent.charList["wanda"], ent.charList["maddie"], ent.charList["peggy"]])
+    scene_16.hasLocation([Entity.locList["school"], Entity.locList["rm13"]])
+    scene_16.hasCharacter([Entity.charList["wanda"], Entity.charList["maddie"], Entity.charList["peggy"]])
 
-    rel_for_sc_16 = rel.Relations("Relation for Scene 16")
+    rel_for_sc_16 = Rel.Relations("Relation for Scene 16")
 
     ####
-    ent.charList["peggy"].hasState([rule.getAdjList("carefree"), rule.getAdjList("happy")], scene_16.time + "ev1")
-    lookup.append([scene_16.time + "ev1", ent.charList["peggy"].name, "state"])
+    Entity.charList["peggy"].hasState([Rule.getAdjList("carefree"), Rule.getAdjList("happy")], scene_16.time + "ev1")
+    lookup.append([scene_16.time + "ev1", Entity.charList["peggy"].name, "state"])
 
-    ent.charList["maddie"].hasState([rule.getAdjList("carefree"), rule.getAdjList("happy")], scene_16.time + "ev2")
-    lookup.append([scene_16.time + "ev2", ent.charList["maddie"].name, "state"])
+    Entity.charList["maddie"].hasState([Rule.getAdjList("carefree"), Rule.getAdjList("happy")], scene_16.time + "ev2")
+    lookup.append([scene_16.time + "ev2", Entity.charList["maddie"].name, "state"])
 
-    ent.charList["peggy"].hasAction(rule.getVerbList("send"), ent.itemList["friendly letter"].name, scene_16.time + "ev3")
-    lookup.append([scene_16.time + "ev3", ent.charList["peggy"].name, "action"])
+    Entity.charList["peggy"].hasAction(Rule.getVerbList("send"), Entity.itemList["friendly letter"].name,
+                                       scene_16.time + "ev3")
+    lookup.append([scene_16.time + "ev3", Entity.charList["peggy"].name, "action"])
 
-    ent.charList["maddie"].hasAction(rule.getVerbList("send"), ent.itemList["friendly letter"].name, scene_16.time + "ev4")
-    lookup.append([scene_16.time + "ev4", ent.charList["maddie"].name, "action"])
+    Entity.charList["maddie"].hasAction(Rule.getVerbList("send"), Entity.itemList["friendly letter"].name,
+                                        scene_16.time + "ev4")
+    lookup.append([scene_16.time + "ev4", Entity.charList["maddie"].name, "action"])
 
-    ent.charList["peggy"].hasAction(rule.getVerbList("reconcile"), ent.charList["wanda"].name, scene_16.time + "ev5")
-    lookup.append([scene_16.time + "ev5", ent.charList["peggy"].name, "action"])
+    Entity.charList["peggy"].hasAction(Rule.getVerbList("reconcile"), Entity.charList["wanda"].name,
+                                       scene_16.time + "ev5")
+    lookup.append([scene_16.time + "ev5", Entity.charList["peggy"].name, "action"])
 
-    ent.charList["maddie"].hasAction(rule.getVerbList("reconcile"), ent.charList["wanda"].name, scene_16.time + "ev6")
-    lookup.append([scene_16.time + "ev6", ent.charList["maddie"].name, "action"])
+    Entity.charList["maddie"].hasAction(Rule.getVerbList("reconcile"), Entity.charList["wanda"].name,
+                                        scene_16.time + "ev6")
+    lookup.append([scene_16.time + "ev6", Entity.charList["maddie"].name, "action"])
 
     rel_for_sc_16.causedBy(scene_16.time + "ev1", scene_16.time + "ev3")
     rel_for_sc_16.causedBy(scene_16.time + "ev2", scene_16.time + "ev4")
@@ -768,15 +798,17 @@ def startScene16():
     ####
 
     ####
-    ent.charList["peggy"].hasAction(rule.getVerbList("understand"), ent.charList["wanda"].name, scene_16.time + "ev7")
-    lookup.append([scene_16.time + "ev7", ent.charList["peggy"].name, "action"])
+    Entity.charList["peggy"].hasAction(Rule.getVerbList("understand"), Entity.charList["wanda"].name,
+                                       scene_16.time + "ev7")
+    lookup.append([scene_16.time + "ev7", Entity.charList["peggy"].name, "action"])
 
-    ent.charList["maddie"].hasAction(rule.getVerbList("understand"), ent.charList["wanda"].name, scene_16.time + "ev8")
-    lookup.append([scene_16.time + "ev8", ent.charList["maddie"].name, "action"])
+    Entity.charList["maddie"].hasAction(Rule.getVerbList("understand"), Entity.charList["wanda"].name,
+                                        scene_16.time + "ev8")
+    lookup.append([scene_16.time + "ev8", Entity.charList["maddie"].name, "action"])
 
-    ent.charList["wanda"].hasAttribute(ent.itemList["clothes"], rule.getVerbList("have"),
-                                       scene_16.time + "inf1").hasProperty("only one", scene_16.time + "inf1ext")
-    lookup.append([scene_16.time + "inf1", ent.charList["wanda"].name, "attribute"])
+    Entity.charList["wanda"].hasAttribute(Entity.itemList["clothes"], Rule.getVerbList("have"),
+                                          scene_16.time + "inf1").hasProperty("only one", scene_16.time + "inf1ext")
+    lookup.append([scene_16.time + "inf1", Entity.charList["wanda"].name, "attribute"])
     # ent.charList["wanda"].hasAction("iron", ent.itemList["clothes"], scene_16.time + "inf2")
 
     rel_for_sc_16.causedBy(scene_16.time + "ev7", scene_16.time + "inf1")
@@ -789,24 +821,25 @@ def startScene16():
 
 
 def startScene17():
-    scene_17.hasLocation([ent.locList["school"], ent.locList["rm13"]])
+    scene_17.hasLocation([Entity.locList["school"], Entity.locList["rm13"]])
     scene_17.hasCharacter(
-        [ent.charList["wanda"], ent.charList["maddie"], ent.charList["peggy"], ent.charList["miss mason"]])
+        [Entity.charList["wanda"], Entity.charList["maddie"], Entity.charList["peggy"], Entity.charList["miss mason"]])
 
-    rel_for_sc_17 = rel.Relations("Relation for Scene 17")
+    rel_for_sc_17 = Rel.Relations("Relation for Scene 17")
 
     ####
-    ent.charList["miss mason"].hasAction(rule.getVerbList("receive"),
-                                         ent.itemList["letter"].hasProperty("wanda's", scene_17.time + "ev1ext"),
-                                         scene_17.time + "ev1")
-    lookup.append([scene_17.time + "", ent.charList["miss mason"].name, "action"])
+    Entity.charList["miss mason"].hasAction(Rule.getVerbList("receive"),
+                                            Entity.itemList["letter"].hasProperty("wanda's", scene_17.time + "ev1ext"),
+                                            scene_17.time + "ev1")
+    lookup.append([scene_17.time + "", Entity.charList["miss mason"].name, "action"])
 
-    ent.charList["miss mason"].hasAction(rule.getVerbList("know"), ent.charList["wanda"].name + " new house", scene_17.time + "inf1")
-    lookup.append([scene_17.time + "inf1", ent.charList["miss mason"].name, "action"])
+    Entity.charList["miss mason"].hasAction(Rule.getVerbList("know"), Entity.charList["wanda"].name + " new house",
+                                            scene_17.time + "inf1")
+    lookup.append([scene_17.time + "inf1", Entity.charList["miss mason"].name, "action"])
 
-    ent.charList["miss mason"].hasAction(rule.getVerbList("send", negator="can"), ent.itemList["medal"].name,
-                                         scene_17.time + "ev2")
-    lookup.append([scene_17.time + "", ent.charList["students"].name, "action"])
+    Entity.charList["miss mason"].hasAction(Rule.getVerbList("send", negator="can"), Entity.itemList["medal"].name,
+                                            scene_17.time + "ev2")
+    lookup.append([scene_17.time + "", Entity.charList["students"].name, "action"])
 
     rel_for_sc_17.consequence(scene_17.time + "ev1", scene_17.time + "inf1")
     rel_for_sc_17.consequence(scene_17.time + "inf1", scene_17.time + "ev2")
@@ -814,24 +847,27 @@ def startScene17():
     ####
 
     ####
-    ent.charList["wanda"].hasAction(rule.getVerbList("forgive"), [ent.charList["peggy"].name, ent.charList["maddie"].name],
-                                    scene_17.time + "ev3")
-    lookup.append([scene_17.time + "ev3", ent.charList["wanda"].name, "action"])
+    Entity.charList["wanda"].hasAction(Rule.getVerbList("forgive"),
+                                       [Entity.charList["peggy"].name, Entity.charList["maddie"].name],
+                                       scene_17.time + "ev3")
+    lookup.append([scene_17.time + "ev3", Entity.charList["wanda"].name, "action"])
 
-    ent.charList["wanda"].hasAction(rule.getVerbList("give"),
-                                    ent.itemList["dress"].hasProperty(["pale blue", "with cerise-colored trimmings"],
-                                                                      scene_17.time + "ev4ext"),
-                                    scene_17.time + "ev4")
-    lookup.append([scene_17.time + "ev4", ent.charList["wanda"].name, "action"])
+    Entity.charList["wanda"].hasAction(Rule.getVerbList("give"),
+                                       Entity.itemList["dress"].hasProperty(
+                                           ["pale blue", "with cerise-colored trimmings"],
+                                           scene_17.time + "ev4ext"),
+                                       scene_17.time + "ev4")
+    lookup.append([scene_17.time + "ev4", Entity.charList["wanda"].name, "action"])
 
-    ent.charList["wanda"].hasAction(rule.getVerbList("give"),
-                                    ent.itemList["dress"].hasProperty(["jungle green", "with red sash"], scene_17.time + "ev5ext"),
-                                    scene_17.time + "ev5")
-    lookup.append([scene_17.time + "ev5", ent.charList["wanda"].name, "action"])
+    Entity.charList["wanda"].hasAction(Rule.getVerbList("give"),
+                                       Entity.itemList["dress"].hasProperty(["jungle green", "with red sash"],
+                                                                            scene_17.time + "ev5ext"),
+                                       scene_17.time + "ev5")
+    lookup.append([scene_17.time + "ev5", Entity.charList["wanda"].name, "action"])
 
-    ent.charList["wanda"].hasAction(rule.getVerbList("receive"), ent.itemList["friendly letter"].name,
-                                    scene_17.time + "ev6")
-    lookup.append([scene_17.time + "ev6", ent.charList["wanda"].name, "action"])
+    Entity.charList["wanda"].hasAction(Rule.getVerbList("receive"), Entity.itemList["friendly letter"].name,
+                                       scene_17.time + "ev6")
+    lookup.append([scene_17.time + "ev6", Entity.charList["wanda"].name, "action"])
 
     rel_for_sc_17.contradiction(scene_17.time + "ev3", scene_5.time + "ev2")
     rel_for_sc_17.causedBy([scene_17.time + "ev4", scene_17.time + "ev5"], scene_17.time + "ev3")
@@ -842,40 +878,43 @@ def startScene17():
 
 
 def startScene18():
-    scene_18.hasLocation([ent.locList["school"], ent.locList["rm13"]])
-    scene_18.hasCharacter([ent.charList["wanda"], ent.charList["maddie"], ent.charList["peggy"]])
+    scene_18.hasLocation([Entity.locList["school"], Entity.locList["rm13"]])
+    scene_18.hasCharacter([Entity.charList["wanda"], Entity.charList["maddie"], Entity.charList["peggy"]])
 
-    rel_for_sc_18 = rel.Relations("Relation for Scene 18")
+    rel_for_sc_18 = Rel.Relations("Relation for Scene 18")
 
     ####
-    ent.charList["maddie"].hasState(rule.getAdjList("sad"), scene_18.time + "ev1")
-    lookup.append([scene_18.time + "", ent.charList["maddie"].name, "state"])
+    Entity.charList["maddie"].hasState(Rule.getAdjList("sad"), scene_18.time + "ev1")
+    lookup.append([scene_18.time + "", Entity.charList["maddie"].name, "state"])
 
-    ent.charList["peggy"].hasState(rule.getAdjList("guilty", negator="not"), scene_18.time + "ev2")
-    lookup.append([scene_18.time + "ev2", ent.charList["peggy"].name, "state"])
+    Entity.charList["peggy"].hasState(Rule.getAdjList("guilty", negator="not"), scene_18.time + "ev2")
+    lookup.append([scene_18.time + "ev2", Entity.charList["peggy"].name, "state"])
 
     rel_for_sc_18.causedBy(scene_18.time + "ev1", scene_17.time + "ev4")
     rel_for_sc_18.causedBy(scene_18.time + "ev2", scene_17.time + "ev5")
     ####
 
     ####
-    ent.charList["maddie"].hasState(rule.getVerbList("cry"), scene_17.time + "ev3")
-    lookup.append([scene_18.time + "ev3", ent.charList["maddie"].name, "state"])
+    Entity.charList["maddie"].hasState(Rule.getVerbList("cry"), scene_17.time + "ev3")
+    lookup.append([scene_18.time + "ev3", Entity.charList["maddie"].name, "state"])
 
     rel_for_sc_18.causedBy(scene_18.time + "ev3",
                            [scene_6.time + "inf5", scene_17.time + "ev3"])
     ####
 
     ####
-    ent.charList["peggy"].hasAction(rule.getVerbList("understand"), ent.itemList["hun dresses"].name, scene_18.time + "ev4")
-    lookup.append([scene_18.time + "ev4", ent.charList["peggy"].name, "action"])
+    Entity.charList["peggy"].hasAction(Rule.getVerbList("understand"), Entity.itemList["hun dresses"].name,
+                                       scene_18.time + "ev4")
+    lookup.append([scene_18.time + "ev4", Entity.charList["peggy"].name, "action"])
 
-    ent.charList["maddie"].hasAction(rule.getVerbList("understand"), ent.itemList["hun dresses"].name, scene_18.time + "ev5")
-    lookup.append([scene_18.time + "ev5", ent.charList["maddie"].name, "action"])
+    Entity.charList["maddie"].hasAction(Rule.getVerbList("understand"), Entity.itemList["hun dresses"].name,
+                                        scene_18.time + "ev5")
+    lookup.append([scene_18.time + "ev5", Entity.charList["maddie"].name, "action"])
 
     rel_for_sc_18.causedBy(scene_18.time + "ev4", scene_10.time + "ev3")
     rel_for_sc_18.causedBy(scene_18.time + "ev5", scene_10.time + "ev3")
     ####
+
 
 def executeAll():
     startScene1()
