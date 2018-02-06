@@ -1,6 +1,6 @@
-import model.Story_World.Entities as ent
-import conceptnet as concept_net
-from conjugator import conjugator
+import model.story_world.Entities as ent
+from model.conjugator import conjugator
+
 
 def whoQuestion(actor, person, relationship):
     if relationship is None:

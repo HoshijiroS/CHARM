@@ -1,8 +1,10 @@
-from django.shortcuts import render
-from django.http import JsonResponse
-from django.views.decorators.csrf import ensure_csrf_cookie
 import json
-import Dialogue_Manager.sentence_parser as parser
+
+from django.http import JsonResponse
+from django.shortcuts import render
+from django.views.decorators.csrf import ensure_csrf_cookie
+
+from model.manager import sentence_parser as parser
 
 # Create your views here.
 

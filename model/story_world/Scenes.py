@@ -1,7 +1,7 @@
 import model.Relations as rel
 import model.Scene as scene
-import model.Story_World.Entities as ent
-import model.Story_World.Rules as rule
+import model.story_world.Entities as ent
+import model.story_world.Rules as rule
 
 lookup = []
 

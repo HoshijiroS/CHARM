@@ -1,6 +1,7 @@
 from django.conf.urls import url
 from . import views
-import model.Story_World.Scenes as scene
+import model.story_world.Scenes as scene
+import model.externals.core_nlp_server as server
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
@@ -8,3 +9,4 @@ urlpatterns = [
 ]
 
 scene.executeAll()
+server.run_server()

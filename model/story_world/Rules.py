@@ -1,4 +1,4 @@
-import model.Story_World.Entities as ent
+import model.story_world.Entities as ent
 from nltk.corpus import wordnet
 
 def getVerbList(verb, negator=None):
