@@ -1,4 +1,4 @@
-import model.story_world.Entities as ent
+import model.story_world.entities as ent
 from model.conjugator import conjugator
 
 

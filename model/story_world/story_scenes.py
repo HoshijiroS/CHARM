@@ -1,28 +1,28 @@
 import model.Relations as rel
-import model.Scene as scene
-import model.story_world.Entities as ent
-import model.story_world.Rules as rule
+
+import model.story_world.entities as ent
+import model.story_world.rules as rule
 
 lookup = []
 
-scene_1 = scene.Scene("Scene 1", "Monday")
-scene_2 = scene.Scene("Scene 2", "Tuesday")
-scene_3 = scene.Scene("Scene 3", "Wednesday")
-scene_4 = scene.Scene("Scene 4", "Wednesday")
-scene_5 = scene.Scene("Scene 5", "Wednesday")
-scene_6 = scene.Scene("Scene 6", "Wednesday")
-scene_7 = scene.Scene("Scene 7", "Wednesday")
-scene_8 = scene.Scene("Scene 8", "Wednesday")
-scene_9 = scene.Scene("Scene 9", "Wednesday")
-scene_10 = scene.Scene("Scene 10", "Thursday")
-scene_11 = scene.Scene("Scene 11", "Thursday")
-scene_12 = scene.Scene("Scene 12", "Thursday")
-scene_13 = scene.Scene("Scene 13", "Thursday")
-scene_14 = scene.Scene("Scene 14", "Thursday")
-scene_15 = scene.Scene("Scene 15", "Thursday")
-scene_16 = scene.Scene("Scene 16", "Friday")
-scene_17 = scene.Scene("Scene 17", "Christmas Time")
-scene_18 = scene.Scene("Scene 18", "Christmas Time")
+scene_1 = Scene.Scene("Scene 1", "Monday")
+scene_2 = Scene.Scene("Scene 2", "Tuesday")
+scene_3 = Scene.Scene("Scene 3", "Wednesday")
+scene_4 = Scene.Scene("Scene 4", "Wednesday")
+scene_5 = Scene.Scene("Scene 5", "Wednesday")
+scene_6 = Scene.Scene("Scene 6", "Wednesday")
+scene_7 = Scene.Scene("Scene 7", "Wednesday")
+scene_8 = Scene.Scene("Scene 8", "Wednesday")
+scene_9 = Scene.Scene("Scene 9", "Wednesday")
+scene_10 = Scene.Scene("Scene 10", "Thursday")
+scene_11 = Scene.Scene("Scene 11", "Thursday")
+scene_12 = Scene.Scene("Scene 12", "Thursday")
+scene_13 = Scene.Scene("Scene 13", "Thursday")
+scene_14 = Scene.Scene("Scene 14", "Thursday")
+scene_15 = Scene.Scene("Scene 15", "Thursday")
+scene_16 = Scene.Scene("Scene 16", "Friday")
+scene_17 = Scene.Scene("Scene 17", "Christmas Time")
+scene_18 = Scene.Scene("Scene 18", "Christmas Time")
 
 
 def startScene1():

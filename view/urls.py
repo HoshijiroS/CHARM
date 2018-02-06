@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from . import views
-import model.story_world.Scenes as scene
+import model.story_world.story_scenes as scene
 import model.externals.core_nlp_server as server
 
 urlpatterns = [

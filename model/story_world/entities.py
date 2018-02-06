@@ -1,6 +1,6 @@
 import model.Character as char
-import model.Item as item
-import model.Location as loc
+
+import model.story_world.Location as loc
 
 # def generateAllchar.Characteracters():
 students = char.Character("Students", ["Student", "Townsperson"])
@@ -91,23 +91,23 @@ charList = {"students": students, "girls": girls, "wanda": wanda, "bill byron": 
                       "jake petronski": jake_petronski, "jan petronski": jan_petronski, "jack beggles": jack_beggles}
 
 # def generateAllitem.Items():
-friend = item.Item("friend")
-grades = item.Item("grades")
-shoes = item.Item("shoes")
-clothes = item.Item("clothes")
-mother = item.Item("mother")
-name = item.Item("name")
-dress = item.Item("dress")
-game = item.Item("dresses game")
-hun_dresses = item.Item("100 dresses")
-note = item.Item("note")
-contest = item.Item("drawing contest")
-drawing = item.Item("drawing")
-medal = item.Item("medal")
-letter = item.Item("letter")
-house = item.Item("house")
-frame_house = item.Item("frame house")
-friendly_letter = item.Item("friendly letter")
+friend = Item.Item("friend")
+grades = Item.Item("grades")
+shoes = Item.Item("shoes")
+clothes = Item.Item("clothes")
+mother = Item.Item("mother")
+name = Item.Item("name")
+dress = Item.Item("dress")
+game = Item.Item("dresses game")
+hun_dresses = Item.Item("100 dresses")
+note = Item.Item("note")
+contest = Item.Item("drawing contest")
+drawing = Item.Item("drawing")
+medal = Item.Item("medal")
+letter = Item.Item("letter")
+house = Item.Item("house")
+frame_house = Item.Item("frame house")
+friendly_letter = Item.Item("friendly letter")
 
 itemList = {"friend": friend, "shoes": shoes, "clothes": clothes, "mother": mother, "name": name, "dress": dress,
                  "game": game, "hun dresses": hun_dresses, "note": note, "drawing contest": contest, "drawing": drawing,
@@ -119,9 +119,9 @@ rm13 = loc.Location("Room 13")
 corner_of_room = loc.Location("corner of the room")
 front_row = loc.Location("front row")
 boggins_heights = loc.Location("Boggins Heights")
-boggins_heights_road = item.Item("road")
+boggins_heights_road = Item.Item("road")
 neighborhood = loc.Location("neighborhood")
-svenson_house = item.Item("Svenson's house")
+svenson_house = Item.Item("Svenson's house")
 oliver_street = loc.Location("Oliver Street")
 
 locList = {"school": school, "rm13": rm13, "corner of room": corner_of_room, "front row": front_row,
