@@ -4,7 +4,7 @@ from conjugator import conjugator
 
 def whoQuestion(actor, person, relationship):
     if relationship is None:
-        if ent.charList[actor.lower()] is not None:
+         if ent.charList[actor.lower()] is not None:
             type = ent.charList[actor.lower()].type
             output = ", ".join(type[:-1]) + ", and " + type[len(type) - 1]
             output = actor.capitalize() + " is a " + output
@@ -23,7 +23,7 @@ def whoQuestion(actor, person, relationship):
 #        output = ent.charList[actor.lower()].prop
 #        return output
 
-def whatQuestion(actor, item=None, action=None):
+def whatQuestion(actor, item, action):
     # print(ent.charList[actor.lower()].attr)
     if item is None and action is None:
         if ent.charList[actor.lower()] is not None:
@@ -52,3 +52,7 @@ def whereQuestion(actor, action, location):
         return output
     else:
         return "I don't know"
+
+#def whyQuestion(actor, query):
+#    if ent.charLIst[actor.lower()] is not None:
+#        if
