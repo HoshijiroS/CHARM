@@ -83,19 +83,20 @@ input, button {
 /* Scroll bar */
 ::-webkit-scrollbar {
     width: 8px;
-	background-color: #000000;
+    background-color: rgba(0, 0, 0, 0);
 }
- 
+
 /* Track */
 ::-webkit-scrollbar-track {
     -webkit-border-radius: 10px;
     border-radius: 10px;
 }
- 
+
 /* Handle */
 ::-webkit-scrollbar-thumb {
     background-color: #bfbfbf;
     height: 2px;
+    border-radius: 5px;
 }
 ::-webkit-scrollbar-thumb:window-inactive {
 	background-color: #bfbfbf; 

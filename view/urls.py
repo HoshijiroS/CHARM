@@ -8,5 +8,5 @@ urlpatterns = [
     url(r'^ajax/process_message/$', views.process_message, name = 'process_message')
 ]
 
-scene.executeAll()
 server.run_server()
+scene.executeAll()
