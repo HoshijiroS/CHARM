@@ -72,6 +72,16 @@ jack_beggles.hasRelationship(wanda.name, "classmate")
 jack_beggles.hasRelationship(students.name, "classmate")
 jack_beggles.hasRelationship(miss_mason.name, "teacher")
 
+# Jake Petronski#
+jake_petronski.hasRelationship(wanda.name, "sister")
+jake_petronski.hasRelationship(jan_petronski.name, "father")
+jake_petronski.hasRelationship(people.name, "neighbor")
+
+# Jan Petronski#
+jan_petronski.hasRelationship(wanda.name, "daughter")
+jan_petronski.hasRelationship(jake_petronski.name, "son")
+jan_petronski.hasRelationship(people.name, "neighbor")
+
 # Svenson#
 svenson.hasRelationship(wanda.name, "neighbor")
 svenson.hasRelationship(people.name, "neighbor")
@@ -105,14 +115,11 @@ contest = Item.Item("drawing contest")
 drawing = Item.Item("drawing")
 medal = Item.Item("medal")
 letter = Item.Item("letter")
-house = Item.Item("house")
-frame_house = Item.Item("frame house")
 friendly_letter = Item.Item("friendly letter")
 
 itemList = {"friend": friend, "shoes": shoes, "clothes": clothes, "mother": mother, "name": name, "dress": dress,
             "game": game, "hun dresses": hun_dresses, "note": note, "drawing contest": contest, "drawing": drawing,
-            "medal": medal, "letter": letter, "house": house, "friendly letter": friendly_letter, "grades": grades,
-            "frame house": frame_house}
+            "medal": medal, "letter": letter, "friendly letter": friendly_letter, "grades": grades}
 
 # def generateAllloc.Locationations():
 school = Loc.Location("School")
@@ -122,10 +129,11 @@ front_row = Loc.Location("front row")
 boggins_heights = Loc.Location("Boggins Heights")
 boggins_heights_road = Item.Item("road")
 neighborhood = Loc.Location("neighborhood")
-svenson_house = Item.Item("Svenson's house")
+svenson_house = Loc.Location("Svenson's house")
 oliver_street = Loc.Location("Oliver Street")
+frame_house = Loc.Location("frame house")
 
 locList = {"school": school, "rm13": rm13, "corner of room": corner_of_room, "front row": front_row,
            "boggins heights": boggins_heights, "boggins heights road": boggins_heights_road,
            "neighborhood": neighborhood, "svenson house": svenson_house,
-           "oliver street": oliver_street}
+           "oliver street": oliver_street, "frame house": frame_house}

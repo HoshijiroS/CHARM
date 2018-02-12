@@ -6,7 +6,7 @@ import model.story_world.entities as Entity
 from model.conjugator import conjugator
 
 
-def confirmCharacter(actor, person, relationship):
+def confirmCharacter(actor, person, relationship, action, location, type):
     names = {}
     val = []
 
@@ -27,7 +27,13 @@ def confirmCharacter(actor, person, relationship):
     match_length = int(re.findall('\d+', val[0])[0])
 
     if match_length == len(Entity.charList[names[val[0]]].name):
-        return whoQuestion(Entity.charList[names[val[0]]], person, relationship)
+        # 0 - Who
+        # 1 - Where
+        if type == 0:
+            return whoQuestion(Entity.charList[names[val[0]]], person, relationship)
+        if type == 1:
+            return whereQuestion(Entity.charList[names[val[0]]], action, location)
+
     elif match_length < 3:
         return "I don't know."
     else:
@@ -35,12 +41,14 @@ def confirmCharacter(actor, person, relationship):
 
 
 def whoQuestion(actor, person, relationship):
+    output = ""
+
     if relationship is None and person is None:
-        type = actor.type
-        if len(type) > 1:
-            output = ", ".join(type[:-1]) + " and " + type[len(type) - 1]
+        charType = actor.type
+        if len(charType) > 1 and type(charType) is not str:
+            output = ", ".join(charType[:-1]) + " and " + charType[len(charType) - 1]
         else:
-            output = "".join(type)
+            output = charType[0]
 
         output = actor.name.title() + " is a " + output
 
@@ -48,20 +56,22 @@ def whoQuestion(actor, person, relationship):
         answer = actor.queryRelationship(person, relationship)
         output = actor.name.title() + "'s " + relationship + " is " + answer
 
-    else:
+    elif relationship is None:
         rel = actor.queryRelationship(person, relationship)
-        if len(rel) > 1:
+        if len(rel) > 1 and type(rel) is not str:
             out_rel = ", ".join(rel[:-1]) + " and " + rel[len(rel) - 1]
         else:
-            out_rel = "".join(rel)
+            out_rel = rel
 
         output = person + " is " + actor.name.title() + "'s " + out_rel
+
+    else:
+        output = "I don't know."
 
     return output
 
 
 def whatQuestion(actor, item, action):
-    # print(ent.charList[actor.lower()].attr)
     if item is None and action is None:
         if Entity.charList[actor.lower()] is not None:
             props = Entity.charList[actor.lower()].prop
@@ -76,15 +86,23 @@ def whatQuestion(actor, item, action):
 
 
 def whereQuestion(actor, action, location):
-    if Entity.charList[actor.lower()] is not None and Entity.charList[actor.lower()].queryLocation(action,
-                                                                                                   location) is not None:
-        location, scene = Entity.charList[actor.lower()].queryLocation(action, location)
-        if actor == Entity.charList["students"].name or actor == Entity.charList["people"].name or actor == \
+    output = ""
+
+    if actor.queryLocation(action, location) is not None:
+        location, scene = actor.queryLocation(action, location)
+        if actor.name == Entity.charList["students"].name or actor.name == Entity.charList[
+            "people"].name or actor.name == \
                 Entity.charList["girls"].name:
             conj_verb = conjugator.conjugate(action, number=conjugator.PLURAL, tense=conjugator.PRESENT_TENSE)
         else:
             conj_verb = conjugator.conjugate(action, number=conjugator.SINGULAR, tense=conjugator.PRESENT_TENSE)
 
-        output = actor.title() + " " + conj_verb + " in " + location.name
+        if type(location) is str:
+            output = actor.name.title() + " " + conj_verb + " in " + location
+        else:
+            output = actor.name.title() + " " + conj_verb + " in " + location.name
+
+    else:
+        output = "I don't know."
 
     return output

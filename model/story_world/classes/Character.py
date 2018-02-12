@@ -138,6 +138,20 @@ class Character:
 
         return None
 
+    def queryAction(self, act_name):
+        # entity[0] = actions
+        # entity[1] = object
+        # entity[2] = scene
+
+        for entity in self.act:
+            for action in entity[0]:
+                if action == act_name:
+                    return entity[1], entity[2]
+                else:
+                    return None
+
+        return None
+
     def queryRelationship(self, char_name, rel_name):
         # entity[0] = person
         # entity[1] = relationship

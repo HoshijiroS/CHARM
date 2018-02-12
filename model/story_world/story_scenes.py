@@ -176,7 +176,7 @@ def startScene4():
     rel_for_sc_4 = Rel.Relations("Relation for Scene 4")
 
     ####
-    Entity.charList["wanda"].hasLocation(Entity.itemList["frame house"], Rule.getVerbList("live"), scene_4.time + "ev1")
+    Entity.charList["wanda"].hasLocation(Entity.locList["frame house"], Rule.getVerbList("live"), scene_4.time + "ev1")
     lookup.append([scene_4.time + "ev1", Entity.charList["wanda"].name, "location"])
 
     Rule.checkIfPersonIsPoor(Entity.charList["wanda"], scene_4.time + "inf2")
@@ -190,7 +190,7 @@ def startScene4():
                                           scene_4.time + "inf3").hasProperty("no", scene_4.time + "inf3ext")
     lookup.append([scene_4.time + "inf3", Entity.charList["wanda"].name, "attribute"])
 
-    Entity.charList["svenson"].hasLocation(Entity.locList["svenson house"], "live",
+    Entity.charList["svenson"].hasLocation(Entity.locList["svenson house"], Rule.getVerbList("live"),
                                            scene_4.time + "inf6").hasProperty("yellow", scene_4.time + "inf6ext")
     lookup.append([scene_4.time + "inf6", Entity.charList["svenson"].name, "location"])
 
@@ -721,8 +721,8 @@ def startScene15():
                                        scene_15.time + "ev2")
     lookup.append([scene_15.time + "ev2", Entity.charList["maddie"].name, "state"])
 
-    Entity.itemList["frame house"].hasState(Rule.getAdjList("empty"), scene_15.time + "inf1")
-    lookup.append([scene_15.time + "inf1", Entity.itemList["frame house"].name, "state"])
+    Entity.locList["frame house"].hasProperty(Rule.getAdjList("empty"), scene_15.time + "inf1")
+    lookup.append([scene_15.time + "inf1", Entity.locList["frame house"].name, "state"])
 
     Entity.charList["peggy"].hasAction(Rule.getVerbList("meet", negator="not"), Entity.charList["wanda"].name,
                                        scene_15.time + "ev3")

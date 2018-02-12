@@ -45,7 +45,7 @@ def assignPropBySeating(actor, scene):
 def checkIfPersonIsPoor(actor, scene):
     if Entity.charList[actor.name.lower()].queryLocation("live", Entity.locList["boggins heights"].name) is not None and \
                     Entity.charList[actor.name.lower()].queryLocation("live",
-                                                                      Entity.itemList["frame house"].name) is not None:
+                                                                      Entity.locList["frame house"].name) is not None:
         Entity.charList[actor.name.lower()].hasProperty("poor", scene)
     else:
         return None
