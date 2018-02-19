@@ -5,11 +5,11 @@ import distance
 import model.story_world.entities as Entity
 from model.conjugator import conjugator
 
-
-def confirmCharacter(actor, person, relationship, action, location, type):
+def confirmCharacter(actor, questType, person=None, relationship=None, action=None, location=None, item=None, propType=None):
     names = {}
     val = []
-
+    #print("person: ", person)
+    #print("relationship: ", relationship)
     for key, value in Entity.charList.items():
         size = distance.lcsubstrings(actor.lower(), key)
         if bool(size):
@@ -29,10 +29,15 @@ def confirmCharacter(actor, person, relationship, action, location, type):
     if match_length == len(Entity.charList[names[val[0]]].name):
         # 0 - Who
         # 1 - Where
-        if type == 0:
+        # 2 - What
+        if questType == 0:
             return whoQuestion(Entity.charList[names[val[0]]], person, relationship)
-        if type == 1:
+        if questType == 1:
             return whereQuestion(Entity.charList[names[val[0]]], action, location)
+        if questType == 2:
+            return whatQuestion(Entity.charList[names[val[0]]], item, propType, action)
+        if questType == 3:
+            return whenQuestion(Entity.charList[names[val[0]]], action)
 
     elif match_length < 3:
         return "I don't know."
@@ -52,18 +57,21 @@ def whoQuestion(actor, person, relationship):
 
         output = actor.name.title() + " is a " + output
 
-    elif person is None:
+    elif person is None and relationship is not None and actor.queryRelationship(person, relationship) is not None:
         answer = actor.queryRelationship(person, relationship)
         output = actor.name.title() + "'s " + relationship + " is " + answer
 
-    elif relationship is None:
+    elif person is not None and relationship is None and actor.queryRelationship(person, relationship) is not None:
+        #print("actor: ", actor.name)
+        #print("person: ", person)
+        #print("relationship: ", relationship)
         rel = actor.queryRelationship(person, relationship)
         if len(rel) > 1 and type(rel) is not str:
             out_rel = ", ".join(rel[:-1]) + " and " + rel[len(rel) - 1]
         else:
             out_rel = rel
 
-        output = person + " is " + actor.name.title() + "'s " + out_rel
+        output = person.title() + " is " + actor.name.title() + "'s " + out_rel
 
     else:
         output = "I don't know."
@@ -71,16 +79,71 @@ def whoQuestion(actor, person, relationship):
     return output
 
 
-def whatQuestion(actor, item, action):
-    if item is None and action is None:
-        if Entity.charList[actor.lower()] is not None:
-            props = Entity.charList[actor.lower()].prop
-            output = ", ".join(props[:-1]) + ", and " + props[len(props) - 1]
+def whatQuestion(actor, item, propType, action):
+    output = ""
+    prop = []
 
-    elif Entity.charList[actor.lower()] is not None and Entity.charList[actor.lower()].queryAttribute(item,
-                                                                                                      action) is not None:
-        attribute, scene = Entity.charList[actor.lower()].queryAttribute(item, action)
-        output = actor.title() + " " + action + " " + attribute.prop[0][0] + " " + item
+    print(actor.name, " items: ", actor.attr)
+    print("Item: ", actor.queryAttribute(action, Entity.itemList[item].name))
+    if action is None and item is not None and actor.queryAttribute(action, Entity.itemList[item].name) is not None:
+        print("hey")
+        item = actor.queryAttribute(action, Entity.itemList[item].name)
+
+        if propType == "appearance":
+            for properties in item.appProp:
+                prop.append(properties[0])
+
+        print("Properties: ", prop)
+        #elif propType == "personality":
+        #    prop = item.perProp
+        #elif propType == "amount":
+        #    prop = item.amtProp
+
+        #print("property: ", prop)
+
+        prop = [item for sublist in prop for item in sublist]
+
+        if prop is not None:
+            if len(prop) > 1 and type(prop) is not str:
+                out_prop = ", ".join(prop[:-1]) + " and " + prop[len(prop) - 1]
+            else:
+                out_prop = prop[0]
+
+            output = actor.name.title() + "'s " + item.name + " is " + out_prop
+
+    elif action is None and item is None:
+        prop = []
+        if propType == "appearance":
+            for properties in actor.appProp:
+                prop.append(properties[0])
+
+            if prop is not None:
+                if len(prop) > 1:
+                    out_prop = ", ".join(prop[:-1]) + " and " + prop[len(prop) - 1]
+                else:
+                    out_prop = prop[0]
+
+                output = actor.name.title() + "'s appearance is " + out_prop
+
+        elif propType == "property":
+            for properties in actor.perProp:
+                prop.append(properties[0])
+
+            print("personality: ", actor.perProp)
+
+            if prop is not None:
+                if len(prop) > 1:
+                    out_prop = ", ".join(prop[:-1]) + " and " + prop[len(prop) - 1]
+                else:
+                    out_prop = prop[0]
+
+                output = actor.name.title() + "'s personality is " + out_prop
+
+        elif propType == "amount":
+            prop = actor.amtProp
+
+    else:
+        output = "I don't know"
 
     return output
 
@@ -88,8 +151,10 @@ def whatQuestion(actor, item, action):
 def whereQuestion(actor, action, location):
     output = ""
 
-    if actor.queryLocation(action, location) is not None:
+    #print("actor: ", actor)
+    if location is None and actor.queryLocation(action, location) is not None:
         location, scene = actor.queryLocation(action, location)
+        #print("location: ", location)
         if actor.name == Entity.charList["students"].name or actor.name == Entity.charList[
             "people"].name or actor.name == \
                 Entity.charList["girls"].name:
@@ -104,5 +169,27 @@ def whereQuestion(actor, action, location):
 
     else:
         output = "I don't know."
+
+    return output
+
+def whenQuestion(actor, action):
+    #print("action ", action)
+    act = actor.queryAction(action)
+    state = actor.queryState(action, None)
+
+    # print("action: ", action)
+    # print("state: ", actor.state)
+
+    print("State: ", state)
+    if act is not None:
+        output = action
+        print("action: ", action)
+
+    elif state is not None:
+        output = state
+        print("state: ", state)
+
+    else:
+        output = "I don't know"
 
     return output

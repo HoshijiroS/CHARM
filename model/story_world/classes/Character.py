@@ -2,8 +2,10 @@ class Character:
     name = ""
     type = []
     state = []
-    prop = []
-    attr = {}
+    appProp = []
+    perProp = []
+    amtProp = []
+    attr = []
     loc = []
     act = []
     des = []
@@ -12,7 +14,10 @@ class Character:
     def __init__(self, name, type):
         self.name = name
         self.type = type
-        self.prop = []
+        self.state = []
+        self.appProp = []
+        self.perProp = []
+        self.amtProp = []
         self.attr = []
         self.loc = []
         self.act = []
@@ -23,9 +28,17 @@ class Character:
         statePair = [state, scene]
         self.state.append(statePair)
 
-    def hasProperty(self, prop, scene):
+    def hasAppProperty(self, prop, scene):
         propPair = [prop, scene]
-        self.prop.append(propPair)
+        self.appProp.append(propPair)
+
+    def hasPerProperty(self, prop, scene):
+        propPair = [prop, scene]
+        self.perProp.append(propPair)
+
+    def hasAmtProperty(self, prop, scene):
+        propPair = [prop, scene]
+        self.amtProp.append(propPair)
 
     def hasLocation(self, location, action, scene):
         locPair = [action, location, scene]
@@ -37,7 +50,9 @@ class Character:
         attrPair = [action, attribute, scene]
         self.attr.append(attrPair)
 
-        return attribute
+        value = self.queryAttribute(None, attribute.name)
+
+        return value
 
     def hasAction(self, action, obj, scene):
         actPair = [action, obj, scene]
@@ -61,10 +76,14 @@ class Character:
         # entity[0] = state
         # entity[1] = scene
 
+        #print("states: ", self.state)
         if state_name is not None:
             for entity in self.state:
-                if entity[0] == state_name:
-                    return entity[1]
+                print("entity: ", entity)
+                print("entity[0]: ", entity[0], " vs state_name: ", state_name)
+                for action in entity[0]:
+                    if action == state_name:
+                        return entity[1]
 
         if scene_name is not None:
             for entity in self.state:
@@ -73,18 +92,24 @@ class Character:
 
         return None
 
-    def queryProperty(self, prop_name, scene_name):
+    def queryProperty(self, prop_name, type_name, scene_name):
         # entity[0] = property
-        # entity[1] = scene
+        # entity[1] = type
+        # entity[2] = scene
 
         if prop_name is not None:
             for entity in self.prop:
                 if entity[0] == prop_name:
-                    return entity[1]
+                    return entity[1], entity[2]
 
         if scene_name is not None:
             for entity in self.prop:
-                if entity[1] == scene_name:
+                if entity[2] == scene_name:
+                    return entity[0]
+
+        if type_name is not None:
+            for entity in self.prop:
+                if entity[1] == type_name:
                     return entity[0]
 
         return None
@@ -94,11 +119,17 @@ class Character:
         # entity[1] = attribute
         # entity[2] = scene
 
-        for entity in self.attr:
-            if entity[1] == attr_name:
-                for action in entity[0]:
-                    if action == act_name:
-                        return entity[1], entity[2]
+        if act_name is None:
+            for entity in self.attr:
+                #print("entity[1]: ", entity[1], " and ", attr_name)
+                if entity[1].name.lower() == attr_name.lower():
+                    return entity[1]
+        else:
+            for entity in self.attr:
+                if entity[1].name.lower() == attr_name.lower():
+                    for action in entity[0]:
+                        if action == act_name:
+                            return entity[1], entity[2]
         return None
 
     def queryLocation(self, act_name, loc_name):
@@ -107,19 +138,16 @@ class Character:
         # entity[2] = scene
         if loc_name is not None:
             for entity in self.loc:
-                # print("entity: ")
-                # print(entity[1].name)
-                # print("loc name: ")
-                # print(loc_name)
-                if entity[1].name == loc_name:
+                if entity[1].name.lower() == loc_name.lower():
                     for action in entity[0]:
-                        # print("action: ")
-                        # print(action)
                         if action == act_name:
                             return entity[1], entity[2]
-        else:
+
+        elif loc_name is None:
+            #print("here")
             for entity in self.loc:
                 for action in entity[0]:
+                    #print("action: ", action, " and ", act_name)
                     if action == act_name:
                         return entity[1], entity[2]
         return None
@@ -133,8 +161,6 @@ class Character:
             for action in entity[0]:
                 if action == act_name:
                     return entity[1], entity[2]
-                else:
-                    return None
 
         return None
 
@@ -144,11 +170,11 @@ class Character:
         # entity[2] = scene
 
         for entity in self.act:
+            #print("entity: ", entity)
             for action in entity[0]:
+                #print("action: ", action, " vs ", "act_name: ", act_name)
                 if action == act_name:
                     return entity[1], entity[2]
-                else:
-                    return None
 
         return None
 
@@ -158,12 +184,13 @@ class Character:
 
         if rel_name is not None:
             for entity in self.rel:
-                if entity[1] == rel_name:
+                if entity[1].lower() == rel_name:
                     return entity[0]
 
         if char_name is not None:
             for entity in self.rel:
-                if entity[0] == char_name:
+                #print(entity[0], " vs ", char_name)
+                if entity[0].lower() == char_name.lower():
                     return entity[1]
 
         return None

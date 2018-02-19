@@ -100,6 +100,8 @@ charList = {"students": students, "girls": girls, "wanda": wanda, "bill byron": 
             "miss mason": miss_mason,
             "jake petronski": jake_petronski, "jan petronski": jan_petronski, "jack beggles": jack_beggles}
 
+relList = ["classmate", "teacher", "brother", "sister", "neighbor", "father", "mother", "friend", "student"]
+
 # def generateAllitem.Items():
 friend = Item.Item("friend")
 grades = Item.Item("grades")
@@ -127,7 +129,7 @@ rm13 = Loc.Location("Room 13")
 corner_of_room = Loc.Location("corner of the room")
 front_row = Loc.Location("front row")
 boggins_heights = Loc.Location("Boggins Heights")
-boggins_heights_road = Item.Item("road")
+boggins_heights_road = Loc.Location("Boggins Heights Road")
 neighborhood = Loc.Location("neighborhood")
 svenson_house = Loc.Location("Svenson's house")
 oliver_street = Loc.Location("Oliver Street")
