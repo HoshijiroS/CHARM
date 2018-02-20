@@ -79,8 +79,8 @@ class Character:
         #print("states: ", self.state)
         if state_name is not None:
             for entity in self.state:
-                print("entity: ", entity)
-                print("entity[0]: ", entity[0], " vs state_name: ", state_name)
+                #print("entity: ", entity)
+                #print("entity[0]: ", entity[0], " vs state_name: ", state_name)
                 for action in entity[0]:
                     if action == state_name:
                         return entity[1]
@@ -164,17 +164,24 @@ class Character:
 
         return None
 
-    def queryAction(self, act_name):
+    def queryAction(self, act_name, scene_name):
         # entity[0] = actions
         # entity[1] = object
         # entity[2] = scene
 
-        for entity in self.act:
-            #print("entity: ", entity)
-            for action in entity[0]:
+        if act_name is not None:
+            for entity in self.act:
+                #print("entity: ", entity)
+                for action in entity[0]:
+                    #print("action: ", action, " vs ", "act_name: ", act_name)
+                    if action == act_name:
+                        return entity[1], entity[2]
+
+        if scene_name is not None:
+            for entity in self.act:
                 #print("action: ", action, " vs ", "act_name: ", act_name)
-                if action == act_name:
-                    return entity[1], entity[2]
+                if entity[2] == scene_name:
+                    return entity[0], entity[1]
 
         return None
 
