@@ -3,14 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="feb6c143-884b-4904-8969-3d7a3e6685ab" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model/dialogue_manager/content_provider.py" afterPath="$PROJECT_DIR$/model/dialogue_manager/content_provider.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model/dialogue_manager/sentence_parser.py" afterPath="$PROJECT_DIR$/model/dialogue_manager/sentence_parser.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model/story_world/classes/Character.py" afterPath="$PROJECT_DIR$/model/story_world/classes/Character.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model/story_world/classes/Item.py" afterPath="$PROJECT_DIR$/model/story_world/classes/Item.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model/story_world/classes/Location.py" afterPath="$PROJECT_DIR$/model/story_world/classes/Location.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model/story_world/entities.py" afterPath="$PROJECT_DIR$/model/story_world/entities.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model/story_world/rules.py" afterPath="$PROJECT_DIR$/model/story_world/rules.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model/story_world/story_scenes.py" afterPath="$PROJECT_DIR$/model/story_world/story_scenes.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -34,7 +26,7 @@
         <entry file="file://$PROJECT_DIR$/model/dialogue_manager/content_provider.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="88">
-              <caret line="182" column="27" lean-forward="true" selection-start-line="182" selection-start-column="27" selection-end-line="182" selection-end-column="27" />
+              <caret line="182" column="27" lean-forward="false" selection-start-line="182" selection-start-column="27" selection-end-line="182" selection-end-column="27" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -68,7 +60,7 @@
         <entry file="file://$PROJECT_DIR$/model/story_world/rules.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="247">
-              <caret line="61" column="19" lean-forward="true" selection-start-line="61" selection-start-column="19" selection-end-line="61" selection-end-column="19" />
+              <caret line="61" column="19" lean-forward="false" selection-start-line="61" selection-start-column="19" selection-end-line="61" selection-end-column="19" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
               </folding>
@@ -80,7 +72,7 @@
         <entry file="file://$PROJECT_DIR$/model/dialogue_manager/sentence_parser.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="204">
-              <caret line="131" column="82" lean-forward="true" selection-start-line="131" selection-start-column="82" selection-end-line="131" selection-end-column="82" />
+              <caret line="131" column="82" lean-forward="false" selection-start-line="131" selection-start-column="82" selection-end-line="131" selection-end-column="82" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -92,7 +84,7 @@
         <entry file="file://$PROJECT_DIR$/view/templates/view/index.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="50">
-              <caret line="2" column="8" lean-forward="true" selection-start-line="2" selection-start-column="8" selection-end-line="2" selection-end-column="8" />
+              <caret line="2" column="8" lean-forward="false" selection-start-line="2" selection-start-column="8" selection-end-line="2" selection-end-column="8" />
               <folding />
             </state>
           </provider>
@@ -102,7 +94,7 @@
         <entry file="file://$PROJECT_DIR$/model/story_world/entities.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-2325">
-              <caret line="0" column="50" lean-forward="true" selection-start-line="0" selection-start-column="50" selection-end-line="1" selection-end-column="45" />
+              <caret line="0" column="50" lean-forward="false" selection-start-line="0" selection-start-column="50" selection-end-line="1" selection-end-column="45" />
               <folding />
             </state>
           </provider>
@@ -111,8 +103,8 @@
       <file leaf-file-name="Character.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/model/story_world/classes/Character.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="313">
-              <caret line="159" column="31" lean-forward="true" selection-start-line="159" selection-start-column="31" selection-end-line="159" selection-end-column="31" />
+            <state relative-caret-position="113">
+              <caret line="151" column="50" lean-forward="false" selection-start-line="151" selection-start-column="50" selection-end-line="151" selection-end-column="50" />
               <folding />
             </state>
           </provider>
@@ -122,7 +114,7 @@
         <entry file="file://$PROJECT_DIR$/model/story_world/classes/Item.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="263">
-              <caret line="71" column="0" lean-forward="true" selection-start-line="71" selection-start-column="0" selection-end-line="71" selection-end-column="0" />
+              <caret line="71" column="0" lean-forward="false" selection-start-line="71" selection-start-column="0" selection-end-line="71" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -525,7 +517,14 @@
       <option name="project" value="LOCAL" />
       <updated>1518473841150</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Finished WHEN.">
+      <created>1519037041558</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1519037041558</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -592,7 +591,8 @@
     <MESSAGE value="fixed formatting and renamed some files" />
     <MESSAGE value="Finished WHO." />
     <MESSAGE value="Finished WHERE." />
-    <option name="LAST_COMMIT_MESSAGE" value="Finished WHERE." />
+    <MESSAGE value="Finished WHEN." />
+    <option name="LAST_COMMIT_MESSAGE" value="Finished WHEN." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -856,7 +856,7 @@
     <entry file="file://$PROJECT_DIR$/model/story_world/entities.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-2325">
-          <caret line="0" column="50" lean-forward="true" selection-start-line="0" selection-start-column="50" selection-end-line="1" selection-end-column="45" />
+          <caret line="0" column="50" lean-forward="false" selection-start-line="0" selection-start-column="50" selection-end-line="1" selection-end-column="45" />
           <folding />
         </state>
       </provider>
@@ -864,7 +864,7 @@
     <entry file="file://$PROJECT_DIR$/model/story_world/rules.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="247">
-          <caret line="61" column="19" lean-forward="true" selection-start-line="61" selection-start-column="19" selection-end-line="61" selection-end-column="19" />
+          <caret line="61" column="19" lean-forward="false" selection-start-line="61" selection-start-column="19" selection-end-line="61" selection-end-column="19" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
           </folding>
@@ -874,7 +874,7 @@
     <entry file="file://$PROJECT_DIR$/view/templates/view/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="50">
-          <caret line="2" column="8" lean-forward="true" selection-start-line="2" selection-start-column="8" selection-end-line="2" selection-end-column="8" />
+          <caret line="2" column="8" lean-forward="false" selection-start-line="2" selection-start-column="8" selection-end-line="2" selection-end-column="8" />
           <folding />
         </state>
       </provider>
@@ -882,7 +882,7 @@
     <entry file="file://$PROJECT_DIR$/model/story_world/classes/Item.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="263">
-          <caret line="71" column="0" lean-forward="true" selection-start-line="71" selection-start-column="0" selection-end-line="71" selection-end-column="0" />
+          <caret line="71" column="0" lean-forward="false" selection-start-line="71" selection-start-column="0" selection-end-line="71" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -916,7 +916,7 @@
     <entry file="file://$PROJECT_DIR$/model/dialogue_manager/sentence_parser.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="204">
-          <caret line="131" column="82" lean-forward="true" selection-start-line="131" selection-start-column="82" selection-end-line="131" selection-end-column="82" />
+          <caret line="131" column="82" lean-forward="false" selection-start-line="131" selection-start-column="82" selection-end-line="131" selection-end-column="82" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
@@ -926,7 +926,7 @@
     <entry file="file://$PROJECT_DIR$/model/dialogue_manager/content_provider.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="88">
-          <caret line="182" column="27" lean-forward="true" selection-start-line="182" selection-start-column="27" selection-end-line="182" selection-end-column="27" />
+          <caret line="182" column="27" lean-forward="false" selection-start-line="182" selection-start-column="27" selection-end-line="182" selection-end-column="27" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>
@@ -935,8 +935,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/model/story_world/classes/Character.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="313">
-          <caret line="159" column="31" lean-forward="true" selection-start-line="159" selection-start-column="31" selection-end-line="159" selection-end-column="31" />
+        <state relative-caret-position="113">
+          <caret line="151" column="50" lean-forward="false" selection-start-line="151" selection-start-column="50" selection-end-line="151" selection-end-column="50" />
           <folding />
         </state>
       </provider>
