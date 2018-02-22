@@ -124,14 +124,14 @@ def determineSentenceType(sequence):
                 answer_list.append(
                     cont_plan.confirmCharacter(character, 2, propType="property"))
 
-    if beg == "when":
+    if beg == "why":
         #if verbList != []:
         print("VerbList: ", verbList)
         for character in charList:
             for action in verbList:
                 answer_list.append(cont_plan.confirmCharacter(character, 3, action=action))
 
-    answer_list = [x for x in answer_list if x != "I don't know."]
+    answer_list = [x for x in answer_list if x != "I don't know." or x != "I don't know"]
 
     if len(answer_list) > 1:
         return "; ".join(answer_list[:-1]) + " and " + answer_list[len(answer_list) - 1] + "."

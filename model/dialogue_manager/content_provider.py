@@ -3,6 +3,7 @@ import re
 import distance
 
 import model.story_world.entities as Entity
+import model.story_world.story_scenes as ref
 from model.conjugator import conjugator
 
 def confirmCharacter(actor, questType, person=None, relationship=None, action=None, location=None, item=None, propType=None):
@@ -37,7 +38,7 @@ def confirmCharacter(actor, questType, person=None, relationship=None, action=No
         if questType == 2:
             return whatQuestion(Entity.charList[names[val[0]]], item, propType, action)
         if questType == 3:
-            return whenQuestion(Entity.charList[names[val[0]]], action)
+            return whyQuestion(Entity.charList[names[val[0]]], action)
 
     elif match_length < 3:
         return "I don't know."
@@ -172,24 +173,65 @@ def whereQuestion(actor, action, location):
 
     return output
 
-def whenQuestion(actor, action):
-    #print("action ", action)
-    act = actor.queryAction(action)
+def whyQuestion(actor, action):
+    act = actor.queryAction(action, None)
     state = actor.queryState(action, None)
 
     # print("action: ", action)
-    # print("state: ", actor.state)
+    print("action: ", action)
+    #print("state: ", actor.state)
 
-    print("State: ", state)
-    if act is not None:
-        output = action
-        print("action: ", action)
+    causeList = []
 
-    elif state is not None:
-        output = state
-        print("state: ", state)
+    if state is None:
+        #output = act
+        print("action: ", act)
+
+    elif act is None:
+        index = ref.queryLookup(state)
+        event, actor, type = ref.getEventFromLookup(index)
+
+        cause_event = ref.queryRelations(event, "cause")
+
+        print("cause_event: ", cause_event)
+
+        if cause_event is not None:
+            for evs in cause_event:
+                causeList.append(assembleSentence(evs, "cause"))
+
+    if len(causeList) > 1:
+        return "; ".join(causeList[:-1]) + " and " + causeList[len(causeList) - 1]
+
+    elif len(causeList) == 1:
+        return causeList[0]
+
+        # if type == "property":
+        #     charProp = Entity.charList[actor].queryProperty(None, None, scene)
+        #     output = "After " + actor + " became " + charProp
+
+        #output = "After " + actor + ""
+        #print("Output: ", output)
+        # print("state: ", state)
 
     else:
-        output = "I don't know"
+        return "I don't know"
 
-    return output
+def assembleSentence(event, type):
+    index = ref.queryLookup(event)
+    event, actor, type = ref.getEventFromLookup(index)
+    actor = actor.lower()
+
+    if type == "action":
+        action, obj = Entity.charList[actor].queryAction(None, event)
+        print("action: ", action)
+        print("obj: ", obj)
+
+        if len(obj) > 1 and type(obj) != str:
+            out_obj = ", ".join(obj[:-1]) + " and " + obj[len(obj) - 1]
+
+        elif len(obj) == 1:
+            out_obj = obj
+
+        output = "Because " + actor.title() + " " + action[0] + " " + out_obj
+
+        return output
