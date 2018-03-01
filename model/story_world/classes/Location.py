@@ -75,7 +75,7 @@ class Location:
 
         if act_name is None:
             for entity in self.attr:
-                if entity[1] == attr_name.lower() :
+                if entity[1] == attr_name.lower():
                     return entity[0], entity[1], entity[2]
         else:
             for entity in self.attr:

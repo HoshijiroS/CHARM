@@ -1,6 +1,6 @@
 from nltk.corpus import wordnet
-import model.story_world.classes.Item as Item
 
+import model.story_world.classes.Item as Item
 import model.story_world.entities as Entity
 
 
@@ -25,7 +25,8 @@ def getAdjList(adj, negator=None):
 def assignPropBySeating(actor, scene):
     location = Entity.charList[actor.name.lower()].queryLocation("sit", Entity.locList["front row"].name)
 
-    if Entity.charList[actor.name.lower()].queryLocation("sit", Entity.locList["corner of room"].name) is not None and actor.name != "Wanda":
+    if Entity.charList[actor.name.lower()].queryLocation("sit", Entity.locList[
+        "corner of room"].name) is not None and actor.name != "Wanda":
         Entity.charList[actor.name.lower()].hasPerProperty("noisy", scene)
         Entity.charList[actor.name.lower()].hasPerProperty("rough", scene)
         # return elabFor
@@ -34,8 +35,10 @@ def assignPropBySeating(actor, scene):
         grades = Item.Item("grades")
         shoes = Item.Item("shoes")
 
-        Entity.charList[actor.name.lower()].hasAttribute(grades, getVerbList("have", negator=None), scene).hasPerProperty("good", scene + "ext")
-        Entity.charList[actor.name.lower()].hasAttribute(shoes, getVerbList("wear", negator=None), scene).hasAppProperty("not muddy", scene + "ext")
+        Entity.charList[actor.name.lower()].hasAttribute(grades, getVerbList("have", negator=None),
+                                                         scene).hasPerProperty("good", scene + "ext")
+        Entity.charList[actor.name.lower()].hasAttribute(shoes, getVerbList("wear", negator=None),
+                                                         scene).hasAppProperty("not muddy", scene + "ext")
 
     elif actor.name == "Wanda":
         shoes = Item.Item("shoes")
@@ -48,13 +51,13 @@ def assignPropBySeating(actor, scene):
 
 
 def checkIfPersonIsPoor(actor, scene):
-    #print(Entity.charList[actor.name.lower()].queryLocation("live", Entity.locList["boggins heights"].name)[0].name)
-    #print(Entity.charList[actor.name.lower()].queryLocation("live", Entity.locList["frame house"].name)[0].name)
+    # print(Entity.charList[actor.name.lower()].queryLocation("live", Entity.locList["boggins heights"].name)[0].name)
+    # print(Entity.charList[actor.name.lower()].queryLocation("live", Entity.locList["frame house"].name)[0].name)
 
     if Entity.charList[actor.name.lower()].queryLocation("live", Entity.locList["boggins heights"].name) is not None and \
                     Entity.charList[actor.name.lower()].queryLocation("live",
                                                                       Entity.locList["frame house"].name) is not None:
-        #print("True")
+        # print("True")
         Entity.charList[actor.name.lower()].hasPerProperty("poor", scene)
     else:
         return None

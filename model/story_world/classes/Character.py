@@ -154,7 +154,7 @@ class Character:
         # entity[2] = scene
 
         if loc_name is None:
-            #print("here")
+            # print("here")
             for entity in self.loc:
                 for action in entity[0]:
                     if action == act_name:

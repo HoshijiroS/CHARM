@@ -1,8 +1,8 @@
+import model.story_world.classes.Item as Item
 import model.story_world.classes.Relations as Rel
 import model.story_world.classes.Scene as Scene
 import model.story_world.entities as Entity
 import model.story_world.rules as Rule
-import model.story_world.classes.Item as Item
 
 lookup = []
 
@@ -36,6 +36,7 @@ scene_17 = Scene.Scene("Scene 17", "Christmas Time17")
 scene_18 = Scene.Scene("Scene 18", "Christmas Time18")
 
 relations = Rel.Relations("Relations for All Scenes")
+
 
 def startScene1():
     scene_1.hasLocation([Entity.locList["school"], Entity.locList["rm13"]])
@@ -79,7 +80,7 @@ def startScene1():
                                          scene_1.time + "inf3")
     lookup.append([scene_1.time + "inf3", Entity.charList["wanda"].name, "location"])
 
-    #Entity.charList["wanda"].hasAttribute(Entity.itemList["shoes"], Rule.getVerbList("wear"),
+    # Entity.charList["wanda"].hasAttribute(Entity.itemList["shoes"], Rule.getVerbList("wear"),
     #                                      scene_1.time + "inf5").hasAppProperty("muddy", scene_1.time + "inf5ext")
 
     lookup.append([scene_1.time + "inf5", Entity.charList["wanda"].name, "attribute"])
@@ -220,7 +221,8 @@ def startScene5():
 
     ####
     Entity.charList["wanda"].hasAttribute(wan_name,
-                                          "has", scene_5.time + "inf1").hasPerProperty(["weird", "not easy to say"], scene_5.time + "inf1ext")
+                                          "has", scene_5.time + "inf1").hasPerProperty(["weird", "not easy to say"],
+                                                                                       scene_5.time + "inf1ext")
     lookup.append([scene_5.time + "inf1", Entity.charList["wanda"].name, "attribute"])
 
     relations.causedBy(scene_1.time + "inf1", scene_5.time + "inf1")
@@ -228,7 +230,8 @@ def startScene5():
 
     ####
     Entity.charList["wanda"].hasAttribute(wan_dress,
-                                          "wear", scene_5.time + "inf2").hasAppProperty(["blue", "not ironed properly"], scene_5.time + "inf2ext")
+                                          "wear", scene_5.time + "inf2").hasAppProperty(["blue", "not ironed properly"],
+                                                                                        scene_5.time + "inf2ext")
     lookup.append([scene_5.time + "inf2", Entity.charList["wanda"].name, "attribute"])
 
     relations.causedBy(scene_5.time + "inf2", scene_4.time + "inf3")
@@ -244,7 +247,7 @@ def startScene5():
 
     relations.causedBy(scene_5.time + "ev1", scene_5.time + "ev2")
     relations.causedBy(scene_5.time + "ev2",
-                          [scene_5.time + "inf1", scene_5.time + "inf2", scene_1.time + "inf3"])
+                       [scene_5.time + "inf1", scene_5.time + "inf2", scene_1.time + "inf3"])
     ####
 
     ####
@@ -471,8 +474,9 @@ def startScene10():
     Entity.charList["peggy"].hasState(Rule.getAdjList("shocked"), scene_10.time + "ev1b")
     lookup.append([scene_10.time + "ev1b", Entity.charList["peggy"].name, "state"])
 
-    Entity.locList["rm13"].hasAttribute(Entity.itemList["drawing"].hasAmtProperty("100 pieces", scene_10.time + "inf1ext"),
-                                        Rule.getVerbList("post"), scene_10.time + "inf1")
+    Entity.locList["rm13"].hasAttribute(
+        Entity.itemList["drawing"].hasAmtProperty("100 pieces", scene_10.time + "inf1ext"),
+        Rule.getVerbList("post"), scene_10.time + "inf1")
     lookup.append([scene_10.time + "inf1", Entity.locList["rm13"].name, "attribute"])
 
     Entity.itemList["drawing"].hasAppProperty(["pretty"], scene_10.time + "inf2")
@@ -620,7 +624,7 @@ def startScene13():
 
     relations.causedBy(scene_13.time + "ev2", scene_13.time + "ev1")
     relations.causedBy(scene_13.time + "ev1",
-                           [scene_6.time + "ev1", scene_12.time + "ev5"])
+                       [scene_6.time + "ev1", scene_12.time + "ev5"])
     ####
 
     ####
@@ -811,7 +815,8 @@ def startScene17():
         [Entity.charList["wanda"], Entity.charList["maddie"], Entity.charList["peggy"], Entity.charList["miss mason"]])
 
     ####
-    Entity.charList["miss mason"].hasAction(Rule.getVerbList("receive"), Entity.itemList["letter"], scene_17.time + "ev1")
+    Entity.charList["miss mason"].hasAction(Rule.getVerbList("receive"), Entity.itemList["letter"],
+                                            scene_17.time + "ev1")
     lookup.append([scene_17.time + "ev1", Entity.charList["miss mason"].name, "action"])
 
     Entity.itemList["letter"].hasPerProperty("from Wanda", scene_17.time + "ev1ext")
@@ -856,7 +861,7 @@ def startScene17():
     relations.causedBy([scene_17.time + "ev4", scene_17.time + "ev5"], scene_17.time + "ev3")
     relations.causedBy(scene_17.time + "ev3", scene_17.time + "ev6")
     relations.causedBy(scene_17.time + "ev6",
-                           [scene_16.time + "ev3", scene_16.time + "ev4"])
+                       [scene_16.time + "ev3", scene_16.time + "ev4"])
     ####
 
 
@@ -880,7 +885,7 @@ def startScene18():
     lookup.append([scene_18.time + "ev3", Entity.charList["maddie"].name, "state"])
 
     relations.causedBy(scene_18.time + "ev3",
-                           [scene_6.time + "inf5", scene_17.time + "ev3"])
+                       [scene_6.time + "inf5", scene_17.time + "ev3"])
     ####
 
     ####
@@ -896,19 +901,23 @@ def startScene18():
     relations.causedBy(scene_18.time + "ev5", scene_10.time + "ev3")
     ####
 
+
 def queryLookup(event):
     print("index", [lookup.index(x) for x in lookup if x[0] == event][0])
     return [lookup.index(x) for x in lookup if x[0] == event][0]
 
+
 def getEventFromLookup(count):
     return lookup[count]
 
-def queryRelations(event, type):
-    if type == "cause":
+
+def queryRelations(event, relType):
+    if relType == "cause":
         out_ev = [x for x in relations.causeList if x[0] == event][0][1]
         print("Output event: ", out_ev)
 
         return out_ev
+
 
 def executeAll():
     startScene1()

@@ -5,7 +5,6 @@ import distance
 
 import model.story_world.entities as Entity
 import model.story_world.story_scenes as ref
-from model.conjugator import conjugator
 
 
 def confirmCharacter(actor, questType, person=None, relationship=None, action=None, location=None, item=None,
@@ -74,8 +73,6 @@ def whoQuestion(actor, person, relationship):
     else:
         # output = "I don't know"
         return "unknown", None
-
-    return "unknown", None
 
 
 def whatQuestion(actor, item, propType, action):
@@ -148,12 +145,12 @@ def whatQuestion(actor, item, propType, action):
 def whereQuestion(actor, action, location):
     loc, event = actor.queryLocation(action, location)
     if location is None and loc is not None:
-        if actor.name == Entity.charList["students"].name or actor.name == Entity.charList[
-            "people"].name or actor.name == \
-                Entity.charList["girls"].name:
-            conj_verb = conjugator.conjugate(action, number=conjugator.PLURAL, tense=conjugator.PRESENT_TENSE)
-        else:
-            conj_verb = conjugator.conjugate(action, number=conjugator.SINGULAR, tense=conjugator.PRESENT_TENSE)
+        # if actor.name == Entity.charList["students"].name or actor.name == Entity.charList[
+        #     "people"].name or actor.name == \
+        #         Entity.charList["girls"].name:
+        #     conj_verb = conjugator.conjugate(action, number=conjugator.PLURAL, tense=conjugator.PRESENT_TENSE)
+        # else:
+        #     conj_verb = conjugator.conjugate(action, number=conjugator.SINGULAR, tense=conjugator.PRESENT_TENSE)
 
         if type(location) is str:
             # output = actor.name.title() + " " + conj_verb + " in " + loc
@@ -168,12 +165,9 @@ def whereQuestion(actor, action, location):
         # output = "I don't know"
         return "unknown", None
 
-    # return output
-    return "unknown", None
-
 
 def whyQuestion(actor, action):
-    act, object, event = actor.queryAction(action, None)
+    act, obj, event = actor.queryAction(action, None)
     state, event = actor.queryState(action, None)
 
     causeList = []
@@ -213,7 +207,8 @@ def assembleProp(attr, event):
     amtProp, event = attr.queryProperty(None, "amount", event)
     perProp, event = attr.queryProperty(None, "personality", event)
 
-    if appProp is None and amtProp is None:
+    if perProp is None and amtProp is None:
+        out_app = None
         if len(appProp) > 1 and type(appProp) is not str:
             out_app = ", ".join(appProp[:-1]) + " and " + appProp[len(appProp) - 1]
 
@@ -223,6 +218,7 @@ def assembleProp(attr, event):
         return "appearance", out_app
 
     elif appProp is None and perProp is None:
+        out_amt = None
         if len(amtProp) > 1 and type(amtProp) is not str:
             out_amt = ", ".join(amtProp[:-1]) + " and " + amtProp[len(amtProp) - 1]
 
@@ -231,102 +227,104 @@ def assembleProp(attr, event):
 
         return "amount", out_amt
 
-    elif amtProp is None and perProp is None:
-        if len(appProp) > 1 and type(appProp) is not str:
-            out_app = ", ".join(appProp[:-1]) + " and " + appProp[len(appProp) - 1]
+    elif amtProp is None and appProp is None:
+        out_per = None
+        if len(perProp) > 1 and type(appProp) is not str:
+            out_per = ", ".join(appProp[:-1]) + " and " + appProp[len(perProp) - 1]
 
-        elif len(appProp) == 1:
-            out_app = appProp
+        elif len(perProp) == 1:
+            out_per = perProp
 
-        return "appearance", out_app
+        return "personality", out_per
 
 
-def assembleSentence(event, qType):
+def assembleSentence(event, sentenceType):
     index = ref.queryLookup(event)
     event, actor, qType = ref.getEventFromLookup(index)
     actor = Entity.charList[actor.lower()]
     out_obj = ""
     out_state = ""
 
-    if qType == "state":
-        state = actor.queryState(None, event)
+    if sentenceType == "cause":
+        if qType == "state":
+            state = actor.queryState(None, event)
 
-        if len(state) > 1 and type(state) is not str:
-            out_state = ", ".join(state[:-1]) + " and " + state[len(state) - 1]
+            if len(state) > 1 and type(state) is not str:
+                out_state = ", ".join(state[:-1]) + " and " + state[len(state) - 1]
 
-        elif len(state) == 1:
-            out_state = state
+            elif len(state) == 1:
+                out_state = state
 
-        # output = "Because " + actor.name.title() + " was " + out_state
+            # output = "Because " + actor.name.title() + " was " + out_state
 
-        return "cause_state", [actor, out_state]
+            return "cause_state", [actor, out_state]
 
-    elif qType == "action":
-        action, obj, event = actor.queryAction(None, event)
-        print("action: ", action)
-        print("obj: ", obj)
+        elif qType == "action":
+            action, obj, event = actor.queryAction(None, event)
+            print("action: ", action)
+            print("obj: ", obj)
 
-        if len(obj) > 1 and type(obj) is not str:
-            out_obj = ", ".join(obj[:-1]) + " and " + obj[len(obj) - 1]
+            if len(obj) > 1 and type(obj) is not str:
+                out_obj = ", ".join(obj[:-1]) + " and " + obj[len(obj) - 1]
 
-        else:
-            out_obj = obj
+            else:
+                out_obj = obj
 
-        # output = "Because " + actor.name.title() + " " + action[0] + " " + out_obj
+            # output = "Because " + actor.name.title() + " " + action[0] + " " + out_obj
 
-        return "cause_action", [actor, random.choice(action), out_obj]
+            return "cause_action", [actor, random.choice(action), out_obj]
 
-    elif qType == "desire":
-        des, obj = actor.queryDesire(None, event)
+        elif qType == "desire":
+            des, obj = actor.queryDesire(None, event)
 
-        if len(obj) > 1 and type(obj) is not str:
-            out_obj = ", ".join(obj[:-1]) + " and " + obj[len(obj) - 1]
+            if len(obj) > 1 and type(obj) is not str:
+                out_obj = ", ".join(obj[:-1]) + " and " + obj[len(obj) - 1]
 
-        elif len(obj) == 1:
-            out_obj = obj
+            elif len(obj) == 1:
+                out_obj = obj
 
-        # output = "Because " + actor.name.title() + " desired to " + des[0] + " " + out_obj
+            # output = "Because " + actor.name.title() + " desired to " + des[0] + " " + out_obj
 
-        return "cause_desire", [actor, random.choice(des), out_obj]
+            return "cause_desire", [actor, random.choice(des), out_obj]
 
-    elif qType == "feeling":
-        feel, obj = actor.queryFeeling(None, event)
+        elif qType == "feeling":
+            feel, obj = actor.queryFeeling(None, event)
 
-        if len(obj) > 1 and type(obj) is not str:
-            out_obj = ", ".join(obj[:-1]) + " and " + obj[len(obj) - 1]
+            if len(obj) > 1 and type(obj) is not str:
+                out_obj = ", ".join(obj[:-1]) + " and " + obj[len(obj) - 1]
 
-        elif len(obj) == 1:
-            out_obj = obj
+            elif len(obj) == 1:
+                out_obj = obj
 
-        # output = "Because " + actor.name.title() + " felt " + des[0] + " towards " + out_obj
+            # output = "Because " + actor.name.title() + " felt " + des[0] + " towards " + out_obj
 
-        return "cause_feeling", [actor, random.choice(feel), out_obj]
+            return "cause_feeling", [actor, random.choice(feel), out_obj]
 
-    elif qType == "attribute":
-        action, attr, scene = actor.queryAttribute(None, None, event)
+        elif qType == "attribute":
+            action, attr, scene = actor.queryAttribute(None, None, event)
 
-        attrList = []
+            attrList = []
 
-        for entries in attr:
-            qType, attr_prop = assembleProp(entries, event)
-            if qType == "appearance":
-                # attrList.append(actor.name.title() + "'s " + entries + " looks " + attr_prop)
-                attrList.append("item_appearance", [actor, entries, attr_prop])
+            for entries in attr:
+                qType, attr_prop = assembleProp(entries, event)
+                if qType == "appearance":
+                    # attrList.append(actor.name.title() + "'s " + entries + " looks " + attr_prop)
+                    attrList.append("item_appearance", [actor, entries, attr_prop])
 
-            elif qType == "amount":
-                # attrList.append(actor.name.title() + " has " + attr_prop + " " + entries)
-                attrList.append("item_amount", [actor, entries, attr_prop])
+                elif qType == "amount":
+                    # attrList.append(actor.name.title() + " has " + attr_prop + " " + entries)
+                    attrList.append("item_amount", [actor, entries, attr_prop])
 
-            elif qType == "personality":
-                # attrList.append(actor.name.title() + "'s " + entries + " is " + attr_prop)
-                attrList.append("item_personality", [actor, entries, attr_prop])
+                elif qType == "personality":
+                    # attrList.append(actor.name.title() + "'s " + entries + " is " + attr_prop)
+                    attrList.append("item_personality", [actor, entries, attr_prop])
 
-        # if len(attrList) > 1 and type(attrList) is not str:
-        #     out_list = ", ".join(attrList[:-1]) + " and " + attrList[len(attrList) - 1]
-        #
-        # elif len(attr) == 1:
-        #     out_list = attrList
+            # if len(attrList) > 1 and type(attrList) is not str:
+            #     out_list = ", ".join(attrList[:-1]) + " and " + attrList[len(attrList) - 1]
+            #
+            # elif len(attr) == 1:
+            #     out_list = attrList
 
-        # output = "Because " + out_list
+            # output = "Because " + out_list
 
-        return "cause_attribute", attrList
+            return "cause_attribute", attrList

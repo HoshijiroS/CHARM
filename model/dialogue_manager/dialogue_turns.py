@@ -5,7 +5,7 @@ from nltk.tag.stanford import CoreNLPParser
 from nltk.tree import ParentedTree
 
 import model.dialogue_manager.sentence_parser as parser
-import model.story_world.entities as entity
+import model.story_world.entities as Entity
 
 incorrect = False
 question = True
@@ -43,13 +43,13 @@ def gotCorrectAnswer(answer):
     result.append("I think " + answer + " is the answer too!")
 
 
-def formatMultipleItems(list):
-    if len(list) > 1 and type(list) is not str:
-        out = ", ".join(list[:-1]) + " and " + list[len(list) - 1]
-    elif type(list) is str:
-        out = list
+def formatMultipleItems(listAnswer):
+    if len(listAnswer) > 1 and type(listAnswer) is not str:
+        out = ", ".join(listAnswer[:-1]) + " and " + listAnswer[len(listAnswer) - 1]
+    elif type(listAnswer) is str:
+        out = listAnswer
     else:
-        out = list[0]
+        out = listAnswer[0]
 
     return out
 
@@ -84,11 +84,11 @@ def find_matches(list_keys, list_pos):
     return list_match
 
 
-def combine_similar(input, tags):
+def combine_similar(user_input, tags):
     output = []
     curr = []
     tag = ""
-    for x in input:
+    for x in user_input:
         if x[1] not in tags:
             if len(curr) > 0:
                 output.append((" ".join([x[0].lower() for x in curr]), tag))
@@ -149,9 +149,9 @@ def determineSentenceType(sequence):
     toList = [x for x, y in enumerate(sequence) if y[1] == "TO"]
     ofList = [x for x, y in enumerate(sequence) if y[0] == "of"]
     andList = [x for x, y in enumerate(sequence) if y[0] == "and"]
-    itemList = list(set(find_matches(entity.itemList.keys(), sequence)))
+    itemList = list(set(find_matches(Entity.itemList.keys(), sequence)))
 
-    if toList != []:
+    if toList:
         sequence = [i for i in sequence if i[0] != "the"]
         toList = [x for x, y in enumerate(sequence) if y[1] == "TO"]
 
@@ -178,7 +178,7 @@ def determineSentenceType(sequence):
         if beg == "why":
             answerList.append(parser.parseWhyMessage(charList, verbList))
 
-        if len(answerList) != []:
+        if len(answerList) != 0:
             question = False
             gotHints = False
 
@@ -198,7 +198,7 @@ def determineSentenceType(sequence):
                         nameList = [x.name.title() for x in char]
                         out_char = ", ".join(nameList[:-1]) + " and " + nameList[len(nameList) - 1]
 
-                        result.append([actor.name.title() + " has many " + rel + "s. They are " + out_char])
+                        result.append(actor.name.title() + " has many " + rel + "s. They are " + out_char)
                         guessesExhausted()
 
                     else:
@@ -215,8 +215,7 @@ def determineSentenceType(sequence):
                             "I think the name of " + actor.name.title() + "'s " + rel + " is composed of " + str(
                                 wordCount) + " " + words,
                             "I think the first name of " + actor.name.title() + "'s " + rel + " has the letter " +
-                            char[0].name[
-                                2]]
+                            char[0].name[2]]
 
                         hintList.append(hintChoices)
                         gotHints = True
@@ -320,7 +319,7 @@ def determineSentenceType(sequence):
 
             if ansType == "relationship_name":
                 actor, rel, char = ansList
-                if charList != []:
+                if charList:
                     for character in charList:
                         if char[0].name.lower() == character:
                             gotCorrectAnswer(character.title)
@@ -329,13 +328,13 @@ def determineSentenceType(sequence):
                 actor, rel, char = ansList
                 if type(rel) is not str:
                     for entries in rel:
-                        if charList != []:
+                        if charList:
                             for character in charList:
                                 if entries == character or entries + "s" == character:
                                     gotCorrectAnswer(character)
 
                 elif type(rel) is str:
-                    if charList != []:
+                    if charList:
                         for character in charList:
                             if rel == character or rel + "s" == character:
                                 gotCorrectAnswer(character)
@@ -376,7 +375,7 @@ def determineSentenceType(sequence):
     elif gotHints is False and incorrect is True:
         result = []
 
-    if result != []:
+    if result:
         print("result: ", result)
         if len(result) > 1:
             return "; ".join(result[:-1]) + " and " + result[len(result) - 1]
@@ -396,7 +395,7 @@ def parse_message(message):
     messages = []
     messages = [split_compound(user_input, 0, messages)][0]
 
-    if messages == []:
+    if not messages:
         messages.append(single_sentence(user_input))
 
     if len(messages) > 1:
