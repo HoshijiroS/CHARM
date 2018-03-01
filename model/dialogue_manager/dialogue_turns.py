@@ -35,12 +35,14 @@ def gotCorrectAnswer(answer):
     global question
     global gotHints
     global result
+    global wrongMessage
 
+    wrongMessage = [""]
     incorrect = False
     question = True
     gotHints = True
     result = []
-    result.append("I think " + answer + " is the answer too!")
+    result.append("Hooray! I think " + answer + " is the answer too!")
 
 
 def formatMultipleItems(listAnswer):
@@ -55,11 +57,11 @@ def formatMultipleItems(listAnswer):
 
 
 def resetWrongMessage():
-    wrongMessage = ["I don't think that's the answer, but ",
+    message = ["I don't think that's the answer, but ",
                     "Let's try getting the right answer together. ",
                     "Let's try again! "]
 
-    return wrongMessage
+    return message
 
 
 def find_index_with_duplicates(seq, item):
@@ -209,13 +211,10 @@ def determineSentenceType(sequence):
                             words = "words"
 
                         hintChoices = [
-                            "I think the first name of " + actor.name.title() + "'s " + rel + " starts with " + char[
-                                                                                                                    0].name[
-                                                                                                                :1],
+                            "I think the first name of " + actor.name.title() + "'s " + rel + " starts with " + char[0].name[:1] + ".",
                             "I think the name of " + actor.name.title() + "'s " + rel + " is composed of " + str(
-                                wordCount) + " " + words,
-                            "I think the first name of " + actor.name.title() + "'s " + rel + " has the letter " +
-                            char[0].name[2]]
+                                wordCount) + " " + words + ".",
+                            "I think the first name of " + actor.name.title() + "'s " + rel + " has the letter " + char[0].name[2] + "."]
 
                         hintList.append(hintChoices)
                         gotHints = True
@@ -314,6 +313,7 @@ def determineSentenceType(sequence):
                     gotHints = True
 
     elif question is False and incorrect is True:
+        wrongMessage = resetWrongMessage()
         for answers in answerList:
             ansType, ansList = answers
 
@@ -322,16 +322,22 @@ def determineSentenceType(sequence):
                 if charList:
                     for character in charList:
                         if char[0].name.lower() == character:
-                            gotCorrectAnswer(character.title)
+                            gotCorrectAnswer(character.title())
 
             elif ansType == "relationship_rel":
                 actor, rel, char = ansList
                 if type(rel) is not str:
-                    for entries in rel:
-                        if charList:
-                            for character in charList:
-                                if entries == character or entries + "s" == character:
-                                    gotCorrectAnswer(character)
+                    pluralList = [x + "s" for x in rel]
+                    answer = list(set(rel) & set(charList))
+                    pluralAnswer = list(set(pluralList) & set(charList))
+
+                    if answer:
+                        answer = formatMultipleItems(answer)
+                        gotCorrectAnswer(answer)
+
+                    elif pluralAnswer:
+                        pluralAnswer = formatMultipleItems(pluralAnswer)
+                        gotCorrectAnswer(pluralAnswer)
 
                 elif type(rel) is str:
                     if charList:

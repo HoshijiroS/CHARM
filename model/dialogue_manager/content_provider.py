@@ -63,7 +63,7 @@ def whoQuestion(actor, person, relationship):
     elif person is None and relationship is not None:
         # output = actor.name.title() + "'s " + relationship + " is " + char.name.title()
         # print(actor.name.title() + "'s " + relationship + " is " + char.name.title())
-        return "relationship_name", [actor, rel, char]
+        return "relationship_name", [actor, relationship, char]
 
     elif relationship is None and person is not None:
         # output = char.name.title() + " is " + actor.name.title() + "'s " + out_rel
