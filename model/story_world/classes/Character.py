@@ -1,6 +1,7 @@
 class Character:
     name = ""
-    type = []
+    charType = []
+    gender = ""
     state = []
     appProp = []
     perProp = []
@@ -11,9 +12,10 @@ class Character:
     des = []
     rel = []
 
-    def __init__(self, name, type):
+    def __init__(self, name, gender, charType):
         self.name = name
-        self.type = type
+        self.charType = charType
+        self.gender = gender
         self.state = []
         self.appProp = []
         self.perProp = []
@@ -50,9 +52,9 @@ class Character:
         attrPair = [action, attribute, scene]
         self.attr.append(attrPair)
 
-        value = self.queryAttribute(None, attribute.name)
+        act, attr, ev = self.queryAttribute(None, attribute.name, None)
 
-        return value
+        return attr
 
     def hasAction(self, action, obj, scene):
         actPair = [action, obj, scene]
@@ -67,7 +69,7 @@ class Character:
         self.rel.append(relPair)
 
     def queryType(self, type_name):
-        for entity in self.type:
+        for entity in self.charType:
             if entity == type_name:
                 return entity
         return None
@@ -76,81 +78,96 @@ class Character:
         # entity[0] = state
         # entity[1] = scene
 
-        #print("states: ", self.state)
-        if state_name is not None:
+        if scene_name is None:
             for entity in self.state:
-                #print("entity: ", entity)
-                #print("entity[0]: ", entity[0], " vs state_name: ", state_name)
                 for action in entity[0]:
                     if action == state_name:
-                        return entity[1]
+                        return entity[0], entity[1]
 
-        if scene_name is not None:
+        elif state_name is None:
             for entity in self.state:
                 if entity[1] == scene_name:
-                    return entity[0]
+                    return entity[0], entity[1]
 
-        return None
+        return None, None
 
     def queryProperty(self, prop_name, type_name, scene_name):
         # entity[0] = property
-        # entity[1] = type
-        # entity[2] = scene
-
-        if prop_name is not None:
-            for entity in self.prop:
-                if entity[0] == prop_name:
-                    return entity[1], entity[2]
-
-        if scene_name is not None:
-            for entity in self.prop:
-                if entity[2] == scene_name:
-                    return entity[0]
+        # entity[1] = scene
 
         if type_name is not None:
-            for entity in self.prop:
-                if entity[1] == type_name:
-                    return entity[0]
+            if type_name == "personality":
+                if scene_name is None:
+                    for entity in self.perProp:
+                        if entity[0] == prop_name:
+                            return entity[0], entity[1]
 
-        return None
+                elif prop_name is None:
+                    for entity in self.perProp:
+                        if entity[1] == scene_name:
+                            return entity[0], entity[1]
 
-    def queryAttribute(self, act_name, attr_name):
+            elif type_name == "appearance":
+                if scene_name is None:
+                    for entity in self.appProp:
+                        if entity[0] == prop_name:
+                            return entity[0], entity[1]
+
+                elif prop_name is None:
+                    for entity in self.appProp:
+                        if entity[1] == scene_name:
+                            return entity[0], entity[1]
+
+            elif type_name == "amount":
+                if scene_name is None:
+                    for entity in self.amtProp:
+                        if entity[0] == prop_name:
+                            return entity[0], entity[1]
+
+                elif prop_name is None:
+                    for entity in self.amtProp:
+                        if entity[1] == scene_name:
+                            return entity[0], entity[1]
+
+        return None, None
+
+    def queryAttribute(self, act_name, attr_name, ev_name):
         # entity[0] = actions
         # entity[1] = attribute
         # entity[2] = scene
 
-        if act_name is None:
-            for entity in self.attr:
-                #print("entity[1]: ", entity[1], " and ", attr_name)
-                if entity[1].name.lower() == attr_name.lower():
-                    return entity[1]
-        else:
+        if act_name is None and ev_name is None:
             for entity in self.attr:
                 if entity[1].name.lower() == attr_name.lower():
-                    for action in entity[0]:
-                        if action == act_name:
-                            return entity[1], entity[2]
-        return None
+                    return entity[0], entity[1], entity[2]
+
+        elif act_name is None and attr_name is None:
+            for entity in self.attr:
+                if entity[2] == ev_name:
+                    return entity[0], entity[1], entity[2]
+
+        return None, None, None
 
     def queryLocation(self, act_name, loc_name):
         # entity[0] = actions
         # entity[1] = location
         # entity[2] = scene
-        if loc_name is not None:
+
+        if loc_name is None:
+            #print("here")
+            for entity in self.loc:
+                for action in entity[0]:
+                    if action == act_name:
+                        return entity[1], entity[2]
+
+        else:
             for entity in self.loc:
                 if entity[1].name.lower() == loc_name.lower():
                     for action in entity[0]:
                         if action == act_name:
                             return entity[1], entity[2]
 
-        elif loc_name is None:
-            #print("here")
-            for entity in self.loc:
-                for action in entity[0]:
-                    #print("action: ", action, " and ", act_name)
-                    if action == act_name:
-                        return entity[1], entity[2]
-        return None
+        return None, None
 
     def queryDesire(self, act_name):
         # entity[0] = actions
@@ -162,42 +179,50 @@ class Character:
                 if action == act_name:
                     return entity[1], entity[2]
 
-        return None
+        return None, None
 
     def queryAction(self, act_name, scene_name):
         # entity[0] = actions
         # entity[1] = object
         # entity[2] = scene
 
-        if act_name is not None:
+        if scene_name is None:
             for entity in self.act:
-                #print("entity: ", entity)
                 for action in entity[0]:
-                    #print("action: ", action, " vs ", "act_name: ", act_name)
                     if action == act_name:
-                        return entity[1], entity[2]
+                        return entity[0], entity[1], entity[2]
 
-        if scene_name is not None:
+        elif act_name is None:
             for entity in self.act:
-                #print("action: ", action, " vs ", "act_name: ", act_name)
                 if entity[2] == scene_name:
-                    return entity[0], entity[1]
+                    return entity[0], entity[1], entity[2]
 
-        return None
+        return None, None, None
 
     def queryRelationship(self, char_name, rel_name):
         # entity[0] = person
         # entity[1] = relationship
 
-        if rel_name is not None:
+        dummyNames = []
+        dummyRels = []
+        if char_name is None:
             for entity in self.rel:
-                if entity[1].lower() == rel_name:
-                    return entity[0]
+                if type(entity[1]) is not str:
+                    for rels in entity[1]:
+                        if rels.lower() == rel_name:
+                            dummyNames.append(entity[0])
+                            dummyRels.append(entity[1])
 
-        if char_name is not None:
+                else:
+                    if entity[1].lower() == rel_name:
+                        dummyNames.append(entity[0])
+                        dummyRels.append(entity[1])
+
+            return dummyNames, dummyRels
+
+        elif rel_name is None:
             for entity in self.rel:
-                #print(entity[0], " vs ", char_name)
-                if entity[0].lower() == char_name.lower():
-                    return entity[1]
+                if entity[0].name.lower() == char_name.lower():
+                    return entity[0], entity[1]
 
-        return None
+        return None, None

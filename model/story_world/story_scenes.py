@@ -55,7 +55,7 @@ def startScene1():
                                           scene_1.time + "inf1").hasAmtProperty(["no"], scene_1.time + "inf1ext")
     lookup.append([scene_1.time + "inf1", Entity.charList["wanda"].name, "attribute"])
 
-    relations.elaborationFor(scene_1.time + "ev1", scene_1.time + "inf1")
+    relations.causedBy(scene_1.time + "ev1", scene_1.time + "inf1")
     ####
 
     ####
@@ -897,7 +897,7 @@ def startScene18():
     ####
 
 def queryLookup(event):
-    #print("index", [lookup.index(x) for x in lookup if x[0] == event][0])
+    print("index", [lookup.index(x) for x in lookup if x[0] == event][0])
     return [lookup.index(x) for x in lookup if x[0] == event][0]
 
 def getEventFromLookup(count):

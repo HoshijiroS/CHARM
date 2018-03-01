@@ -24,8 +24,6 @@ def getAdjList(adj, negator=None):
 
 def assignPropBySeating(actor, scene):
     location = Entity.charList[actor.name.lower()].queryLocation("sit", Entity.locList["front row"].name)
-    if location is not None:
-        print("front row: ", location[0].name)
 
     if Entity.charList[actor.name.lower()].queryLocation("sit", Entity.locList["corner of room"].name) is not None and actor.name != "Wanda":
         Entity.charList[actor.name.lower()].hasPerProperty("noisy", scene)
