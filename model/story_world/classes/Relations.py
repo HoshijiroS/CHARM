@@ -8,14 +8,10 @@ class Relations:
 
     def __init__(self, sceneName):
         self.sceneName = sceneName
-        self.elabList = []
         self.causeList = []
         self.contList = []
         self.consList = []
         self.summary = []
-
-    def elaborationFor(self, a, bList):
-        self.elabList.append([a, bList])
 
     def causedBy(self, a, bList):
         self.causeList.append([a, bList])

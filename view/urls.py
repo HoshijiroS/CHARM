@@ -10,3 +10,4 @@ urlpatterns = [
 
 server.run_server()
 scene.executeAll()
+scene.printSentences()

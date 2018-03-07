@@ -7,6 +7,17 @@ import model.story_world.entities as Entity
 import model.story_world.story_scenes as ref
 
 
+def formatMultipleItems(listAnswer):
+    if len(listAnswer) > 1 and type(listAnswer) is not str:
+        out = ", ".join(listAnswer[:-1]) + " and " + listAnswer[len(listAnswer) - 1]
+    elif type(listAnswer) is str:
+        out = listAnswer
+    else:
+        out = listAnswer[0]
+
+    return out
+
+
 def confirmCharacter(actor, questType, person=None, relationship=None, action=None, location=None, item=None,
                      propType=None):
     names = {}
@@ -48,13 +59,16 @@ def confirmCharacter(actor, questType, person=None, relationship=None, action=No
 
 
 def whoQuestion(actor, person, relationship):
-    char, rel = actor.queryRelationship(person, relationship)
+    try:
+        char, rel = actor.queryRelationship(person, relationship)
+    except Exception as e:
+        print(e)
+        return "unknown", None
+
     if relationship is None and person is None:
         charType = actor.charType
-        if len(charType) > 1 and type(charType) is not str:
-            output = ", ".join(charType[:-1]) + " and " + charType[len(charType) - 1]
-        else:
-            output = charType[0]
+
+        output = formatMultipleItems(charType)
 
         # output = actor.name.title() + " is a " + output
 
@@ -78,9 +92,13 @@ def whoQuestion(actor, person, relationship):
 def whatQuestion(actor, item, propType, action):
     prop = []
 
-    act, item, event = actor.queryAttribute(action, Entity.itemList[item].name, None)
-    if action is None and item is not None:
+    try:
+        act, item, event = actor.queryAttribute(action, Entity.itemList[item].name, None)
+    except Exception as e:
+        print(e)
+        return "unknown", None
 
+    if action is None and item is not None:
         if propType == "appearance":
             for properties in item.appProp:
                 prop.append(properties[0])
@@ -89,13 +107,8 @@ def whatQuestion(actor, item, propType, action):
             for properties in item.amtProp:
                 prop.append(properties[0])
 
-        prop = [item for sublist in prop for item in sublist]
-
         if prop is not None:
-            if len(prop) > 1 and type(prop) is not str:
-                out_prop = ", ".join(prop[:-1]) + " and " + prop[len(prop) - 1]
-            else:
-                out_prop = prop[0]
+            out_prop = formatMultipleItems(prop)
 
             if propType == "appearance":
                 # output = actor.name.title() + "'s " + item.name + " is " + out_prop
@@ -113,10 +126,7 @@ def whatQuestion(actor, item, propType, action):
                 prop.append(properties[0])
 
             if prop is not None:
-                if len(prop) > 1:
-                    out_prop = ", ".join(prop[:-1]) + " and " + prop[len(prop) - 1]
-                else:
-                    out_prop = prop[0]
+                out_prop = formatMultipleItems(prop)
 
                 # output = actor.name.title() + "'s appearance is " + out_prop
 
@@ -127,10 +137,7 @@ def whatQuestion(actor, item, propType, action):
                 prop.append(properties[0])
 
             if prop is not None:
-                if len(prop) > 1:
-                    out_prop = ", ".join(prop[:-1]) + " and " + prop[len(prop) - 1]
-                else:
-                    out_prop = prop[0]
+                out_prop = formatMultipleItems(prop)
 
                 # output = actor.name.title() + "'s personality is " + out_prop
 
@@ -143,7 +150,12 @@ def whatQuestion(actor, item, propType, action):
 
 
 def whereQuestion(actor, action, location):
-    loc, event = actor.queryLocation(action, location)
+    try:
+        action, loc, event = actor.queryLocation(action, location)
+    except Exception as e:
+        print(e)
+        return "unknown", None
+
     if location is None and loc is not None:
         # if actor.name == Entity.charList["students"].name or actor.name == Entity.charList[
         #     "people"].name or actor.name == \
@@ -153,16 +165,17 @@ def whereQuestion(actor, action, location):
         #     conj_verb = conjugator.conjugate(action, number=conjugator.SINGULAR, tense=conjugator.PRESENT_TENSE)
 
         if type(location) is str:
-            # output = actor.name.title() + " " + conj_verb + " in " + loc
+            output = actor.name.title() + " " + action[0] + " in " + loc
+            print(output)
 
-            return "location", [actor, loc]
+            return "location", [actor, action, loc]
         else:
-            # output = actor.name.title() + " " + conj_verb + " in " + loc.name
+            output = actor.name.title() + " " + action[0] + " in " + loc.name
+            print(output)
 
-            return "location", [actor, loc.name]
+            return "location", [actor, action[0], loc.name]
 
-    else:
-        # output = "I don't know"
+    else:  # output = "I don't know"
         return "unknown", None
 
 
@@ -174,7 +187,7 @@ def whyQuestion(actor, action):
 
     if state is None:
         # output = act
-        print("action: ", act)
+        print("action: ", act[0])
 
     elif act is None:
         index = ref.queryLookup(event)
@@ -204,56 +217,43 @@ def whyQuestion(actor, action):
 
 def assembleProp(attr, event):
     appProp, event = attr.queryProperty(None, "appearance", event)
+    print("appProp: ", appProp)
     amtProp, event = attr.queryProperty(None, "amount", event)
     perProp, event = attr.queryProperty(None, "personality", event)
 
     if perProp is None and amtProp is None:
-        out_app = None
-        if len(appProp) > 1 and type(appProp) is not str:
-            out_app = ", ".join(appProp[:-1]) + " and " + appProp[len(appProp) - 1]
-
-        elif len(appProp) == 1:
-            out_app = appProp
+        out_app = formatMultipleItems(appProp)
 
         return "appearance", out_app
 
     elif appProp is None and perProp is None:
-        out_amt = None
-        if len(amtProp) > 1 and type(amtProp) is not str:
-            out_amt = ", ".join(amtProp[:-1]) + " and " + amtProp[len(amtProp) - 1]
-
-        elif len(amtProp) == 1:
-            out_amt = amtProp
+        out_amt = formatMultipleItems(amtProp)
 
         return "amount", out_amt
 
     elif amtProp is None and appProp is None:
-        out_per = None
-        if len(perProp) > 1 and type(appProp) is not str:
-            out_per = ", ".join(appProp[:-1]) + " and " + appProp[len(perProp) - 1]
-
-        elif len(perProp) == 1:
-            out_per = perProp
+        out_per = formatMultipleItems(perProp)
 
         return "personality", out_per
 
 
 def assembleSentence(event, sentenceType):
-    index = ref.queryLookup(event)
-    event, actor, qType = ref.getEventFromLookup(index)
-    actor = Entity.charList[actor.lower()]
+    try:
+        index = ref.queryLookup(event)
+        event, actor, qType = ref.getEventFromLookup(index)
+        actor = Entity.charList[actor.lower()]
+    except Exception as e:
+        print(e)
+        return "unknown", None
+
     out_obj = ""
     out_state = ""
 
     if sentenceType == "cause":
         if qType == "state":
-            state = actor.queryState(None, event)
+            state, event = actor.queryState(None, event)
 
-            if len(state) > 1 and type(state) is not str:
-                out_state = ", ".join(state[:-1]) + " and " + state[len(state) - 1]
-
-            elif len(state) == 1:
-                out_state = state
+            out_state = formatMultipleItems(state[0])
 
             # output = "Because " + actor.name.title() + " was " + out_state
 
@@ -261,27 +261,17 @@ def assembleSentence(event, sentenceType):
 
         elif qType == "action":
             action, obj, event = actor.queryAction(None, event)
-            print("action: ", action)
-            print("obj: ", obj)
 
-            if len(obj) > 1 and type(obj) is not str:
-                out_obj = ", ".join(obj[:-1]) + " and " + obj[len(obj) - 1]
-
-            else:
-                out_obj = obj
+            out_obj = formatMultipleItems(obj[0])
 
             # output = "Because " + actor.name.title() + " " + action[0] + " " + out_obj
 
-            return "cause_action", [actor, random.choice(action), out_obj]
+            return "cause_action", [actor, action[0], out_obj]
 
         elif qType == "desire":
             des, obj = actor.queryDesire(None, event)
 
-            if len(obj) > 1 and type(obj) is not str:
-                out_obj = ", ".join(obj[:-1]) + " and " + obj[len(obj) - 1]
-
-            elif len(obj) == 1:
-                out_obj = obj
+            out_obj = formatMultipleItems(obj)
 
             # output = "Because " + actor.name.title() + " desired to " + des[0] + " " + out_obj
 
@@ -290,11 +280,7 @@ def assembleSentence(event, sentenceType):
         elif qType == "feeling":
             feel, obj = actor.queryFeeling(None, event)
 
-            if len(obj) > 1 and type(obj) is not str:
-                out_obj = ", ".join(obj[:-1]) + " and " + obj[len(obj) - 1]
-
-            elif len(obj) == 1:
-                out_obj = obj
+            out_obj = formatMultipleItems(obj)
 
             # output = "Because " + actor.name.title() + " felt " + des[0] + " towards " + out_obj
 

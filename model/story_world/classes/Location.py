@@ -28,6 +28,10 @@ class Location:
         attrPair = [action, attribute, scene]
         self.attr.append(attrPair)
 
+        act, attr, ev = self.queryAttribute(None, None, scene)
+
+        return attr
+
     def queryProperty(self, prop_name, type_name, scene_name):
         # entity[0] = property
         # entity[1] = scene
@@ -68,19 +72,19 @@ class Location:
 
         return None, None
 
-    def queryAttribute(self, act_name, attr_name):
+    def queryAttribute(self, act_name, attr_name, ev_name):
         # entity[0] = actions
         # entity[1] = attribute
         # entity[2] = scene
 
-        if act_name is None:
+        if act_name is None and ev_name is None:
             for entity in self.attr:
-                if entity[1] == attr_name.lower():
+                if entity[1].name.lower() == attr_name.lower():
                     return entity[0], entity[1], entity[2]
-        else:
+
+        elif act_name is None and attr_name is None:
             for entity in self.attr:
-                if entity[1] == attr_name.lower():
-                    for action in entity[0]:
-                        if action == act_name:
-                            return entity[0], entity[1], entity[2]
+                if entity[2] == ev_name:
+                    return entity[0], entity[1], entity[2]
+
         return None, None, None

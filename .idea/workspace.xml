@@ -2,9 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="feb6c143-884b-4904-8969-3d7a3e6685ab" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/model/externals/wordnet.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model/dialogue_manager/content_provider.py" afterPath="$PROJECT_DIR$/model/dialogue_manager/content_provider.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model/dialogue_manager/dialogue_turns.py" afterPath="$PROJECT_DIR$/model/dialogue_manager/dialogue_turns.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model/dialogue_manager/sentence_parser.py" afterPath="$PROJECT_DIR$/model/dialogue_manager/sentence_parser.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model/story_world/classes/Character.py" afterPath="$PROJECT_DIR$/model/story_world/classes/Character.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model/story_world/classes/Item.py" afterPath="$PROJECT_DIR$/model/story_world/classes/Item.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model/story_world/classes/Location.py" afterPath="$PROJECT_DIR$/model/story_world/classes/Location.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model/story_world/classes/Relations.py" afterPath="$PROJECT_DIR$/model/story_world/classes/Relations.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model/story_world/entities.py" afterPath="$PROJECT_DIR$/model/story_world/entities.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model/story_world/rules.py" afterPath="$PROJECT_DIR$/model/story_world/rules.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model/story_world/story_scenes.py" afterPath="$PROJECT_DIR$/model/story_world/story_scenes.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/view/urls.py" afterPath="$PROJECT_DIR$/view/urls.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -27,8 +37,8 @@
       <file leaf-file-name="content_provider.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/dialogue_manager/content_provider.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="92">
-              <caret line="63" column="28" lean-forward="true" selection-start-line="63" selection-start-column="28" selection-end-line="63" selection-end-column="28" />
+            <state relative-caret-position="192">
+              <caret line="185" column="18" lean-forward="true" selection-start-line="185" selection-start-column="18" selection-end-line="185" selection-end-column="18" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
               </folding>
@@ -36,39 +46,22 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/.gitignore">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="693">
-              <caret line="48" column="14" lean-forward="false" selection-start-line="48" selection-start-column="14" selection-end-line="48" selection-end-column="14" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="dialogue_turns.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="dialogue_turns.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/dialogue_manager/dialogue_turns.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="282">
-              <caret line="176" column="25" lean-forward="true" selection-start-line="176" selection-start-column="25" selection-end-line="176" selection-end-column="25" />
+            <state relative-caret-position="142">
+              <caret line="403" column="12" lean-forward="false" selection-start-line="403" selection-start-column="12" selection-end-line="403" selection-end-column="12" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
-                <element signature="e#899#1152#0" expanded="false" />
-                <element signature="e#1415#1650#0" expanded="false" />
-                <element signature="e#1696#1885#0" expanded="false" />
-                <element signature="e#1931#2575#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="story_scenes.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/model/story_world/story_scenes.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-22110">
-              <caret line="16" column="34" lean-forward="false" selection-start-line="16" selection-start-column="34" selection-end-line="16" selection-end-column="34" />
-              <folding>
-                <element signature="e#0#45#0" expanded="true" />
+                <element signature="e#1343#1514#0" expanded="false" />
+                <element signature="e#1891#2126#0" expanded="false" />
+                <element signature="e#2172#2361#0" expanded="false" />
+                <element signature="e#2407#3051#0" expanded="false" />
+                <element signature="e#6451#7969#0" expanded="false" />
+                <element signature="e#8043#15876#0" expanded="false" />
+                <element signature="e#15942#17769#0" expanded="false" />
+                <element signature="e#18030#18128#0" expanded="false" />
+                <element signature="e#18655#19480#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -77,33 +70,60 @@
       <file leaf-file-name="sentence_parser.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/dialogue_manager/sentence_parser.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="525">
-              <caret line="21" column="0" lean-forward="false" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+            <state relative-caret-position="142">
+              <caret line="45" column="58" lean-forward="false" selection-start-line="45" selection-start-column="58" selection-end-line="45" selection-end-column="58" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="entities.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/model/story_world/entities.py">
+      <file leaf-file-name="story_scenes.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/model/story_world/story_scenes.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="400">
-              <caret line="35" column="43" lean-forward="false" selection-start-line="35" selection-start-column="43" selection-end-line="35" selection-end-column="43" />
+            <state relative-caret-position="279">
+              <caret line="485" column="8" lean-forward="true" selection-start-line="485" selection-start-column="8" selection-end-line="485" selection-end-column="8" />
               <folding>
-                <element signature="e#0#50#0" expanded="true" />
+                <element signature="e#0#41#0" expanded="true" />
+                <element signature="e#3761#4603#0" expanded="false" />
+                <element signature="e#4655#5094#0" expanded="false" />
+                <element signature="e#5144#5422#0" expanded="false" />
+                <element signature="e#5477#6262#0" expanded="false" />
+                <element signature="e#6317#7110#0" expanded="false" />
+                <element signature="e#7163#8901#0" expanded="false" />
+                <element signature="e#8952#12148#0" expanded="false" />
+                <element signature="e#12174#14277#0" expanded="false" />
+                <element signature="e#14303#15740#0" expanded="false" />
+                <element signature="e#15766#19401#0" expanded="false" />
+                <element signature="e#26851#30182#0" expanded="false" />
+                <marker date="1520437926677" expanded="false" signature="9877:10590" ph="..." />
+                <marker date="1520437926677" expanded="false" signature="10630:11342" ph="..." />
+                <marker date="1520437926677" expanded="false" signature="11382:12093" ph="..." />
+                <marker date="1520437926677" expanded="false" signature="19422:21276" ph="..." />
+                <marker date="1520437926677" expanded="false" signature="21297:24021" ph="..." />
+                <marker date="1520437926677" expanded="false" signature="24042:26825" ph="..." />
+                <marker date="1520437926677" expanded="false" signature="30203:32184" ph="..." />
+                <marker date="1520437926677" expanded="false" signature="32205:34095" ph="..." />
+                <marker date="1520437926677" expanded="false" signature="34117:36806" ph="..." />
+                <marker date="1520437926677" expanded="false" signature="36828:40219" ph="..." />
+                <marker date="1520437926677" expanded="false" signature="40241:42130" ph="..." />
+                <marker date="1520437926677" expanded="false" signature="42152:43739" ph="..." />
+                <marker date="1520437926677" expanded="false" signature="43761:46789" ph="..." />
+                <marker date="1520437926677" expanded="false" signature="46811:49507" ph="..." />
+                <marker date="1520437926677" expanded="false" signature="49529:52739" ph="..." />
+                <marker date="1520437926677" expanded="false" signature="52761:55723" ph="..." />
+                <marker date="1520437926677" expanded="false" signature="55745:57404" ph="..." />
+                <marker date="1520437926677" expanded="false" signature="57848:58181" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="rules.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/model/story_world/rules.py">
+      <file leaf-file-name="Location.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/model/story_world/classes/Location.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="575">
-              <caret line="23" column="0" lean-forward="false" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
-              <folding>
-                <element signature="e#0#31#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="253">
+              <caret line="89" column="31" lean-forward="true" selection-start-line="89" selection-start-column="31" selection-end-line="89" selection-end-column="31" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -111,19 +131,31 @@
       <file leaf-file-name="Relations.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/story_world/classes/Relations.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="350">
-              <caret line="14" column="25" lean-forward="false" selection-start-line="14" selection-start-column="25" selection-end-line="14" selection-end-column="25" />
+            <state relative-caret-position="-102">
+              <caret line="9" column="34" lean-forward="false" selection-start-line="9" selection-start-column="34" selection-end-line="9" selection-end-column="34" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Scene.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/model/story_world/classes/Scene.py">
+      <file leaf-file-name="urls.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/view/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="375">
-              <caret line="15" column="33" lean-forward="false" selection-start-line="15" selection-start-column="33" selection-end-line="15" selection-end-column="33" />
+            <state relative-caret-position="225">
+              <caret line="12" column="0" lean-forward="false" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="rules.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/model/story_world/rules.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="275">
+              <caret line="26" column="89" lean-forward="true" selection-start-line="26" selection-start-column="89" selection-end-line="26" selection-end-column="89" />
+              <folding>
+                <element signature="e#0#45#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -131,8 +163,18 @@
       <file leaf-file-name="Character.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/story_world/classes/Character.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="250">
-              <caret line="10" column="12" lean-forward="false" selection-start-line="10" selection-start-column="12" selection-end-line="10" selection-end-column="12" />
+            <state relative-caret-position="25">
+              <caret line="133" column="0" lean-forward="false" selection-start-line="133" selection-start-column="0" selection-end-line="148" selection-end-column="31" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Item.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/model/story_world/classes/Item.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="523">
+              <caret line="100" column="41" lean-forward="false" selection-start-line="100" selection-start-column="41" selection-end-line="100" selection-end-column="41" />
               <folding />
             </state>
           </provider>
@@ -149,40 +191,38 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>.name.title()</find>
-      <find>failCount</find>
-      <find>compMessage +</find>
-      <find>global</find>
-      <find>actor</find>
-      <find>actor.name.title() + &quot;'s &quot; + relationship + &quot; is &quot; + char.name.title()q</find>
-      <find>wrongMessage = [&quot;&quot;]</find>
-      <find>resetWrong</find>
-      <find>wrong</find>
-      <find>compMessage</find>
-      <find>print(&quot;result</find>
-      <find>is the answer too</find>
-      <find>incorrect</find>
-      <find>rel</find>
-      <find>i don't know</find>
-      <find>.title</find>
+      <find>.consequence</find>
+      <find>obj</find>
+      <find>&quot;has&quot;</find>
+      <find>ev1a</find>
+      <find>and</find>
+      <find>query</find>
+      <find>print(&quot;state</find>
+      <find>monday1inf3</find>
+      <find>entity</find>
+      <find>monday1ev2</find>
+      <find>monday1inf4</find>
       <find>print</find>
-      <find>First</find>
-      <find>relationship_rel</find>
-      <find>result.append</find>
-      <find>result</find>
-      <find>i don't</find>
-      <find>!= []</find>
-      <find>assembleSentence</find>
-      <find>result = []</find>
-      <find>relationship_name</find>
-      <find>i think</find>
-      <find>reset</find>
-      <find>resetWrongMessage</find>
-      <find>gotCorrectAnswer</find>
+      <find>(sent)monday</find>
+      <find>queryLocation</find>
+      <find>scene_5.time</find>
+      <find>attr</find>
+      <find>100 dresses</find>
+      <find>wednesday5ev5</find>
+      <find>wednesday9ev1</find>
+      <find>wednesday9ev</find>
+      <find>hasAttribute</find>
+      <find>negator=&quot;not&quot;</find>
+      <find>WordNet.get</find>
+      <find>hasAtt</find>
+      <find>hasAttr</find>
+      <find>if type(location) is str:query</find>
+      <find>queryState</find>
+      <find>state</find>
+      <find>queryAction</find>
+      <find>pretty</find>
     </findStrings>
     <replaceStrings>
-      <replace>.extend</replace>
-      <replace>.append</replace>
       <replace>scene_15.time + &quot;inf1&quot;</replace>
       <replace>ent.itemList[&quot;hun dresses&quot;]</replace>
       <replace>ent.charList[&quot;svenson_house&quot;]</replace>
@@ -207,6 +247,12 @@
       <replace>actor.title()</replace>
       <replace>causedBy</replace>
       <replace>is the answer too</replace>
+      <replace>&quot;room 13&quot;</replace>
+      <replace>WordNet.getAdjList</replace>
+      <replace>#print(&quot;Error</replace>
+      <replace>print(&quot;Error: &quot;, e, &quot; on &quot;, time)</replace>
+      <replace># print(&quot;action: &quot;, act[0])</replace>
+      <replace>act[0]</replace>
     </replaceStrings>
     <dirStrings>
       <dir>C:\Users\ERDT\Google Drive\ECA\Thesis\CHARM\view\templates</dir>
@@ -250,22 +296,23 @@
         <option value="$PROJECT_DIR$/Dialogue_Manager/sentence_parser.py" />
         <option value="$PROJECT_DIR$/dialogue_manager/sentence_parser.py" />
         <option value="$PROJECT_DIR$/model/story_world/classes/Scene.py" />
-        <option value="$PROJECT_DIR$/view/urls.py" />
         <option value="$PROJECT_DIR$/model/conjugator/conjugator.py" />
         <option value="$PROJECT_DIR$/view/static/css/components.css" />
-        <option value="$PROJECT_DIR$/model/story_world/classes/Relations.py" />
-        <option value="$PROJECT_DIR$/model/story_world/classes/Item.py" />
         <option value="$PROJECT_DIR$/view/views.py" />
         <option value="$PROJECT_DIR$/model/dialogue_manager/dummyBackup.py" />
-        <option value="$PROJECT_DIR$/model/dialogue_manager/sentence_parser.py" />
-        <option value="$PROJECT_DIR$/model/story_world/story_scenes.py" />
-        <option value="$PROJECT_DIR$/model/story_world/classes/Character.py" />
-        <option value="$PROJECT_DIR$/model/story_world/classes/Location.py" />
-        <option value="$PROJECT_DIR$/model/story_world/entities.py" />
-        <option value="$PROJECT_DIR$/model/story_world/rules.py" />
         <option value="$PROJECT_DIR$/.gitignore" />
-        <option value="$PROJECT_DIR$/model/dialogue_manager/content_provider.py" />
+        <option value="$PROJECT_DIR$/model/dialogue_manager/sentence_parser.py" />
+        <option value="$PROJECT_DIR$/model/externals/wordnet.py" />
         <option value="$PROJECT_DIR$/model/dialogue_manager/dialogue_turns.py" />
+        <option value="$PROJECT_DIR$/view/urls.py" />
+        <option value="$PROJECT_DIR$/model/story_world/entities.py" />
+        <option value="$PROJECT_DIR$/model/story_world/classes/Relations.py" />
+        <option value="$PROJECT_DIR$/model/story_world/rules.py" />
+        <option value="$PROJECT_DIR$/model/story_world/classes/Character.py" />
+        <option value="$PROJECT_DIR$/model/story_world/classes/Item.py" />
+        <option value="$PROJECT_DIR$/model/story_world/classes/Location.py" />
+        <option value="$PROJECT_DIR$/model/dialogue_manager/content_provider.py" />
+        <option value="$PROJECT_DIR$/model/story_world/story_scenes.py" />
       </list>
     </option>
   </component>
@@ -318,7 +365,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -347,6 +394,12 @@
               <item name="CHARM" type="b2602c69:ProjectViewProjectNode" />
               <item name="CHARM" type="462c0819:PsiDirectoryNode" />
               <item name="model" type="462c0819:PsiDirectoryNode" />
+              <item name="externals" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="CHARM" type="b2602c69:ProjectViewProjectNode" />
+              <item name="CHARM" type="462c0819:PsiDirectoryNode" />
+              <item name="model" type="462c0819:PsiDirectoryNode" />
               <item name="story_world" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -365,7 +418,7 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -598,7 +651,14 @@
       <option name="project" value="LOCAL" />
       <updated>1519923684650</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Added check for multiple answers">
+      <created>1519925136956</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1519925136956</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -628,26 +688,26 @@
     <frame x="-11" y="-11" width="1942" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="SVN Repositories" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32982457" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15119363" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37669095" sideWeight="0.5114058" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32931727" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32921347" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.36608186" sideWeight="0.48859417" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298647" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15119363" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Database" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3263158" sideWeight="0.49791667" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298647" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39954597" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3299735" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="SVN Repositories" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32982457" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="manage.py@CHARM" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3281075" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3263158" sideWeight="0.49791667" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Concurrent Activities Diagram" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3291714" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
     </layout>
@@ -670,7 +730,8 @@
     <MESSAGE value="Added conjugator." />
     <MESSAGE value="Added Dialogue Turns." />
     <MESSAGE value="Fixed warnings" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed warnings" />
+    <MESSAGE value="Added check for multiple answers" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added check for multiple answers" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -680,25 +741,11 @@
           <line>15</line>
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="12" />
+      <option name="time" value="15" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/view/templates/view/register_page.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/CHARM/wsgi.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/manage.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="357">
@@ -761,13 +808,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/model/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$APPLICATION_HOME_DIR$/helpers/pycharm/django_test_runner.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="925">
@@ -818,25 +858,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="50">
           <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/view/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="200">
-          <caret line="11" column="18" lean-forward="false" selection-start-line="11" selection-start-column="18" selection-end-line="11" selection-end-column="18" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/view/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/model/conjugator/rule.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -867,40 +892,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/model/dialogue_manager/dummyBackup.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="142">
-          <caret line="131" column="18" lean-forward="false" selection-start-line="131" selection-start-column="18" selection-end-line="131" selection-end-column="65" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/model/story_world/classes/Item.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="50" column="25" lean-forward="false" selection-start-line="50" selection-start-column="25" selection-end-line="50" selection-end-column="25" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/model/story_world/classes/Location.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="262">
-          <caret line="23" column="8" lean-forward="false" selection-start-line="23" selection-start-column="8" selection-end-line="23" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/model/story_world/classes/Relations.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="350">
-          <caret line="14" column="25" lean-forward="false" selection-start-line="14" selection-start-column="25" selection-end-line="14" selection-end-column="25" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/model/story_world/classes/Scene.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="375">
@@ -909,80 +900,179 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1200">
+          <caret line="48" column="14" lean-forward="false" selection-start-line="48" selection-start-column="14" selection-end-line="48" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model/dialogue_manager/dummyBackup.py" />
+    <entry file="file://$PROJECT_DIR$/model/externals/wordnet.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="25">
+          <caret line="1" column="0" lean-forward="true" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model/conjugator/rule.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="25">
+          <caret line="1" column="21" lean-forward="false" selection-start-line="1" selection-start-column="21" selection-end-line="1" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/model/story_world/entities.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="400">
-          <caret line="35" column="43" lean-forward="false" selection-start-line="35" selection-start-column="43" selection-end-line="35" selection-end-column="43" />
+        <state relative-caret-position="-2200">
+          <caret line="5" column="28" lean-forward="false" selection-start-line="5" selection-start-column="28" selection-end-line="5" selection-end-column="28" />
           <folding>
             <element signature="e#0#50#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/model/story_world/rules.py">
+    <entry file="file://$PROJECT_DIR$/model/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="575">
-          <caret line="23" column="0" lean-forward="false" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/model/story_world/story_scenes.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-22110">
-          <caret line="16" column="34" lean-forward="false" selection-start-line="16" selection-start-column="34" selection-end-line="16" selection-end-column="34" />
-          <folding>
-            <element signature="e#0#45#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/model/story_world/classes/Character.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="250">
-          <caret line="10" column="12" lean-forward="false" selection-start-line="10" selection-start-column="12" selection-end-line="10" selection-end-column="12" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python35-32/Lib/site-packages/nltk/corpus/reader/wordnet.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="168">
+          <caret line="1297" column="0" lean-forward="false" selection-start-line="1297" selection-start-column="0" selection-end-line="1297" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model/dialogue_manager/dialogue_turns.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="142">
+          <caret line="403" column="12" lean-forward="false" selection-start-line="403" selection-start-column="12" selection-end-line="403" selection-end-column="12" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+            <element signature="e#1343#1514#0" expanded="false" />
+            <element signature="e#1891#2126#0" expanded="false" />
+            <element signature="e#2172#2361#0" expanded="false" />
+            <element signature="e#2407#3051#0" expanded="false" />
+            <element signature="e#6451#7969#0" expanded="false" />
+            <element signature="e#8043#15876#0" expanded="false" />
+            <element signature="e#15942#17769#0" expanded="false" />
+            <element signature="e#18030#18128#0" expanded="false" />
+            <element signature="e#18655#19480#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/model/dialogue_manager/sentence_parser.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="525">
-          <caret line="21" column="0" lean-forward="false" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+        <state relative-caret-position="142">
+          <caret line="45" column="58" lean-forward="false" selection-start-line="45" selection-start-column="58" selection-end-line="45" selection-end-column="58" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
+    <entry file="file://$PROJECT_DIR$/view/urls.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="693">
-          <caret line="48" column="14" lean-forward="false" selection-start-line="48" selection-start-column="14" selection-end-line="48" selection-end-column="14" />
+        <state relative-caret-position="225">
+          <caret line="12" column="0" lean-forward="false" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model/story_world/classes/Character.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="25">
+          <caret line="133" column="0" lean-forward="false" selection-start-line="133" selection-start-column="0" selection-end-line="148" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model/story_world/classes/Item.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="523">
+          <caret line="100" column="41" lean-forward="false" selection-start-line="100" selection-start-column="41" selection-end-line="100" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model/story_world/classes/Location.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="253">
+          <caret line="89" column="31" lean-forward="true" selection-start-line="89" selection-start-column="31" selection-end-line="89" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model/story_world/classes/Relations.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-102">
+          <caret line="9" column="34" lean-forward="false" selection-start-line="9" selection-start-column="34" selection-end-line="9" selection-end-column="34" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/model/dialogue_manager/content_provider.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="92">
-          <caret line="63" column="28" lean-forward="true" selection-start-line="63" selection-start-column="28" selection-end-line="63" selection-end-column="28" />
+        <state relative-caret-position="192">
+          <caret line="185" column="18" lean-forward="true" selection-start-line="185" selection-start-column="18" selection-end-line="185" selection-end-column="18" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/model/dialogue_manager/dialogue_turns.py">
+    <entry file="file://$PROJECT_DIR$/model/story_world/rules.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="282">
-          <caret line="176" column="25" lean-forward="true" selection-start-line="176" selection-start-column="25" selection-end-line="176" selection-end-column="25" />
+        <state relative-caret-position="275">
+          <caret line="26" column="89" lean-forward="true" selection-start-line="26" selection-start-column="89" selection-end-line="26" selection-end-column="89" />
           <folding>
-            <element signature="e#0#13#0" expanded="true" />
-            <element signature="e#899#1152#0" expanded="false" />
-            <element signature="e#1415#1650#0" expanded="false" />
-            <element signature="e#1696#1885#0" expanded="false" />
-            <element signature="e#1931#2575#0" expanded="false" />
+            <element signature="e#0#45#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model/story_world/story_scenes.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="279">
+          <caret line="485" column="8" lean-forward="true" selection-start-line="485" selection-start-column="8" selection-end-line="485" selection-end-column="8" />
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+            <element signature="e#3761#4603#0" expanded="false" />
+            <element signature="e#4655#5094#0" expanded="false" />
+            <element signature="e#5144#5422#0" expanded="false" />
+            <element signature="e#5477#6262#0" expanded="false" />
+            <element signature="e#6317#7110#0" expanded="false" />
+            <element signature="e#7163#8901#0" expanded="false" />
+            <element signature="e#8952#12148#0" expanded="false" />
+            <element signature="e#12174#14277#0" expanded="false" />
+            <element signature="e#14303#15740#0" expanded="false" />
+            <element signature="e#15766#19401#0" expanded="false" />
+            <element signature="e#26851#30182#0" expanded="false" />
+            <marker date="1520437926677" expanded="false" signature="9877:10590" ph="..." />
+            <marker date="1520437926677" expanded="false" signature="10630:11342" ph="..." />
+            <marker date="1520437926677" expanded="false" signature="11382:12093" ph="..." />
+            <marker date="1520437926677" expanded="false" signature="19422:21276" ph="..." />
+            <marker date="1520437926677" expanded="false" signature="21297:24021" ph="..." />
+            <marker date="1520437926677" expanded="false" signature="24042:26825" ph="..." />
+            <marker date="1520437926677" expanded="false" signature="30203:32184" ph="..." />
+            <marker date="1520437926677" expanded="false" signature="32205:34095" ph="..." />
+            <marker date="1520437926677" expanded="false" signature="34117:36806" ph="..." />
+            <marker date="1520437926677" expanded="false" signature="36828:40219" ph="..." />
+            <marker date="1520437926677" expanded="false" signature="40241:42130" ph="..." />
+            <marker date="1520437926677" expanded="false" signature="42152:43739" ph="..." />
+            <marker date="1520437926677" expanded="false" signature="43761:46789" ph="..." />
+            <marker date="1520437926677" expanded="false" signature="46811:49507" ph="..." />
+            <marker date="1520437926677" expanded="false" signature="49529:52739" ph="..." />
+            <marker date="1520437926677" expanded="false" signature="52761:55723" ph="..." />
+            <marker date="1520437926677" expanded="false" signature="55745:57404" ph="..." />
+            <marker date="1520437926677" expanded="false" signature="57848:58181" ph="..." />
           </folding>
         </state>
       </provider>

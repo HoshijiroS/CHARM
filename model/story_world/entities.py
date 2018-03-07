@@ -3,7 +3,7 @@ import model.story_world.classes.Item as Item
 import model.story_world.classes.Location as Loc
 
 # def generateAllchar.Characteracters():
-students = Char.Character("Students", "collective", ["Student", "Townsperson"])
+students = Char.Character("students", "collective", ["Student", "Townsperson"])
 girls = Char.Character("girls", "female", ["Student", "Townsperson"])
 wanda = Char.Character("Wanda", "female", ["Student", "Townsperson"])
 bill_byron = Char.Character("Bill Byron", "male", ["Student", "Townsperson"])
@@ -96,7 +96,7 @@ miss_mason.hasRelationship(bill_byron, "student")
 miss_mason.hasRelationship(jack_beggles, "student")
 
 charList = {"students": students, "girls": girls, "wanda": wanda, "bill byron": bill_byron, "peggy": peggy,
-            "maddie": maddie, "people": people, "svenson": svenson, "cecile": cecile,
+            "maddie": maddie, "townspeople": people, "svenson": svenson, "cecile": cecile,
             "miss mason": miss_mason,
             "jake petronski": jake_petronski, "jan petronski": jan_petronski, "jack beggles": jack_beggles}
 
@@ -120,7 +120,7 @@ letter = Item.Item("letter")
 friendly_letter = Item.Item("friendly letter")
 
 itemList = {"friend": friend, "shoes": shoes, "clothes": clothes, "mother": mother, "name": name, "dress": dress,
-            "game": game, "hun dresses": hun_dresses, "note": note, "drawing contest": contest, "drawing": drawing,
+            "dresses game": game, "100 dresses": hun_dresses, "note": note, "drawing contest": contest, "drawing": drawing,
             "medal": medal, "letter": letter, "friendly letter": friendly_letter, "grades": grades}
 
 # def generateAllloc.Locationations():
@@ -135,7 +135,7 @@ svenson_house = Loc.Location("Svenson's house")
 oliver_street = Loc.Location("Oliver Street")
 frame_house = Loc.Location("frame house")
 
-locList = {"school": school, "rm13": rm13, "corner of room": corner_of_room, "front row": front_row,
+locList = {"school": school, "room 13": rm13, "corner of the room": corner_of_room, "front row": front_row,
            "boggins heights": boggins_heights, "boggins heights road": boggins_heights_road,
-           "neighborhood": neighborhood, "svenson house": svenson_house,
+           "neighborhood": neighborhood, "svenson's house": svenson_house,
            "oliver street": oliver_street, "frame house": frame_house}

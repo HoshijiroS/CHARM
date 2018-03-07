@@ -80,7 +80,7 @@ class Character:
 
         if scene_name is None:
             for entity in self.state:
-                for action in entity[0]:
+                for action in entity[0][1]:
                     if action == state_name:
                         return entity[0], entity[1]
 
@@ -148,38 +148,53 @@ class Character:
 
         return None, None, None
 
-    def queryLocation(self, act_name, loc_name):
+    def queryLocation(self, act_name, loc_name, ev_name):
         # entity[0] = actions
         # entity[1] = location
         # entity[2] = scene
 
-        if loc_name is None:
+        if loc_name is None and act_name and not ev_name:
             # print("here")
             for entity in self.loc:
                 for action in entity[0]:
                     if action == act_name:
-                        return entity[1], entity[2]
+                        return entity[0], entity[1], entity[2]
 
-        else:
+        elif loc_name and act_name and not ev_name:
             for entity in self.loc:
-                if entity[1].name.lower() == loc_name.lower():
+                if type(entity[1]) is str:
+                    comparator = entity[1]
+                else:
+                    comparator = entity[1].name.lower()
+
+                if comparator == loc_name.lower():
                     for action in entity[0]:
                         if action == act_name:
-                            return entity[1], entity[2]
+                            return entity[0], entity[1], entity[2]
 
-        return None, None
+        elif not loc_name and not act_name:
+            for entity in self.loc:
+                if entity[2] == ev_name:
+                    return entity[0], entity[1], entity[2]
 
-    def queryDesire(self, act_name):
+        return None, None, None
+
+    def queryDesire(self, act_name, ev_name):
         # entity[0] = actions
         # entity[1] = object
         # entity[2] = scene
 
-        for entity in self.des:
-            for action in entity[0]:
-                if action == act_name:
-                    return entity[1], entity[2]
+        if act_name and not ev_name:
+            for entity in self.des:
+                for action in entity[0][1]:
+                    if action == act_name:
+                        return entity[0], entity[1], entity[2]
+        else:
+            for entity in self.des:
+                if entity[2] == ev_name:
+                    return entity[0], entity[1], entity[2]
 
-        return None, None
+        return None, None, None
 
     def queryAction(self, act_name, scene_name):
         # entity[0] = actions
@@ -188,7 +203,7 @@ class Character:
 
         if scene_name is None:
             for entity in self.act:
-                for action in entity[0]:
+                for action in entity[0][1]:
                     if action == act_name:
                         return entity[0], entity[1], entity[2]
 
