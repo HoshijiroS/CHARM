@@ -8,6 +8,7 @@ class Relations:
 
     def __init__(self, sceneName):
         self.sceneName = sceneName
+        self.elabList = []
         self.causeList = []
         self.contList = []
         self.consList = []
@@ -15,6 +16,9 @@ class Relations:
 
     def causedBy(self, a, bList):
         self.causeList.append([a, bList])
+
+    def elaborationFor(self, a, bList):
+        self.elabList.append([a, bList])
 
     def contradiction(self, a, b):
         self.contList.append([a, b])

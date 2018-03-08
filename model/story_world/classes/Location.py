@@ -28,10 +28,6 @@ class Location:
         attrPair = [action, attribute, scene]
         self.attr.append(attrPair)
 
-        act, attr, ev = self.queryAttribute(None, None, scene)
-
-        return attr
-
     def queryProperty(self, prop_name, type_name, scene_name):
         # entity[0] = property
         # entity[1] = scene

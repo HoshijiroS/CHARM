@@ -4,7 +4,7 @@ class Item:
     perProp = []
     amtProp = []
     state = []
-    pur = []
+    act = []
 
     def __init__(self, name):
         self.name = name
@@ -12,11 +12,11 @@ class Item:
         self.perProp = []
         self.amtProp = []
         self.state = []
-        self.pur = []
+        self.act = []
 
-    def hasPurpose(self, action, obj, scene):
-        purPair = [action, obj, scene]
-        self.pur.append(purPair)
+    def hasAction(self, action, obj, scene):
+        actPair = [action, obj, scene]
+        self.act.append(actPair)
 
     def hasState(self, state, scene):
         statePair = [state, scene]
@@ -91,19 +91,19 @@ class Item:
 
         return None, None
 
-    def queryPurpose(self, act_name, scene_name):
+    def queryAction(self, act_name, scene_name):
         # entity[0] = actions
         # entity[1] = object
         # entity[2] = scene
 
         if scene_name is None:
-            for entity in self.pur:
+            for entity in self.act:
                 for action in entity[0][1]:
                     if action == act_name:
                         return entity[0], entity[1], entity[2]
 
         elif act_name is None:
-            for entity in self.pur:
+            for entity in self.act:
                 if entity[2] == scene_name:
                     return entity[0], entity[1], entity[2]
 

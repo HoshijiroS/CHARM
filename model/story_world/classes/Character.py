@@ -52,10 +52,6 @@ class Character:
         attrPair = [action, attribute, scene]
         self.attr.append(attrPair)
 
-        act, attr, ev = self.queryAttribute(None, attribute.name, None)
-
-        return attr
-
     def hasAction(self, action, obj, scene):
         actPair = [action, obj, scene]
         self.act.append(actPair)
