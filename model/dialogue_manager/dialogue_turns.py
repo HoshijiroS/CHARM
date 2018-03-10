@@ -251,15 +251,15 @@ def determineSentenceType(sequence):
                             words = "words"
 
                         hintChoices = [
-                            "I think the first name of " + actor.name.title() + "'s " + rel + " starts with " + char[
+                            "the first name of " + actor.name.title() + "'s " + rel + " starts with " + char[
                                                                                                                     0].name[
                                                                                                                 :1] + ".",
-                            "I think the name of " + actor.name.title() + "'s " + rel + " is composed of " + str(
+                            "the name of " + actor.name.title() + "'s " + rel + " is composed of " + str(
                                 wordCount) + " " + words + ".",
-                            "I think the first name of " + actor.name.title() + "'s " + rel + " has the letter " +
+                            "the first name of " + actor.name.title() + "'s " + rel + " has the letter " +
                             char[0].name[2] + "."]
 
-                        hintList.append(hintChoices)
+                        hintList.append("I think " + hintChoices + " Which of the characters has a name like this?")
                         gotHints = True
 
                 elif ansType == "relationship_rel":
@@ -267,72 +267,72 @@ def determineSentenceType(sequence):
 
                     if [x for x in rel if x == "classmate"] or rel == "classmate":
                         hintChoices.extend([
-                            "I think " + actor.name.title() + " and " + char.name.title() + " go to the same school. What kind of relationship do you think they have?",
-                            "I think " + actor.name.title() + " and " + char.name.title() + " are being taught by the same teacher. So, what do you think is their relationship with each other?",
-                            "I think " + actor.name.title() + " and " + char.name.title() + " attend the same classes. What is their relationship to each other then?"
+                            actor.name.title() + " and " + char.name.title() + " go to the same school. What kind of relationship do you think they have?",
+                            actor.name.title() + " and " + char.name.title() + " are being taught by the same teacher. So, what do you think is their relationship with each other?",
+                            actor.name.title() + " and " + char.name.title() + " attend the same classes. What is their relationship to each other then?"
                         ])
 
                     if [x for x in rel if x == "friend"] or rel == "friend":
                         hintChoices.extend([
-                            "I think " + actor.name.title() + " and " + char.name.title() + " talk to each other sometimes. Maybe they are a little more than acquaintances? What can their relationship be?",
-                            "I think " + actor.name.title() + " and " + char.name.title() + " can even become best friends if they spend more time together. So, what do you think is their relationship?",
-                            "I think " + actor.name.title() + " likes to talk to " + char.name.title() + ". What are they to each other?"
+                            actor.name.title() + " and " + char.name.title() + " talk to each other sometimes. Maybe they are a little more than acquaintances? What can their relationship be?",
+                            actor.name.title() + " and " + char.name.title() + " can even become best friends if they spend more time together. So, what do you think is their relationship?",
+                            actor.name.title() + " likes to talk to " + char.name.title() + ". What are they to each other?"
                         ])
 
                     if [x for x in rel if x == "best friend"] or rel == "best friend":
                         hintChoices.extend([
-                            "I think " + actor.name.title() + " and " + char.name.title() + " are always together. Maybe they are a little more than friends? What are they to each other?",
-                            "I think " + actor.name.title() + " and " + char.name.title() + " go to school together. So, what do you think is their relationship?",
-                            "I think " + actor.name.title() + " and " + char.name.title() + " even share items. What can their relationship be?"
+                            actor.name.title() + " and " + char.name.title() + " are always together. Maybe they are a little more than friends? What are they to each other?",
+                            actor.name.title() + " and " + char.name.title() + " go to school together. So, what do you think is their relationship?",
+                            actor.name.title() + " and " + char.name.title() + " even share items. What can their relationship be?"
                         ])
 
                     if [x for x in rel if x == "father"] or rel == "father":
                         hintChoices.extend([
-                            "I think " + actor.name.title() + " and " + char.name.title() + " live in the same house. Who can " + char.name.title() + " be to " + actor.name.title() + "?",
-                            "I think " + actor.name.title() + " and " + char.name.title() + " are relatives. So, what do you think is the relationship of " + char.name.title() + " to " + actor.name.title() + "?",
-                            "I think " + char.name.title() + " provides for " + actor.name.title() + "'s needs. Who can " + char.name.title() + " be to " + actor.name.title() + "?"
+                            actor.name.title() + " and " + char.name.title() + " live in the same house. Who can " + char.name.title() + " be to " + actor.name.title() + "?",
+                            actor.name.title() + " and " + char.name.title() + " are relatives. So, what do you think is the relationship of " + char.name.title() + " to " + actor.name.title() + "?",
+                            char.name.title() + " provides for " + actor.name.title() + "'s needs. Who can " + char.name.title() + " be to " + actor.name.title() + "?"
                         ])
 
                     if [x for x in rel if x == "daughter"] or rel == "daughter":
                         hintChoices.extend([
-                            "I think " + actor.name.title() + " and " + char.name.title() + " live in the same house. Who can " + char.name.title() + " be to " + actor.name.title() + "?",
-                            "I think " + actor.name.title() + " and " + char.name.title() + " are relatives. So, what do you think is the relationship of " + char.name.title() + " to " + actor.name.title() + "?",
-                            "I think " + actor.name.title() + " loves " + char.name.title() + " very much. Who can " + char.name.title() + " be to " + actor.name.title() + "?"
+                            actor.name.title() + " and " + char.name.title() + " live in the same house. Who can " + char.name.title() + " be to " + actor.name.title() + "?",
+                            actor.name.title() + " and " + char.name.title() + " are relatives. So, what do you think is the relationship of " + char.name.title() + " to " + actor.name.title() + "?",
+                            actor.name.title() + " loves " + char.name.title() + " very much. Who can " + char.name.title() + " be to " + actor.name.title() + "?"
                         ])
 
                     if [x for x in rel if x == "brother"] or rel == "brother":
                         hintChoices.extend([
-                            "I think " + actor.name.title() + " and " + char.name.title() + " live in the same house. Who can " + char.name.title() + " be to " + actor.name.title() + "?",
-                            "I think " + actor.name.title() + " and " + char.name.title() + " have the same surname! So, what do you think is the relationship of " + char.name.title() + " to " + actor.name.title() + "?",
-                            "I think " + char.name.title() + " and " + actor.name.title() + " are relatives. Who can " + char.name.title() + " be to " + actor.name.title() + "?"
+                            actor.name.title() + " and " + char.name.title() + " live in the same house. Who can " + char.name.title() + " be to " + actor.name.title() + "?",
+                            actor.name.title() + " and " + char.name.title() + " have the same surname! So, what do you think is the relationship of " + char.name.title() + " to " + actor.name.title() + "?",
+                            char.name.title() + " and " + actor.name.title() + " are relatives. Who can " + char.name.title() + " be to " + actor.name.title() + "?"
                         ])
 
                     if [x for x in rel if x == "sister"] or rel == "sister":
                         hintChoices.extend([
-                            "I think " + actor.name.title() + " and " + char.name.title() + " live in the same house. Who can " + char.name.title() + " be to " + actor.name.title() + "?",
-                            "I think " + actor.name.title() + " and " + char.name.title() + " have the same surname! So, what do you think is the relationship of " + char.name.title() + " to " + actor.name.title() + "?",
-                            "I think " + char.name.title() + " and " + actor.name.title() + " are relatives. Who can " + char.name.title() + " be to " + actor.name.title() + "?"
+                            actor.name.title() + " and " + char.name.title() + " live in the same house. Who can " + char.name.title() + " be to " + actor.name.title() + "?",
+                            actor.name.title() + " and " + char.name.title() + " have the same surname! So, what do you think is the relationship of " + char.name.title() + " to " + actor.name.title() + "?",
+                            char.name.title() + " and " + actor.name.title() + " are relatives. Who can " + char.name.title() + " be to " + actor.name.title() + "?"
                         ])
 
                     if [x for x in rel if x == "teacher"] or rel == "teacher":
                         hintChoices.extend([
-                            "I think " + actor.name.title() + " respects " + char.name.title() + " very much. Maybe they also see each other at school. Who can " + char.name.title() + " be to " + actor.name.title() + "?",
-                            "I think " + actor.name.title() + " learns a lot from listening to " + char.name.title() + ". So, who do you think is " + char.name.title() + " to " + actor.name.title() + "?",
-                            "I think you can consider " + char.name.title() + " as " + actor.name.title() + "'s second mother. Who can " + char.name.title() + " be to " + actor.name.title() + "?"
+                            actor.name.title() + " respects " + char.name.title() + " very much. Maybe they also see each other at school. Who can " + char.name.title() + " be to " + actor.name.title() + "?",
+                            actor.name.title() + " learns a lot from listening to " + char.name.title() + ". So, who do you think is " + char.name.title() + " to " + actor.name.title() + "?",
+                            "you can consider " + char.name.title() + " as " + actor.name.title() + "'s second mother. Who can " + char.name.title() + " be to " + actor.name.title() + "?"
                         ])
 
                     if [x for x in rel if x == "student"] or rel == "student":
                         hintChoices.extend([
-                            "I think " + char.name.title() + " respects " + actor.name.title() + " very much. Maybe they also see each other at school. Who can " + char.name.title() + " be to " + actor.name.title() + "?",
-                            "I think " + char.name.title() + " learns a lot from listening to " + actor.name.title() + ". So, who do you think is " + char.name.title() + " to " + actor.name.title() + "?",
-                            "I think you can consider " + actor.name.title() + " as " + char.name.title() + "'s second mother. Who can " + char.name.title() + " be to " + actor.name.title() + "?"
+                            char.name.title() + " respects " + actor.name.title() + " very much. Maybe they also see each other at school. Who can " + char.name.title() + " be to " + actor.name.title() + "?",
+                            char.name.title() + " learns a lot from listening to " + actor.name.title() + ". So, who do you think is " + char.name.title() + " to " + actor.name.title() + "?",
+                            "you can consider " + actor.name.title() + " as " + char.name.title() + "'s second mother. Who can " + char.name.title() + " be to " + actor.name.title() + "?"
                         ])
 
                     if [x for x in rel if x == "neighbor"] or rel == "neighbor":
                         hintChoices.extend([
-                            "I think " + char.name.title() + " and " + actor.name.title() + " live in the same neighborhood. What do you think is their relationship with each other?",
-                            "I think " + actor.name.title() + " lives near " + char.name.title() + ". So, who do you think is " + actor.name.title() + " to " + char.name.title() + "?",
-                            "I think there is a possibility that " + actor.name.title() + "'s and " + char.name.title() + "'s houses are only beside each other! So, what do you think is their relationship?"
+                            char.name.title() + " and " + actor.name.title() + " live in the same neighborhood. What do you think is their relationship with each other?",
+                            actor.name.title() + " lives near " + char.name.title() + ". So, who do you think is " + actor.name.title() + " to " + char.name.title() + "?",
+                            "there is a possibility that " + actor.name.title() + "'s and " + char.name.title() + "'s houses are only beside each other! So, what do you think is their relationship?"
                         ])
 
                     if len(hintChoices) > 3:
@@ -344,23 +344,22 @@ def determineSentenceType(sequence):
                             temp.append(r)
                             i = i + 1
 
-                        hintList.append(temp)
+                        hintList.append("I think " + temp)
                         gotHints = True
 
                     else:
-                        hintList.append(hintChoices)
+                        hintList.append("I think " + hintChoices)
                         gotHints = True
 
                 elif ansType == "location":
                     actor, action, loc = ansList
 
                     temp = Entity.locList[loc.lower()].appProp
-                    print("Temp: ", temp)
 
                     if temp:
                         for properties in temp:
                             hintChoices.append(
-                                "I think the place where " + actor.name.title() + action + " is " + properties)
+                                "the place where " + actor.name.title() + action + " is " + properties)
 
                     else:
                         wordCount = len(loc.split())
@@ -369,10 +368,10 @@ def determineSentenceType(sequence):
                         else:
                             words = "words"
 
-                        hintChoices.extend(["I think the name of the place where " + actor.name.title() + " " + action + " starts with " + loc[                                                                                            :1] + ".",
-                                            "I think the name of the place where " + actor.name.title() + " " + action + " is composed of " + str(
+                        hintChoices.extend(["the name of the place where " + actor.name.title() + " " + action + " starts with " + loc[                                                                                            :1] + ".",
+                                            "the name of the place where " + actor.name.title() + " " + action + " is composed of " + str(
                                             wordCount) + " " + words + ".",
-                                            "I think the name of the place where " + actor.name.title() + " " + action + " has the letter " +
+                                            "the name of the place where " + actor.name.title() + " " + action + " has the letter " +
                                             loc[2] + "."])
 
                     if len(hintChoices) > 3:
@@ -384,11 +383,11 @@ def determineSentenceType(sequence):
                             temp.append(r)
                             i = i + 1
 
-                        hintList.append(temp)
+                        hintList.append("I think " + temp + " What place in the story do you think this is?")
                         gotHints = True
 
                     else:
-                        hintList.append(hintChoices)
+                        hintList.append("I think " + hintChoices + " What place in the story do you think this is?")
                         gotHints = True
 
                 elif ansType == "item_appearance":
@@ -493,6 +492,15 @@ def determineSentenceType(sequence):
             return result[0]
     else:
         return "Try asking me a question!"
+
+def generateFollowUp(questType, ansList):
+    if questType == "relationship_name" or questType == "relationship_rel":
+        actor, rel, char = ansList
+
+        #try:
+        #    prop = Entity.charList[actor].query
+
+
 
 
 def parse_message(message):
