@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="feb6c143-884b-4904-8969-3d7a3e6685ab" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model/dialogue_manager/dialogue_turns.py" afterPath="$PROJECT_DIR$/model/dialogue_manager/dialogue_turns.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -35,7 +35,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="dialogue_turns.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="dialogue_turns.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/dialogue_manager/dialogue_turns.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="536">
@@ -55,11 +55,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="sentence_parser.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/model/dialogue_manager/sentence_parser.py">
+      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1125">
-              <caret line="45" column="58" lean-forward="false" selection-start-line="45" selection-start-column="58" selection-end-line="45" selection-end-column="58" />
+            <state relative-caret-position="768">
+              <caret line="49" column="13" lean-forward="false" selection-start-line="49" selection-start-column="13" selection-end-line="49" selection-end-column="13" />
               <folding />
             </state>
           </provider>
@@ -280,7 +280,6 @@
         <option value="$PROJECT_DIR$/view/static/css/components.css" />
         <option value="$PROJECT_DIR$/view/views.py" />
         <option value="$PROJECT_DIR$/model/dialogue_manager/dummyBackup.py" />
-        <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/model/dialogue_manager/sentence_parser.py" />
         <option value="$PROJECT_DIR$/model/externals/wordnet.py" />
         <option value="$PROJECT_DIR$/view/urls.py" />
@@ -293,6 +292,7 @@
         <option value="$PROJECT_DIR$/model/story_world/classes/Item.py" />
         <option value="$PROJECT_DIR$/model/story_world/story_scenes.py" />
         <option value="$PROJECT_DIR$/model/dialogue_manager/dialogue_turns.py" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -652,7 +652,14 @@
       <option name="project" value="LOCAL" />
       <updated>1520534817887</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Added function to further conversation.">
+      <created>1520667512962</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1520667512962</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -727,7 +734,8 @@
     <MESSAGE value="Added check for multiple answers" />
     <MESSAGE value="Added function to print Story World" />
     <MESSAGE value="Added function to print Story World." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added function to print Story World." />
+    <MESSAGE value="Added function to further conversation." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added function to further conversation." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -893,13 +901,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1200">
-          <caret line="48" column="14" lean-forward="false" selection-start-line="48" selection-start-column="14" selection-end-line="48" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/model/dialogue_manager/dummyBackup.py" />
     <entry file="file://$PROJECT_DIR$/model/externals/wordnet.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -1053,6 +1054,14 @@
             <element signature="e#17775#17873#0" expanded="false" />
             <element signature="e#18400#19225#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="768">
+          <caret line="49" column="13" lean-forward="false" selection-start-line="49" selection-start-column="13" selection-end-line="49" selection-end-column="13" />
+          <folding />
         </state>
       </provider>
     </entry>
