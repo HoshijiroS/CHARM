@@ -190,8 +190,7 @@ def whyQuestion(actor, action):
         print("action: ", act[0])
 
     elif act is None:
-        index = ref.queryLookup(event)
-        event, actor, qType = ref.getEventFromLookup(index)
+        event, actor, qType = ref.queryLookup(event)
 
         cause_event = ref.queryRelations(event, "cause")
 
@@ -199,7 +198,7 @@ def whyQuestion(actor, action):
 
         if cause_event is not None:
             for evs in cause_event:
-                causeList.append(assembleSentence(evs, "cause"))
+                causeList.append(assembleSentence(evs))
 
                 # if len(causeList) > 1:
                 #     return "; ".join(causeList[:-1]) + " and " + causeList[len(causeList) - 1]
@@ -217,100 +216,88 @@ def whyQuestion(actor, action):
 
 def assembleProp(attr, event):
     appProp, event = attr.queryProperty(None, "appearance", event)
-    print("appProp: ", appProp)
     amtProp, event = attr.queryProperty(None, "amount", event)
     perProp, event = attr.queryProperty(None, "personality", event)
 
-    if perProp is None and amtProp is None:
+    if perProp is None and amtProp is None and appProp:
         out_app = formatMultipleItems(appProp)
 
         return "appearance", out_app
 
-    elif appProp is None and perProp is None:
+    elif appProp is None and perProp is None and amtProp:
         out_amt = formatMultipleItems(amtProp)
 
         return "amount", out_amt
 
-    elif amtProp is None and appProp is None:
+    elif amtProp is None and appProp is None and perProp:
         out_per = formatMultipleItems(perProp)
 
         return "personality", out_per
 
+    return None, None
 
-def assembleSentence(event, sentenceType):
+def assembleSentence(event):
     try:
-        index = ref.queryLookup(event)
-        event, actor, qType = ref.getEventFromLookup(index)
+        event, actor, qType = ref.queryLookup(event)
         actor = Entity.charList[actor.lower()]
     except Exception as e:
         print(e)
         return "unknown", None
 
+    print("qType: ", qType)
     out_obj = ""
     out_state = ""
 
-    if sentenceType == "cause":
-        if qType == "state":
-            state, event = actor.queryState(None, event)
+    if qType == "state":
+        state, event = actor.queryState(None, event)
 
-            out_state = formatMultipleItems(state[0])
+        out_state = formatMultipleItems(state[0])
 
-            # output = "Because " + actor.name.title() + " was " + out_state
+        # output = "Because " + actor.name.title() + " was " + out_state
 
-            return "cause_state", [actor, out_state]
+        return "state", [actor, out_state]
 
-        elif qType == "action":
-            action, obj, event = actor.queryAction(None, event)
+    elif qType == "action":
+        action, obj, event = actor.queryAction(None, event)
 
-            out_obj = formatMultipleItems(obj[0])
+        out_obj = formatMultipleItems(obj)
 
-            # output = "Because " + actor.name.title() + " " + action[0] + " " + out_obj
+        # output = "Because " + actor.name.title() + " " + action[0] + " " + out_obj
 
-            return "cause_action", [actor, action[0], out_obj]
+        return "action", [actor, action[0], out_obj]
 
-        elif qType == "desire":
-            des, obj = actor.queryDesire(None, event)
+    elif qType == "desire":
+        des, obj = actor.queryDesire(None, event)
 
-            out_obj = formatMultipleItems(obj)
+        out_obj = formatMultipleItems(obj)
 
-            # output = "Because " + actor.name.title() + " desired to " + des[0] + " " + out_obj
+        # output = "Because " + actor.name.title() + " desired to " + des[0] + " " + out_obj
 
-            return "cause_desire", [actor, random.choice(des), out_obj]
+        return "desire", [actor, random.choice(des), out_obj]
 
-        elif qType == "feeling":
-            feel, obj = actor.queryFeeling(None, event)
+    elif qType == "feeling":
+        feel, obj = actor.queryFeeling(None, event)
 
-            out_obj = formatMultipleItems(obj)
+        out_obj = formatMultipleItems(obj)
 
-            # output = "Because " + actor.name.title() + " felt " + des[0] + " towards " + out_obj
+        # output = "Because " + actor.name.title() + " felt " + des[0] + " towards " + out_obj
 
-            return "cause_feeling", [actor, random.choice(feel), out_obj]
+        return "feeling", [actor, random.choice(feel), out_obj]
 
-        elif qType == "attribute":
-            action, attr, scene = actor.queryAttribute(None, None, event)
+    elif qType == "attribute":
+        action, attr, scene = actor.queryAttribute(None, None, event)
 
-            attrList = []
+        if type(attr) is str:
+            propType, out_prop = assembleProp(attr, scene)
 
-            for entries in attr:
-                qType, attr_prop = assembleProp(entries, event)
-                if qType == "appearance":
-                    # attrList.append(actor.name.title() + "'s " + entries + " looks " + attr_prop)
-                    attrList.append("item_appearance", [actor, entries, attr_prop])
+            return "attribute", [actor, action, attr, scene, propType, out_prop]
 
-                elif qType == "amount":
-                    # attrList.append(actor.name.title() + " has " + attr_prop + " " + entries)
-                    attrList.append("item_amount", [actor, entries, attr_prop])
+        else:
+            temp = []
+            for items in attr:
+                propType, out_prop = assembleProp(attr, event)
+                temp.append(actor, action, attr, scene, propType, out_prop)
 
-                elif qType == "personality":
-                    # attrList.append(actor.name.title() + "'s " + entries + " is " + attr_prop)
-                    attrList.append("item_personality", [actor, entries, attr_prop])
+            return "attribute", temp
 
-            # if len(attrList) > 1 and type(attrList) is not str:
-            #     out_list = ", ".join(attrList[:-1]) + " and " + attrList[len(attrList) - 1]
-            #
-            # elif len(attr) == 1:
-            #     out_list = attrList
-
-            # output = "Because " + out_list
-
-            return "cause_attribute", attrList
+        return "attribute", [actor, action, attr, scene]

@@ -5,13 +5,15 @@ from nltk.tag.stanford import CoreNLPParser
 from nltk.tree import ParentedTree
 
 import model.dialogue_manager.sentence_parser as parser
+import model.dialogue_manager.content_provider as provider
 import model.story_world.entities as Entity
-import model.externals.wordnet as WordNet
+import model.story_world.story_scenes as ref
 
 incorrect = False
 question = True
 gotHints = True
 first = True
+followUp = False
 answerList = []
 hintList = []
 result = []
@@ -25,15 +27,17 @@ def guessesExhausted():
     global gotHints
     global compMessage
     global first
+    global followUp
 
     first = True
     question = True
     gotHints = False
     incorrect = False
+    followUp = False
     compMessage = [""]
 
 
-def gotCorrectAnswer(answer):
+def gotCorrectAnswer(answer, followUpSent):
     global incorrect
     global question
     global gotHints
@@ -41,16 +45,18 @@ def gotCorrectAnswer(answer):
     global wrongMessage
     global compMessage
     global first
+    global followUp
 
     first = True
     incorrect = False
     question = True
     gotHints = True
+    followUp = True
     wrongMessage = [""]
     compMessage = [""]
 
     result = []
-    result.append("Hooray! I think " + answer + " is the answer too!")
+    result.append("Hooray! I think " + answer + " is the answer too!" + followUpSent)
 
 
 def formatMultipleItems(listAnswer):
@@ -190,21 +196,23 @@ def determineSentenceType(sequence):
     verbList = [item[0] for item in sequence if item[1] in verbTags]
 
     if question is True:
-        answerList = []
+        result = []
         wrongMessage = [""]
         incorrect = True
 
-        if beg == "who":
-            answerList.extend(parser.parseWhoMessage(sequence, posList, ofList, toList, charList))
+        if not followUp:
+            answerList = []
+            if beg == "who":
+                answerList.extend(parser.parseWhoMessage(sequence, posList, ofList, toList, charList))
 
-        if beg == "where":
-            answerList.extend(parser.parseWhereMessage(charList, verbList))
+            if beg == "where":
+                answerList.extend(parser.parseWhereMessage(charList, verbList))
 
-        if beg == "what":
-            answerList.extend(parser.parseWhatMessage(sequence, posList, ofList, charList, andList, itemList))
+            if beg == "what":
+                answerList.extend(parser.parseWhatMessage(sequence, posList, ofList, charList, andList, itemList))
 
-        if beg == "why":
-            answerList.extend(parser.parseWhyMessage(charList, verbList))
+            if beg == "why":
+                answerList.extend(parser.parseWhyMessage(charList, verbList))
 
         answerList = [x for x in answerList if x[0] != "unknown"]
         tempResult = []
@@ -252,14 +260,17 @@ def determineSentenceType(sequence):
 
                         hintChoices = [
                             "the first name of " + actor.name.title() + "'s " + rel + " starts with " + char[
-                                                                                                                    0].name[
-                                                                                                                :1] + ".",
+                                                                                                            0].name[
+                                                                                                        :1] + ".",
                             "the name of " + actor.name.title() + "'s " + rel + " is composed of " + str(
                                 wordCount) + " " + words + ".",
                             "the first name of " + actor.name.title() + "'s " + rel + " has the letter " +
                             char[0].name[2] + "."]
 
-                        hintList.append("I think " + hintChoices + " Which of the characters has a name like this?")
+                        hintList.extend(
+                            ["I think " + entries + " Which of the characters has a name like this?" for entries in
+                             hintChoices])
+                        # print("hintList: ", hintList)
                         gotHints = True
 
                 elif ansType == "relationship_rel":
@@ -344,11 +355,11 @@ def determineSentenceType(sequence):
                             temp.append(r)
                             i = i + 1
 
-                        hintList.append("I think " + temp)
+                        hintList.extend(["I think " + entries for entries in temp])
                         gotHints = True
 
                     else:
-                        hintList.append("I think " + hintChoices)
+                        hintList.extend(["I think " + entries for entries in hintChoices])
                         gotHints = True
 
                 elif ansType == "location":
@@ -359,7 +370,7 @@ def determineSentenceType(sequence):
                     if temp:
                         for properties in temp:
                             hintChoices.append(
-                                "the place where " + actor.name.title() + action + " is " + properties)
+                                "the place where " + actor.name.title() + action + " is " + properties + ".")
 
                     else:
                         wordCount = len(loc.split())
@@ -368,11 +379,13 @@ def determineSentenceType(sequence):
                         else:
                             words = "words"
 
-                        hintChoices.extend(["the name of the place where " + actor.name.title() + " " + action + " starts with " + loc[                                                                                            :1] + ".",
-                                            "the name of the place where " + actor.name.title() + " " + action + " is composed of " + str(
-                                            wordCount) + " " + words + ".",
-                                            "the name of the place where " + actor.name.title() + " " + action + " has the letter " +
-                                            loc[2] + "."])
+                        hintChoices.extend([
+                                               "the name of the place where " + actor.name.title() + " " + action + " starts with " + loc[
+                                                                                                                                      :1] + ".",
+                                               "the name of the place where " + actor.name.title() + " " + action + " is composed of " + str(
+                                                   wordCount) + " " + words + ".",
+                                               "the name of the place where " + actor.name.title() + " " + action + " has the letter " +
+                                               loc[2] + "."])
 
                     if len(hintChoices) > 3:
                         i = 0
@@ -383,21 +396,25 @@ def determineSentenceType(sequence):
                             temp.append(r)
                             i = i + 1
 
-                        hintList.append("I think " + temp + " What place in the story do you think this is?")
+                        hintList.extend(
+                            ["I think " + entries + " What place in the story do you think this is?" for entries in
+                             temp])
                         gotHints = True
 
                     else:
-                        hintList.append("I think " + hintChoices + " What place in the story do you think this is?")
+                        hintList.extend(
+                            ["I think " + entries + " What place in the story do you think this is?" for entries in
+                             hintChoices])
                         gotHints = True
 
                 elif ansType == "item_appearance":
                     actor, item, prop = ansList
 
-                    #for prop
-                    #synonymList = WordNet.getAdjList(prop)
+                    # for prop
+                    # synonymList = WordNet.getAdjList(prop)
 
                 elif ansType == "confirmation":
-                    hintList.append(["Do you mean " + ansList.name.title() + "?"])
+                    hintList.append("Do you mean " + ansList.name.title() + "?")
                     gotHints = True
 
     elif question is False and incorrect is True:
@@ -410,7 +427,7 @@ def determineSentenceType(sequence):
                 if charList:
                     for character in charList:
                         if char[0].name.lower() == character:
-                            gotCorrectAnswer(character.title())
+                            generateFollowUp(character.title(), "relationship_name", ansList)
 
             elif ansType == "relationship_rel":
                 actor, rel, char = ansList
@@ -421,38 +438,37 @@ def determineSentenceType(sequence):
 
                     if answer:
                         answer = formatMultipleItems(answer)
-                        gotCorrectAnswer(answer)
+                        generateFollowUp(answer, "relationship_rel", ansList)
 
                     elif pluralAnswer:
                         pluralAnswer = formatMultipleItems(pluralAnswer)
-                        gotCorrectAnswer(pluralAnswer)
+                        generateFollowUp(pluralAnswer, "relationship_rel", ansList)
 
                 elif type(rel) is str:
                     if charList:
                         for character in charList:
                             if rel == character or rel + "s" == character:
-                                gotCorrectAnswer(character)
+                                generateFollowUp(character)
 
             elif ansType == "location":
                 actor, action, loc = ansList
                 if charList:
                     for character in charList:
                         if character in loc.lower():
-                            gotCorrectAnswer(loc)
+                            generateFollowUp(loc, "location", ansList)
 
     if gotHints is True and incorrect is True:
         result = []
         if hintList != [[]]:
-            for hints in hintList:
-                r = random.choice(hints)
-                hints.remove(r)
+            r = random.choice(hintList)
+            hintList.remove(r)
 
-                if first is True:
-                    # print("compMessage2: ", compMessage)
-                    result.append(random.choice(compMessage) + r)
-                    first = False
-                else:
-                    result.append(random.choice(wrongMessage) + r)
+            if first is True:
+                # print("compMessage2: ", compMessage)
+                result.append(random.choice(compMessage) + r)
+                first = False
+            else:
+                result.append(random.choice(wrongMessage) + r)
 
         elif hintList == [[]]:
             for answers in answerList:
@@ -463,7 +479,7 @@ def determineSentenceType(sequence):
 
                     out = formatMultipleItems(rel)
 
-                    result.append("I think " + actor.name.title() + "'s " + out + " is " + char[0].name.title() + ".")
+                    result.append("I think " + actor.name.title() + "'s " + out + " is " + char[0].name.title() + ".", "relationship_name", ansList)
                     guessesExhausted()
 
                 if ansType == "relationship_rel":
@@ -471,13 +487,13 @@ def determineSentenceType(sequence):
 
                     out = formatMultipleItems(rel)
 
-                    result.append("I think " + char.name.title() + " is " + actor.name.title() + "'s " + out + ".")
+                    result.append("I think " + char.name.title() + " is " + actor.name.title() + "'s " + out + ".", "relationship_rel", ansList)
                     guessesExhausted()
 
                 if ansType == "location":
                     actor, action, loc = ansList
 
-                    result.append("I think " + actor.name.title() + " " + action + " in " + loc + ".")
+                    result.append("I think " + actor.name.title() + " " + action + " in " + loc + ".", "location", ansList)
                     guessesExhausted()
 
     elif gotHints is False and incorrect is True:
@@ -493,14 +509,45 @@ def determineSentenceType(sequence):
     else:
         return "Try asking me a question!"
 
-def generateFollowUp(questType, ansList):
-    if questType == "relationship_name" or questType == "relationship_rel":
+
+def generateFollowUp(answer, questType, ansList):
+    print("correct1")
+    global answerList
+    global result
+
+    followUpSent = ""
+
+    if questType == "relationship_name":
         actor, rel, char = ansList
 
-        #try:
-        #    prop = Entity.charList[actor].query
+        try:
+            perProp = Entity.charList[actor.name.lower()].perProp
+            appProp = Entity.charList[actor.name.lower()].appProp
+        except Exception as e:
+            # print("Error: ", e)
+            a = 1
 
+        print("perProp: ", perProp)
+        if perProp:
+            personality, event = random.choice(perProp)
 
+            if event is not None:
+                followUpResult = ref.queryRelations("Wednesday3inf10", "cause")
+                #followUpResult = ref.queryRelations(event, "cause")
+                answerList = []
+
+                if followUpResult:
+                    if type(followUpResult) is list:
+                        for entries in followUpResult:
+                            print("entries: ", entries)
+                            answerList.append(provider.assembleSentence(entries))
+
+                    else:
+                        answerList.append(provider.assembleSentence(followUpResult))
+
+                    print("answerList: ", answerList)
+                    followUpSent = " Why do you think is " + actor.name.title() + " " + personality + "?"
+                    gotCorrectAnswer(answer, followUpSent)
 
 
 def parse_message(message):

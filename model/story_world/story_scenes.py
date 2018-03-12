@@ -40,6 +40,7 @@ scene_18 = Scene.Scene("Scene 18", "Christmas Time18")
 
 relations = Rel.Relations("Relations for All Scenes")
 
+
 def formatMultipleItems(listAnswer):
     if len(listAnswer) > 1 and type(listAnswer) is not str:
         out = ", ".join(listAnswer[:-1]) + " and " + listAnswer[len(listAnswer) - 1]
@@ -49,6 +50,7 @@ def formatMultipleItems(listAnswer):
         out = listAnswer[0]
 
     return out
+
 
 def assembleSentence():
     sentences = {}
@@ -61,12 +63,14 @@ def assembleSentence():
             try:
                 act, obj, scene = Entity.charList[actor].queryAction(None, time)
             except Exception as e:
-                print("Error: ", e, " on ", time, " charAction")
+                # print("Error: ", e, " on ", time, " charAction")
+                a = 1
 
             try:
                 act, obj, scene = Entity.itemList[actor].queryAction(None, time)
             except Exception as e:
-                print("Error: ", e, " on ", time, " itemAction")
+                # print("Error: ", e, " on ", time, " itemAction")
+                a = 1
 
             if obj:
                 if type(obj) is str:
@@ -113,12 +117,14 @@ def assembleSentence():
             try:
                 state, scene = Entity.charList[actor].queryState(None, time)
             except Exception as e:
-                print("Error: ", e, " on ", time, " actorState")
+                # print("Error: ", e, " on ", time, " actorState")
+                a = 1
 
             try:
                 state, scene = Entity.itemList[actor].queryState(None, time)
             except Exception as e:
-                print("Error: ", e, " on ", time, " itemState")
+                # print("Error: ", e, " on ", time, " itemState")
+                a = 1
 
             if state:
                 state = state[0]
@@ -139,7 +145,8 @@ def assembleSentence():
             try:
                 act, loc, scene = Entity.charList[actor].queryLocation(None, None, time)
             except Exception as e:
-                print("Error: ", e, " on ", time, " actorLocation")
+                # print("Error: ", e, " on ", time, " actorLocation")
+                a = 1
 
             if loc:
                 if type(loc) is str:
@@ -163,17 +170,20 @@ def assembleSentence():
             try:
                 prop, scene = Entity.charList[actor].queryProperty(None, "appearance", time)
             except Exception as e:
-                print("Error: ", e, " on ", time, "charAppearance")
+                # print("Error: ", e, " on ", time, "charAppearance")
+                a = 1
 
             try:
                 prop, scene = Entity.itemList[actor].queryProperty(None, "appearance", time)
             except Exception as e:
-                print("Error: ", e, " on ", time, " itemAppearance")
+                a = 1
+                # print("Error: ", e, " on ", time, " itemAppearance")
 
             try:
                 prop, scene = Entity.locList[actor].queryProperty(None, "appearance", time)
             except Exception as e:
-                print("Error: ", e, " on ", time, "locationAppearance")
+                a = 1
+                # print("Error: ", e, " on ", time, "locationAppearance")
 
             if prop:
                 out_prop = formatMultipleItems(prop)
@@ -183,17 +193,20 @@ def assembleSentence():
             try:
                 prop, scene = Entity.charList[actor].queryProperty(None, "personality", time)
             except Exception as e:
-                print("Error: ", e, " on ", time, " actorPersonality")
+                a = 1
+                # print("Error: ", e, " on ", time, " actorPersonality")
 
             try:
                 prop, scene = Entity.itemList[actor].queryProperty(None, "personality", time)
             except Exception as e:
-                print("Error: ", e, " on ", time, " itemPersonality")
+                a = 1
+                # print("Error: ", e, " on ", time, " itemPersonality")
 
             try:
                 prop, scene = Entity.locList[actor].queryProperty(None, "personality", time)
             except Exception as e:
-                print("Error: ", e, " on ", time, "locationPersonality")
+                a = 1
+                # print("Error: ", e, " on ", time, "locationPersonality")
 
             if prop:
                 out_prop = formatMultipleItems(prop)
@@ -203,7 +216,8 @@ def assembleSentence():
             try:
                 act, obj, scene = Entity.itemList[actor].queryPurpose(None, None, time)
             except Exception as e:
-                print("Error: ", e, " on ", time, " itemPurpose")
+                a = 1
+                # print("Error: ", e, " on ", time, " itemPurpose")
 
             sentences["sentence for " + time] = actor + " " + act[0] + " " + obj
 
@@ -211,17 +225,20 @@ def assembleSentence():
             try:
                 act, attr, scene = Entity.charList[actor].queryAttribute(None, None, time)
             except Exception as e:
-                print("Error: ", e, " on ", time, " actorAttr")
+                a = 1
+                # print("Error: ", e, " on ", time, " actorAttr")
 
             try:
                 act, attr, scene = Entity.itemList[actor].queryAttribute(None, None, time)
             except Exception as e:
-                print("Error: ", e, " on ", time, " itemAttr")
+                a = 1
+                # print("Error: ", e, " on ", time, " itemAttr")
 
             try:
                 act, attr, scene = Entity.locList[actor].queryAttribute(None, None, time)
             except Exception as e:
-                print("Error: ", e, " on ", time, " locationAttr")
+                a = 1
+                # print("Error: ", e, " on ", time, " locationAttr")
 
             if attr:
                 sentences["sentence for " + time] = actor + " " + act[0] + " " + attr.name
@@ -1232,20 +1249,24 @@ def startScene18():
 
 
 def queryLookup(event):
-    print("index", [lookup.index(x) for x in lookup if x[0] == event][0])
-    return [lookup.index(x) for x in lookup if x[0] == event][0]
-
-
-def getEventFromLookup(count):
+    count = [lookup.index(x) for x in lookup if x[0] == event][0]
     return lookup[count]
 
 
 def queryRelations(event, relType):
     if relType == "cause":
-        out_ev = [x for x in relations.causeList if x[0] == event][0][1]
-        print("Output event: ", out_ev)
+        for entries in relations.causeList:
+            a, b = entries
 
-        return out_ev
+            if type(a) is str and a == event:
+                return b
+
+            elif type(a) is list:
+                for items in a:
+                    if items == event:
+                        return b
+
+    return None
 
 
 def executeAll():
