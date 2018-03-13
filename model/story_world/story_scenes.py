@@ -1,6 +1,5 @@
 import model.externals.wordnet as WordNet
 import model.story_world.classes.Item as Item
-import model.story_world.classes.Location as Location
 import model.story_world.classes.Relations as Rel
 import model.story_world.classes.Scene as Scene
 import model.story_world.entities as Entity

@@ -240,16 +240,18 @@ def assembleSentence(event):
     try:
         event, actor, qType = ref.queryLookup(event)
         actor = Entity.charList[actor.lower()]
+        actor = Entity.itemList[actor.lower()]
+        actor = Entity.locList[actor.lower()]
     except Exception as e:
         print(e)
-        return "unknown", None
+        #return "unknown", None
 
     print("qType: ", qType)
     out_obj = ""
     out_state = ""
 
     if qType == "state":
-        state, event = actor.queryState(None, event)
+        state, scene = actor.queryState(None, event)
 
         out_state = formatMultipleItems(state[0])
 
@@ -258,46 +260,112 @@ def assembleSentence(event):
         return "state", [actor, out_state]
 
     elif qType == "action":
-        action, obj, event = actor.queryAction(None, event)
+        act, obj, scene = actor.queryAction(None, event)
 
         out_obj = formatMultipleItems(obj)
 
         # output = "Because " + actor.name.title() + " " + action[0] + " " + out_obj
 
-        return "action", [actor, action[0], out_obj]
+        return "action", [actor, act[0], out_obj]
 
     elif qType == "desire":
-        des, obj = actor.queryDesire(None, event)
+        des, obj, scene = actor.queryDesire(None, event)
 
         out_obj = formatMultipleItems(obj)
 
         # output = "Because " + actor.name.title() + " desired to " + des[0] + " " + out_obj
 
-        return "desire", [actor, random.choice(des), out_obj]
+        return "desire", [actor, des[0], out_obj]
 
     elif qType == "feeling":
-        feel, obj = actor.queryFeeling(None, event)
+        feel, obj, scene = actor.queryFeeling(None, event)
 
         out_obj = formatMultipleItems(obj)
 
         # output = "Because " + actor.name.title() + " felt " + des[0] + " towards " + out_obj
 
-        return "feeling", [actor, random.choice(feel), out_obj]
+        return "feeling", [actor, feel[0], out_obj]
 
     elif qType == "attribute":
-        action, attr, scene = actor.queryAttribute(None, None, event)
+        act, attr, scene = actor.queryAttribute(None, None, event)
 
         if type(attr) is str:
-            propType, out_prop = assembleProp(attr, scene)
+            propType, out_prop = assembleProp(attr, scene + "ext")
 
-            return "attribute", [actor, action, attr, scene, propType, out_prop]
+            return "attribute", [actor, act[0], attr, propType, out_prop]
 
-        else:
+        elif type(attr) is list:
             temp = []
             for items in attr:
-                propType, out_prop = assembleProp(attr, event)
-                temp.append(actor, action, attr, scene, propType, out_prop)
+                propType, out_prop = assembleProp(attr, scene + "ext")
+                temp.append(actor, act[0], attr, propType, out_prop)
 
             return "attribute", temp
 
-        return "attribute", [actor, action, attr, scene]
+        else:
+            propType, out_prop = assembleProp(attr, scene + "ext")
+
+            return "attribute", [actor, act[0], attr, propType, out_prop]
+
+        return "attribute", [actor, act[0], attr]
+
+    elif qType == "appProperty":
+        prop = []
+
+        try:
+            prop, scene = actor.queryProperty(None, "appearance", event)
+        except Exception as e:
+            # print("Error: ", e, " on ", time, "charAppearance")
+            a = 1
+
+        try:
+            prop, scene = actor.queryProperty(None, "appearance", event)
+        except Exception as e:
+            a = 1
+            # print("Error: ", e, " on ", time, " itemAppearance")
+
+        try:
+            prop, scene = actor.queryProperty(None, "appearance", event)
+        except Exception as e:
+            a = 1
+            # print("Error: ", e, " on ", time, "locationAppearance")
+
+        if prop:
+            out_prop = formatMultipleItems(prop)
+            return "appProperty", [actor, prop]
+
+    elif qType == "perProperty":
+        prop = []
+
+        try:
+            prop, scene = actor.queryProperty(None, "personality", event)
+        except Exception as e:
+            a = 1
+            # print("Error: ", e, " on ", time, " actorPersonality")
+
+        try:
+            prop, scene = actor.queryProperty(None, "personality", event)
+        except Exception as e:
+            a = 1
+            # print("Error: ", e, " on ", time, " itemPersonality")
+
+        try:
+            prop, scene = actor.queryProperty(None, "personality", event)
+        except Exception as e:
+            a = 1
+            # print("Error: ", e, " on ", time, "locationPersonality")
+
+        if prop:
+            out_prop = formatMultipleItems(prop)
+            return "perProperty", [actor, out_prop]
+
+    elif qType == "purpose":
+        try:
+            act, obj, scene = actor.queryPurpose(None, None, event)
+        except Exception as e:
+            a = 1
+            # print("Error: ", e, " on ", time, " itemPurpose")
+
+        return "purpose", [actor, act[0], obj]
+
+    return "unknown", None

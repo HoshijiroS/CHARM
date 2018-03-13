@@ -8,6 +8,7 @@ import model.dialogue_manager.sentence_parser as parser
 import model.dialogue_manager.content_provider as provider
 import model.story_world.entities as Entity
 import model.story_world.story_scenes as ref
+import model.externals.wordnet as WordNet
 
 incorrect = False
 question = True
@@ -194,6 +195,12 @@ def determineSentenceType(sequence):
 
     verbTags = ["VBD", "VBZ", "VB", "VBP"]
     verbList = [item[0] for item in sequence if item[1] in verbTags]
+
+    adjTags = ["JJ", "JJS", "JJR"]
+    adjList = [item[0] for item in sequence if item[1] in adjTags]
+
+    advTags = ["RB", "RBS", "RBR"]
+    advList = [item[0] for item in sequence if item[1] in advTags]
 
     if question is True:
         result = []
@@ -407,11 +414,34 @@ def determineSentenceType(sequence):
                              hintChoices])
                         gotHints = True
 
-                elif ansType == "item_appearance":
-                    actor, item, prop = ansList
+                elif ansType == "appProperty":
+                    actor, prop = ansList
 
-                    # for prop
-                    # synonymList = WordNet.getAdjList(prop)
+                    temp = []
+                    for items in prop:
+                        if "not" in items:
+                            temp.append((items, WordNet.getAdjList(items, negator="not")))
+                        else:
+                            temp.append((items, WordNet.getAdjList(items, negator=None)))
+
+                    for entries in temp:
+                        adj, synonyms = entries
+
+                        for synonym in synonyms:
+                            if synonym != adj:
+                                hintChoices.append("because " + actor.name.title() + " is __. This word starts with " + adj[0] + " and its synonym is " + synonym + ".")
+
+                    if hintChoices:
+                        hintList.extend(["I think it's " + entries + " What do you think is this word?" for entries in hintChoices])
+                        gotHints = True
+
+                elif ansType == "attribute":
+                    actor, act, attr, propType, prop = ansList
+
+                    hintChoices.extend([" related to the " + propType + " of the " + attr.name + " " + actor.name.title() + " " + act + ""])
+
+                    hintList.extend(["I think it's " + entries + " What do you think is the reason? " for entries in hintChoices])
+                    gotHints = True
 
                 elif ansType == "confirmation":
                     hintList.append("Do you mean " + ansList.name.title() + "?")
@@ -456,6 +486,22 @@ def determineSentenceType(sequence):
                     for character in charList:
                         if character in loc.lower():
                             generateFollowUp(loc, "location", ansList)
+
+            elif ansType == "appProperty":
+                print("hereCheck")
+                actor, prop = ansList
+
+                if adjList:
+                    for adjective in adjList:
+                        for entries in prop:
+                            if entries == adjective:
+                                generateFollowUp(actor.name.title(), "appProperty", ansList)
+
+                if advList:
+                    for adjective in advList:
+                        for entries in prop:
+                            if entries == adjective:
+                                generateFollowUp(actor.name.title(), "appProperty", ansList)
 
     if gotHints is True and incorrect is True:
         result = []
@@ -511,7 +557,6 @@ def determineSentenceType(sequence):
 
 
 def generateFollowUp(answer, questType, ansList):
-    print("correct1")
     global answerList
     global result
 
@@ -548,6 +593,9 @@ def generateFollowUp(answer, questType, ansList):
                     print("answerList: ", answerList)
                     followUpSent = " Why do you think is " + actor.name.title() + " " + personality + "?"
                     gotCorrectAnswer(answer, followUpSent)
+
+    elif questType == "appProperty":
+        gotCorrectAnswer(answer, ". Blah")
 
 
 def parse_message(message):
