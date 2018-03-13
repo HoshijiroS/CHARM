@@ -31,10 +31,10 @@ def guessesExhausted():
     global followUp
 
     first = True
-    question = True
-    gotHints = False
     incorrect = False
-    followUp = False
+    question = True
+    gotHints = True
+    followUp = True
     compMessage = [""]
 
 
@@ -178,6 +178,7 @@ def determineSentenceType(sequence):
     global result
     global compMessage
     global wrongMessage
+    global followUp
 
     beg = sequence[0][0]
     posList = [x for x, y in enumerate(sequence) if y[1] == "POS"]
@@ -237,9 +238,11 @@ def determineSentenceType(sequence):
             gotHints = False
 
         if gotHints is False:
+            print("heregotHints")
             hintList = []
             hintChoices = []
             wrongMessage = [""]
+            incorrect = True
 
             answerList = cleanList(answerList)
 
@@ -447,7 +450,7 @@ def determineSentenceType(sequence):
                     hintList.append("Do you mean " + ansList.name.title() + "?")
                     gotHints = True
 
-    elif question is False and incorrect is True:
+    if incorrect is True and (question is False or followUp is True):
         wrongMessage = resetWrongMessage()
         for answers in answerList:
             ansType, ansList = answers
@@ -488,7 +491,6 @@ def determineSentenceType(sequence):
                             generateFollowUp(loc, "location", ansList)
 
             elif ansType == "appProperty":
-                print("hereCheck")
                 actor, prop = ansList
 
                 if adjList:
@@ -505,7 +507,7 @@ def determineSentenceType(sequence):
 
     if gotHints is True and incorrect is True:
         result = []
-        if hintList != [[]]:
+        if hintList != [[]] and hintList != []:
             r = random.choice(hintList)
             hintList.remove(r)
 
@@ -516,7 +518,7 @@ def determineSentenceType(sequence):
             else:
                 result.append(random.choice(wrongMessage) + r)
 
-        elif hintList == [[]]:
+        else:
             for answers in answerList:
                 ansType, ansList = answers
 
@@ -525,7 +527,7 @@ def determineSentenceType(sequence):
 
                     out = formatMultipleItems(rel)
 
-                    result.append("I think " + actor.name.title() + "'s " + out + " is " + char[0].name.title() + ".", "relationship_name", ansList)
+                    result.append("I think " + actor.name.title() + "'s " + out + " is " + char[0].name.title() + ".")
                     guessesExhausted()
 
                 if ansType == "relationship_rel":
@@ -533,13 +535,13 @@ def determineSentenceType(sequence):
 
                     out = formatMultipleItems(rel)
 
-                    result.append("I think " + char.name.title() + " is " + actor.name.title() + "'s " + out + ".", "relationship_rel", ansList)
+                    result.append("I think " + char.name.title() + " is " + actor.name.title() + "'s " + out + ".")
                     guessesExhausted()
 
                 if ansType == "location":
                     actor, action, loc = ansList
 
-                    result.append("I think " + actor.name.title() + " " + action + " in " + loc + ".", "location", ansList)
+                    result.append("I think " + actor.name.title() + " " + action + " in " + loc + ".")
                     guessesExhausted()
 
     elif gotHints is False and incorrect is True:
