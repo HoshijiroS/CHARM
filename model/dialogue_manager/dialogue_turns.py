@@ -8,11 +8,10 @@ import model.dialogue_manager.sentence_parser as parser
 import model.dialogue_manager.content_provider as provider
 import model.story_world.entities as Entity
 import model.story_world.story_scenes as ref
-import model.externals.wordnet as WordNet
 
 incorrect = False
 question = True
-gotHints = True
+gotHints = False
 first = True
 followUp = False
 answerList = []
@@ -20,6 +19,7 @@ hintList = []
 result = []
 compMessage = [""]
 wrongMessage = [""]
+correctAnswer = ()
 
 
 def guessesExhausted():
@@ -33,12 +33,12 @@ def guessesExhausted():
     first = True
     incorrect = False
     question = True
-    gotHints = True
+    gotHints = False
     followUp = True
     compMessage = [""]
 
 
-def gotCorrectAnswer(answer, followUpSent):
+def gotCorrectAnswer(preparedString, followUpSent):
     global incorrect
     global question
     global gotHints
@@ -50,14 +50,14 @@ def gotCorrectAnswer(answer, followUpSent):
 
     first = True
     incorrect = False
-    question = True
-    gotHints = True
+    question = False
+    gotHints = False
     followUp = True
     wrongMessage = [""]
     compMessage = [""]
 
     result = []
-    result.append("Hooray! I think " + answer + " is the answer too!" + followUpSent)
+    result.append(preparedString + followUpSent)
 
 
 def formatMultipleItems(listAnswer):
@@ -191,7 +191,7 @@ def determineSentenceType(sequence):
         sequence = [i for i in sequence if i[0] != "the"]
         toList = [x for x, y in enumerate(sequence) if y[1] == "TO"]
 
-    nounTags = ["NNS", "NNP", "NNPS"]
+    nounTags = ["NN", "NNS", "NNP", "NNPS"]
     charList = [item[0] for item in sequence if item[1] in nounTags]
 
     verbTags = ["VBD", "VBZ", "VB", "VBP"]
@@ -203,24 +203,36 @@ def determineSentenceType(sequence):
     advTags = ["RB", "RBS", "RBR"]
     advList = [item[0] for item in sequence if item[1] in advTags]
 
+    temp = []
+
+    if beg == "who":
+        temp.extend(parser.parseWhoMessage(sequence, posList, ofList, toList, charList))
+        question = True
+        followUp = False
+
+    if beg == "where":
+        temp.extend(parser.parseWhereMessage(charList, verbList))
+        question = True
+        followUp = False
+
+    if beg == "what":
+        temp.extend(parser.parseWhatMessage(sequence, posList, ofList, charList, andList, itemList))
+        question = True
+        followUp = False
+
+    if beg == "why":
+        temp.extend(parser.parseWhyMessage(charList, verbList))
+        question = True
+        followUp = False
+
     if question is True:
+        answerList = []
+        answerList.extend(temp)
+
+    if question is True or followUp is True:
         result = []
         wrongMessage = [""]
         incorrect = True
-
-        if not followUp:
-            answerList = []
-            if beg == "who":
-                answerList.extend(parser.parseWhoMessage(sequence, posList, ofList, toList, charList))
-
-            if beg == "where":
-                answerList.extend(parser.parseWhereMessage(charList, verbList))
-
-            if beg == "what":
-                answerList.extend(parser.parseWhatMessage(sequence, posList, ofList, charList, andList, itemList))
-
-            if beg == "why":
-                answerList.extend(parser.parseWhyMessage(charList, verbList))
 
         answerList = [x for x in answerList if x[0] != "unknown"]
         tempResult = []
@@ -233,227 +245,135 @@ def determineSentenceType(sequence):
             result.append(random.choice(tempResult))
             guessesExhausted()
 
-        if len(answerList) != 0:
+        if answerList:
             question = False
-            gotHints = False
 
-        if gotHints is False:
-            print("heregotHints")
-            hintList = []
-            hintChoices = []
-            wrongMessage = [""]
-            incorrect = True
+            if gotHints is False:
+                hintList = []
+                wrongMessage = [""]
+                incorrect = True
 
-            answerList = cleanList(answerList)
+                answerList = cleanList(answerList)
 
-            for answers in answerList:
-                ansType, ansList = answers
-                print("answers: ", answers)
+                for answers in answerList:
+                    ansType, ansList = answers
+                    hintChoices = []
+                    print("answers: ", answers)
 
-                if ansType == "relationship_name":
-                    actor, rel, char = ansList
+                    if ansType == "relationship_name":
+                        actor, rel, char = ansList
 
-                    if len(char) > 1:
-                        result = []
-                        nameList = [x.name.title() for x in char]
-                        out_char = ", ".join(nameList[:-1]) + " and " + nameList[len(nameList) - 1]
+                        if len(char) > 1:
+                            result = []
+                            nameList = [x.name.title() for x in char]
+                            out_char = ", ".join(nameList[:-1]) + " and " + nameList[len(nameList) - 1]
 
-                        result.append(actor.name.title() + " has many " + rel + "s. They are " + out_char + ".")
-                        guessesExhausted()
+                            result.append(actor.name.title() + " has many " + rel + "s. They are " + out_char + ".")
+                            guessesExhausted()
 
-                    else:
-                        wordCount = len(char[0].name.split())
-                        if wordCount == 1:
-                            words = "word"
                         else:
-                            words = "words"
+                            hintChoices.extend(provider.generateHintsForRelName(ansList))
+                            hintList.extend(
+                                ["I think " + entries + " Which of the characters has a name like this?" for entries in
+                                 hintChoices])
 
-                        hintChoices = [
-                            "the first name of " + actor.name.title() + "'s " + rel + " starts with " + char[
-                                                                                                            0].name[
-                                                                                                        :1] + ".",
-                            "the name of " + actor.name.title() + "'s " + rel + " is composed of " + str(
-                                wordCount) + " " + words + ".",
-                            "the first name of " + actor.name.title() + "'s " + rel + " has the letter " +
-                            char[0].name[2] + "."]
+                    elif ansType == "relationship_rel":
+                        hintChoices.extend(provider.generateHintsForRelRel(ansList))
 
-                        hintList.extend(
-                            ["I think " + entries + " Which of the characters has a name like this?" for entries in
-                             hintChoices])
-                        # print("hintList: ", hintList)
-                        gotHints = True
+                        if len(hintChoices) > 3:
+                            i = 0
+                            temp = []
+                            while i < 3:
+                                r = random.choice(hintChoices)
+                                hintChoices.remove(r)
+                                temp.append(r)
+                                i = i + 1
 
-                elif ansType == "relationship_rel":
-                    actor, rel, char = ansList
+                            hintList.extend(["I think " + entries for entries in temp])
 
-                    if [x for x in rel if x == "classmate"] or rel == "classmate":
-                        hintChoices.extend([
-                            actor.name.title() + " and " + char.name.title() + " go to the same school. What kind of relationship do you think they have?",
-                            actor.name.title() + " and " + char.name.title() + " are being taught by the same teacher. So, what do you think is their relationship with each other?",
-                            actor.name.title() + " and " + char.name.title() + " attend the same classes. What is their relationship to each other then?"
-                        ])
-
-                    if [x for x in rel if x == "friend"] or rel == "friend":
-                        hintChoices.extend([
-                            actor.name.title() + " and " + char.name.title() + " talk to each other sometimes. Maybe they are a little more than acquaintances? What can their relationship be?",
-                            actor.name.title() + " and " + char.name.title() + " can even become best friends if they spend more time together. So, what do you think is their relationship?",
-                            actor.name.title() + " likes to talk to " + char.name.title() + ". What are they to each other?"
-                        ])
-
-                    if [x for x in rel if x == "best friend"] or rel == "best friend":
-                        hintChoices.extend([
-                            actor.name.title() + " and " + char.name.title() + " are always together. Maybe they are a little more than friends? What are they to each other?",
-                            actor.name.title() + " and " + char.name.title() + " go to school together. So, what do you think is their relationship?",
-                            actor.name.title() + " and " + char.name.title() + " even share items. What can their relationship be?"
-                        ])
-
-                    if [x for x in rel if x == "father"] or rel == "father":
-                        hintChoices.extend([
-                            actor.name.title() + " and " + char.name.title() + " live in the same house. Who can " + char.name.title() + " be to " + actor.name.title() + "?",
-                            actor.name.title() + " and " + char.name.title() + " are relatives. So, what do you think is the relationship of " + char.name.title() + " to " + actor.name.title() + "?",
-                            char.name.title() + " provides for " + actor.name.title() + "'s needs. Who can " + char.name.title() + " be to " + actor.name.title() + "?"
-                        ])
-
-                    if [x for x in rel if x == "daughter"] or rel == "daughter":
-                        hintChoices.extend([
-                            actor.name.title() + " and " + char.name.title() + " live in the same house. Who can " + char.name.title() + " be to " + actor.name.title() + "?",
-                            actor.name.title() + " and " + char.name.title() + " are relatives. So, what do you think is the relationship of " + char.name.title() + " to " + actor.name.title() + "?",
-                            actor.name.title() + " loves " + char.name.title() + " very much. Who can " + char.name.title() + " be to " + actor.name.title() + "?"
-                        ])
-
-                    if [x for x in rel if x == "brother"] or rel == "brother":
-                        hintChoices.extend([
-                            actor.name.title() + " and " + char.name.title() + " live in the same house. Who can " + char.name.title() + " be to " + actor.name.title() + "?",
-                            actor.name.title() + " and " + char.name.title() + " have the same surname! So, what do you think is the relationship of " + char.name.title() + " to " + actor.name.title() + "?",
-                            char.name.title() + " and " + actor.name.title() + " are relatives. Who can " + char.name.title() + " be to " + actor.name.title() + "?"
-                        ])
-
-                    if [x for x in rel if x == "sister"] or rel == "sister":
-                        hintChoices.extend([
-                            actor.name.title() + " and " + char.name.title() + " live in the same house. Who can " + char.name.title() + " be to " + actor.name.title() + "?",
-                            actor.name.title() + " and " + char.name.title() + " have the same surname! So, what do you think is the relationship of " + char.name.title() + " to " + actor.name.title() + "?",
-                            char.name.title() + " and " + actor.name.title() + " are relatives. Who can " + char.name.title() + " be to " + actor.name.title() + "?"
-                        ])
-
-                    if [x for x in rel if x == "teacher"] or rel == "teacher":
-                        hintChoices.extend([
-                            actor.name.title() + " respects " + char.name.title() + " very much. Maybe they also see each other at school. Who can " + char.name.title() + " be to " + actor.name.title() + "?",
-                            actor.name.title() + " learns a lot from listening to " + char.name.title() + ". So, who do you think is " + char.name.title() + " to " + actor.name.title() + "?",
-                            "you can consider " + char.name.title() + " as " + actor.name.title() + "'s second mother. Who can " + char.name.title() + " be to " + actor.name.title() + "?"
-                        ])
-
-                    if [x for x in rel if x == "student"] or rel == "student":
-                        hintChoices.extend([
-                            char.name.title() + " respects " + actor.name.title() + " very much. Maybe they also see each other at school. Who can " + char.name.title() + " be to " + actor.name.title() + "?",
-                            char.name.title() + " learns a lot from listening to " + actor.name.title() + ". So, who do you think is " + char.name.title() + " to " + actor.name.title() + "?",
-                            "you can consider " + actor.name.title() + " as " + char.name.title() + "'s second mother. Who can " + char.name.title() + " be to " + actor.name.title() + "?"
-                        ])
-
-                    if [x for x in rel if x == "neighbor"] or rel == "neighbor":
-                        hintChoices.extend([
-                            char.name.title() + " and " + actor.name.title() + " live in the same neighborhood. What do you think is their relationship with each other?",
-                            actor.name.title() + " lives near " + char.name.title() + ". So, who do you think is " + actor.name.title() + " to " + char.name.title() + "?",
-                            "there is a possibility that " + actor.name.title() + "'s and " + char.name.title() + "'s houses are only beside each other! So, what do you think is their relationship?"
-                        ])
-
-                    if len(hintChoices) > 3:
-                        i = 0
-                        temp = []
-                        while i < 3:
-                            r = random.choice(hintChoices)
-                            hintChoices.remove(r)
-                            temp.append(r)
-                            i = i + 1
-
-                        hintList.extend(["I think " + entries for entries in temp])
-                        gotHints = True
-
-                    else:
-                        hintList.extend(["I think " + entries for entries in hintChoices])
-                        gotHints = True
-
-                elif ansType == "location":
-                    actor, action, loc = ansList
-
-                    temp = Entity.locList[loc.lower()].appProp
-
-                    if temp:
-                        for properties in temp:
-                            hintChoices.append(
-                                "the place where " + actor.name.title() + action + " is " + properties + ".")
-
-                    else:
-                        wordCount = len(loc.split())
-                        if wordCount == 1:
-                            words = "word"
                         else:
-                            words = "words"
+                            hintList.extend(["I think " + entries for entries in hintChoices])
 
-                        hintChoices.extend([
-                                               "the name of the place where " + actor.name.title() + " " + action + " starts with " + loc[
-                                                                                                                                      :1] + ".",
-                                               "the name of the place where " + actor.name.title() + " " + action + " is composed of " + str(
-                                                   wordCount) + " " + words + ".",
-                                               "the name of the place where " + actor.name.title() + " " + action + " has the letter " +
-                                               loc[2] + "."])
+                    elif ansType == "location":
+                        hintChoices.extend(provider.generateHintsForLocation(ansList))
 
-                    if len(hintChoices) > 3:
-                        i = 0
-                        temp = []
-                        while i < 3:
-                            r = random.choice(hintChoices)
-                            hintChoices.remove(r)
-                            temp.append(r)
-                            i = i + 1
+                        if len(hintChoices) > 3:
+                            i = 0
+                            temp = []
+                            while i < 3:
+                                r = random.choice(hintChoices)
+                                hintChoices.remove(r)
+                                temp.append(r)
+                                i = i + 1
 
-                        hintList.extend(
-                            ["I think " + entries + " What place in the story do you think this is?" for entries in
-                             temp])
-                        gotHints = True
+                            hintList.extend(
+                                ["I think " + entries + " What place in the story do you think this is?" for entries in
+                                 temp])
 
-                    else:
-                        hintList.extend(
-                            ["I think " + entries + " What place in the story do you think this is?" for entries in
-                             hintChoices])
-                        gotHints = True
-
-                elif ansType == "appProperty":
-                    actor, prop = ansList
-
-                    temp = []
-                    for items in prop:
-                        if "not" in items:
-                            temp.append((items, WordNet.getAdjList(items, negator="not")))
                         else:
-                            temp.append((items, WordNet.getAdjList(items, negator=None)))
+                            hintList.extend(
+                                ["I think " + entries + " What place in the story do you think this is?" for entries in
+                                 hintChoices])
 
-                    for entries in temp:
-                        adj, synonyms = entries
+                    elif ansType == "appProperty":
+                        hintChoices.extend(provider.generateHintsForAppProp(ansList))
+                        hintChoices.extend(provider.generatePromptsForAppProp(ansList))
+                        hintChoices.extend(provider.generatePumpsForAppProp(correctAnswer))
+                        hintChoices.extend(provider.generateElabForAppProp(ansList, correctAnswer))
 
-                        for synonym in synonyms:
-                            if synonym != adj:
-                                hintChoices.append("because " + actor.name.title() + " is __. This word starts with " + adj[0] + " and its synonym is " + synonym + ".")
+                        if hintChoices:
+                            if len(hintChoices) > 5:
+                                i = 0
+                                temp = []
+                                while i < 5:
+                                    r = random.choice(hintChoices)
+                                    hintChoices.remove(r)
+                                    temp.append(r)
+                                    i = i + 1
 
-                    if hintChoices:
-                        hintList.extend(["I think it's " + entries + " What do you think is this word?" for entries in hintChoices])
-                        gotHints = True
+                                hintList.extend(temp)
 
-                elif ansType == "attribute":
-                    actor, act, attr, propType, prop = ansList
+                            else:
+                                hintList.extend(hintChoices)
 
-                    hintChoices.extend([" related to the " + propType + " of the " + attr.name + " " + actor.name.title() + " " + act + ""])
+                    elif ansType == "attribute":
+                        hintChoices.extend(provider.generateHintsForAttr(ansList))
+                        # hintChoices = provider.generatePromptsForAppProp()
+                        # hintChoices = provider.generatePumpsForAppProp()
+                        # hintChoices = provider.generateElabForAppProp()
 
-                    hintList.extend(["I think it's " + entries + " What do you think is the reason? " for entries in hintChoices])
-                    gotHints = True
+                        hintList.extend(["I think it's " + entries + " What do you think is the reason? " for entries in hintChoices])
 
-                elif ansType == "confirmation":
-                    hintList.append("Do you mean " + ansList.name.title() + "?")
-                    gotHints = True
+                    elif ansType == "action":
+                        hintChoices.extend(provider.generateHintsForAction())
+                        #hintChoices = provider.generatePromptsForAppProp()
+                        #hintChoices = provider.generatePumpsForAppProp()
+                        #hintChoices = provider.generateElabForAppProp()
 
-    if incorrect is True and (question is False or followUp is True):
+                    elif ansType == "confirmation":
+                        hintList.append("Do you mean " + ansList.name.title() + "?")
+
+            if hintList:
+                if len(hintList) > 5:
+                    temp = hintList
+                    hintList = []
+
+                    i = 0
+                    while i < 5:
+                        r = random.choice(temp)
+                        temp.remove(r)
+                        hintList.append(r)
+                        i = i + 1
+
+                gotHints = True
+
+    if (question is False or followUp is True) and incorrect is True:
         wrongMessage = resetWrongMessage()
         for answers in answerList:
             ansType, ansList = answers
+
+            print("ansType: ", ansType)
+            print("ansList: ", ansList)
 
             if ansType == "relationship_name":
                 actor, rel, char = ansList
@@ -481,7 +401,7 @@ def determineSentenceType(sequence):
                     if charList:
                         for character in charList:
                             if rel == character or rel + "s" == character:
-                                generateFollowUp(character)
+                                generateFollowUp(character, "relationship_rel", ansList)
 
             elif ansType == "location":
                 actor, action, loc = ansList
@@ -497,13 +417,16 @@ def determineSentenceType(sequence):
                     for adjective in adjList:
                         for entries in prop:
                             if entries == adjective:
-                                generateFollowUp(actor.name.title(), "appProperty", ansList)
+                                generateFollowUp(entries, "appProperty", ansList)
 
                 if advList:
-                    for adjective in advList:
+                    for adverb in advList:
                         for entries in prop:
-                            if entries == adjective:
-                                generateFollowUp(actor.name.title(), "appProperty", ansList)
+                            if entries == adverb:
+                                generateFollowUp(entries, "appProperty", ansList)
+
+            #elif ansType == "attribute":
+            #    print("a")
 
     if gotHints is True and incorrect is True:
         result = []
@@ -512,7 +435,6 @@ def determineSentenceType(sequence):
             hintList.remove(r)
 
             if first is True:
-                # print("compMessage2: ", compMessage)
                 result.append(random.choice(compMessage) + r)
                 first = False
             else:
@@ -561,8 +483,7 @@ def determineSentenceType(sequence):
 def generateFollowUp(answer, questType, ansList):
     global answerList
     global result
-
-    followUpSent = ""
+    global correctAnswer
 
     if questType == "relationship_name":
         actor, rel, char = ansList
@@ -574,30 +495,48 @@ def generateFollowUp(answer, questType, ansList):
             # print("Error: ", e)
             a = 1
 
-        print("perProp: ", perProp)
         if perProp:
-            personality, event = random.choice(perProp)
+            current = random.choice(perProp)
+            personality, event = current
 
             if event is not None:
                 followUpResult = ref.queryRelations("Wednesday3inf10", "cause")
-                #followUpResult = ref.queryRelations(event, "cause")
                 answerList = []
 
-                if followUpResult:
+                if not followUpResult:
+                    perProp.remove(current)
+
+                else:
                     if type(followUpResult) is list:
                         for entries in followUpResult:
-                            print("entries: ", entries)
                             answerList.append(provider.assembleSentence(entries))
 
                     else:
                         answerList.append(provider.assembleSentence(followUpResult))
 
-                    print("answerList: ", answerList)
+                    preparedString = "Hooray! I think " + answer + " is the answer too!"
                     followUpSent = " Why do you think is " + actor.name.title() + " " + personality + "?"
-                    gotCorrectAnswer(answer, followUpSent)
+
+                    correctAnswer = (actor, personality)
+                    gotCorrectAnswer(preparedString, followUpSent)
+
+    elif questType == "location" or questType == "relationship_rel":
+        preparedString = "Hooray! I think " + answer + " is the answer too!"
+        gotCorrectAnswer(preparedString, " Blah")
 
     elif questType == "appProperty":
-        gotCorrectAnswer(answer, ". Blah")
+        if correctAnswer:
+            actor, personality = correctAnswer
+
+            pronoun = "it"
+            if actor.gender:
+                if actor.gender == "female":
+                    pronoun = "she"
+                elif actor.gender == "male":
+                    pronoun = "he"
+
+            preparedString = "Hooray! I also think " + actor.name.title() + " is " + personality + " because " + pronoun + " is " + answer + "."
+            gotCorrectAnswer(preparedString, " Blah")
 
 
 def parse_message(message):

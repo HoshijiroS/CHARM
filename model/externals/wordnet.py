@@ -16,3 +16,11 @@ def getAdjList(adj, negator=None):
     else:
         dummy = [x.name().split(".")[0] for x in wordnet.synsets(adj)]
         return list(set(dummy))
+
+
+def getDefinition(word):
+    syns = wordnet.synsets(word)
+
+    print(syns[0].definition())
+
+    return syns[0].definition()

@@ -5,6 +5,7 @@ import distance
 
 import model.story_world.entities as Entity
 import model.story_world.story_scenes as ref
+import model.externals.wordnet as WordNet
 
 
 def formatMultipleItems(listAnswer):
@@ -151,7 +152,7 @@ def whatQuestion(actor, item, propType, action):
 
 def whereQuestion(actor, action, location):
     try:
-        action, loc, event = actor.queryLocation(action, location)
+        action, loc, event = actor.queryLocation(action, location, None)
     except Exception as e:
         print(e)
         return "unknown", None
@@ -235,6 +236,7 @@ def assembleProp(attr, event):
         return "personality", out_per
 
     return None, None
+
 
 def assembleSentence(event):
     try:
@@ -369,3 +371,201 @@ def assembleSentence(event):
         return "purpose", [actor, act[0], obj]
 
     return "unknown", None
+
+
+def generateHintsForRelName(ansList):
+    actor, rel, char = ansList
+
+    wordCount = len(char[0].name.split())
+    if wordCount == 1:
+        words = "word"
+    else:
+        words = "words"
+
+    hintChoices = [
+        "the first name of " + actor.name.title() + "'s " + rel + " starts with " + char[0].name[:1] + ".",
+        "the name of " + actor.name.title() + "'s " + rel + " is composed of " + str(wordCount) + " " + words + ".",
+        "the first name of " + actor.name.title() + "'s " + rel + " has the letter " + char[0].name[2] + "."]
+
+    return hintChoices
+
+
+def generateHintsForRelRel(ansList):
+    actor, rel, char = ansList
+    hintChoices =  []
+
+    if [x for x in rel if x == "classmate"] or rel == "classmate":
+        hintChoices.extend([
+            actor.name.title() + " and " + char.name.title() + " go to the same school. What kind of relationship do you think they have?",
+            actor.name.title() + " and " + char.name.title() + " are being taught by the same teacher. So, what do you think is their relationship with each other?",
+            actor.name.title() + " and " + char.name.title() + " attend the same classes. What is their relationship to each other then?"
+        ])
+
+    if [x for x in rel if x == "friend"] or rel == "friend":
+        hintChoices.extend([
+            actor.name.title() + " and " + char.name.title() + " talk to each other sometimes. Maybe they are a little more than acquaintances? What can their relationship be?",
+            actor.name.title() + " and " + char.name.title() + " can even become best friends if they spend more time together. So, what do you think is their relationship?",
+            actor.name.title() + " likes to talk to " + char.name.title() + ". What are they to each other?"
+        ])
+
+    if [x for x in rel if x == "best friend"] or rel == "best friend":
+        hintChoices.extend([
+            actor.name.title() + " and " + char.name.title() + " are always together. Maybe they are a little more than friends? What are they to each other?",
+            actor.name.title() + " and " + char.name.title() + " go to school together. So, what do you think is their relationship?",
+            actor.name.title() + " and " + char.name.title() + " even share items. What can their relationship be?"
+        ])
+
+    if [x for x in rel if x == "father"] or rel == "father":
+        hintChoices.extend([
+            actor.name.title() + " and " + char.name.title() + " live in the same house. Who can " + char.name.title() + " be to " + actor.name.title() + "?",
+            actor.name.title() + " and " + char.name.title() + " are relatives. So, what do you think is the relationship of " + char.name.title() + " to " + actor.name.title() + "?",
+            char.name.title() + " provides for " + actor.name.title() + "'s needs. Who can " + char.name.title() + " be to " + actor.name.title() + "?"
+        ])
+
+    if [x for x in rel if x == "daughter"] or rel == "daughter":
+        hintChoices.extend([
+            actor.name.title() + " and " + char.name.title() + " live in the same house. Who can " + char.name.title() + " be to " + actor.name.title() + "?",
+            actor.name.title() + " and " + char.name.title() + " are relatives. So, what do you think is the relationship of " + char.name.title() + " to " + actor.name.title() + "?",
+            actor.name.title() + " loves " + char.name.title() + " very much. Who can " + char.name.title() + " be to " + actor.name.title() + "?"
+        ])
+
+    if [x for x in rel if x == "brother"] or rel == "brother":
+        hintChoices.extend([
+            actor.name.title() + " and " + char.name.title() + " live in the same house. Who can " + char.name.title() + " be to " + actor.name.title() + "?",
+            actor.name.title() + " and " + char.name.title() + " have the same surname! So, what do you think is the relationship of " + char.name.title() + " to " + actor.name.title() + "?",
+            char.name.title() + " and " + actor.name.title() + " are relatives. Who can " + char.name.title() + " be to " + actor.name.title() + "?"
+        ])
+
+    if [x for x in rel if x == "sister"] or rel == "sister":
+        hintChoices.extend([
+            actor.name.title() + " and " + char.name.title() + " live in the same house. Who can " + char.name.title() + " be to " + actor.name.title() + "?",
+            actor.name.title() + " and " + char.name.title() + " have the same surname! So, what do you think is the relationship of " + char.name.title() + " to " + actor.name.title() + "?",
+            char.name.title() + " and " + actor.name.title() + " are relatives. Who can " + char.name.title() + " be to " + actor.name.title() + "?"
+        ])
+
+    if [x for x in rel if x == "teacher"] or rel == "teacher":
+        hintChoices.extend([
+            actor.name.title() + " respects " + char.name.title() + " very much. Maybe they also see each other at school. Who can " + char.name.title() + " be to " + actor.name.title() + "?",
+            actor.name.title() + " learns a lot from listening to " + char.name.title() + ". So, who do you think is " + char.name.title() + " to " + actor.name.title() + "?",
+            "you can consider " + char.name.title() + " as " + actor.name.title() + "'s second mother. Who can " + char.name.title() + " be to " + actor.name.title() + "?"
+        ])
+
+    if [x for x in rel if x == "student"] or rel == "student":
+        hintChoices.extend([
+            char.name.title() + " respects " + actor.name.title() + " very much. Maybe they also see each other at school. Who can " + char.name.title() + " be to " + actor.name.title() + "?",
+            char.name.title() + " learns a lot from listening to " + actor.name.title() + ". So, who do you think is " + char.name.title() + " to " + actor.name.title() + "?",
+            "you can consider " + actor.name.title() + " as " + char.name.title() + "'s second mother. Who can " + char.name.title() + " be to " + actor.name.title() + "?"
+        ])
+
+    if [x for x in rel if x == "neighbor"] or rel == "neighbor":
+        hintChoices.extend([
+            char.name.title() + " and " + actor.name.title() + " live in the same neighborhood. What do you think is their relationship with each other?",
+            actor.name.title() + " lives near " + char.name.title() + ". So, who do you think is " + actor.name.title() + " to " + char.name.title() + "?",
+            "there is a possibility that " + actor.name.title() + "'s and " + char.name.title() + "'s houses are only beside each other! So, what do you think is their relationship?"
+        ])
+
+    return hintChoices
+
+
+def generateHintsForLocation(ansList):
+    actor, action, loc = ansList
+    hintChoices = []
+
+    temp = Entity.locList[loc.lower()].appProp
+    if temp:
+        for properties in temp:
+            hintChoices.append(
+                "the place where " + actor.name.title() + action + " is " + properties + ".")
+
+    else:
+        wordCount = len(loc.split())
+        if wordCount == 1:
+            words = "word"
+        else:
+            words = "words"
+
+        hintChoices.extend([
+            "the name of the place where " + actor.name.title() + " " + action + " starts with " + loc[:1] + ".",
+            "the name of the place where " + actor.name.title() + " " + action + " is composed of " + str(wordCount) + " " + words + ".",
+            "the name of the place where " + actor.name.title() + " " + action + " has the letter " + loc[2] + "."])
+
+    return hintChoices
+
+
+def generateHintsForAttr(ansList):
+    actor, act, attr, propType, prop = ansList
+    hintChoices = []
+
+    hintChoices.extend(
+        [" related to the " + propType + " of the " + attr.name + " " + actor.name.title() + " " + act + "."])
+
+    return hintChoices
+
+
+def generateHintsForAppProp(ansList):
+    actor, prop = ansList
+    hintChoices = []
+    temp = []
+
+    for items in prop:
+        if "not" in items:
+            temp.append((items, WordNet.getAdjList(items, negator="not")))
+        else:
+            temp.append((items, WordNet.getAdjList(items, negator=None)))
+
+    for entries in temp:
+        adj, synonyms = entries
+
+        for synonym in synonyms:
+            if synonym != adj:
+                hintChoices.append("I think it's because " + actor.name.title() + " is __. The word in the blank starts with " + adj[
+                    0] + " and its synonym is " + synonym + ". Can you complete the sentence?")
+
+    return hintChoices
+
+
+def generatePromptsForAppProp(ansList):
+    actor, prop = ansList
+    hintChoices = []
+
+    hintChoices.extend(["I think it's related to " + actor.name.title() + "'s appearance. Can you describe " + actor.name.title() + "'s appearance?"])
+
+    return hintChoices
+
+
+def generatePumpsForAppProp(correctAnswer):
+    actor, property = correctAnswer
+    hintChoices = []
+
+    hintChoices.extend(["What makes a person " + property + "? Can you give me some examples?",
+                        "Do you know anyone who is " + property + "? What makes them " + property + "? Can you describe?"])
+
+    return hintChoices
+
+
+def generateElabForAppProp(ansList, correctAnswer):
+    actor, prop = ansList
+    actor, ansProperty = correctAnswer
+    propDefs = []
+    ansDefs = []
+
+    if type(prop) is list:
+        for properties in prop:
+            propDefs.append(WordNet.getDefinition(properties))
+
+    else:
+        propDefs.append(WordNet.getDefinition(prop))
+
+    if type(ansProperty) is list:
+        for properties in ansProperty:
+            ansDefs.append(WordNet.getDefinition(properties))
+
+    else:
+        ansDefs.append(WordNet.getDefinition(ansProperty))
+
+    hintChoices = []
+
+    hintChoices.extend(["I think " + actor.name.title() + " looks " + random.choice(propDefs) + ", so people treat " + actor.name.title() + " differently. Can you describe the appearance of " + actor.name.title() + "?",
+                        "I think someone is " + random.choice(ansDefs) + " depending on their appearance. So what is the appearance of " + actor.name.title() + "?"])
+
+    return hintChoices
