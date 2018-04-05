@@ -425,7 +425,7 @@ def startScene1():
     Entity.charList["wanda"].hasState(("absent", WordNet.getAdjList("absent")), scene_1.time)
     lookup.append([scene_1.time, Entity.charList["wanda"].name, "state"])
 
-    relations.causedBy(scene_1.time + "ev1", scene_1.time)
+    relations.sequence(scene_1.time, scene_1.time + "ev1")
 
     Entity.charList["wanda"].hasAttribute(wan_friend, ("have", WordNet.getVerbList("have")), scene_1.time + "inf1")
     lookup.append([scene_1.time + "inf1", Entity.charList["wanda"].name, "attribute"])

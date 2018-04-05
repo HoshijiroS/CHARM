@@ -72,9 +72,9 @@ def formatMultipleItems(listAnswer):
 
 
 def resetWrongMessage():
-    message = ["I don't think that's the answer, but ",
-               "Let's try getting the right answer together. ",
-               "Let's try again! "]
+    message = ["I don't think that's the answer, but you can try again. ",
+               "I don't think that's the answer. Let's try getting the right answer together. ",
+               "I don't think that's the answer. Let's try again! "]
 
     return message
 
@@ -180,6 +180,7 @@ def determineSentenceType(sequence):
     global wrongMessage
     global followUp
 
+    print("sequence: ", sequence)
     beg = sequence[0][0]
     posList = [x for x, y in enumerate(sequence) if y[1] == "POS"]
     toList = [x for x, y in enumerate(sequence) if y[1] == "TO"]
@@ -317,9 +318,8 @@ def determineSentenceType(sequence):
 
                     elif ansType == "appProperty":
                         hintChoices.extend(provider.generateHintsForAppProp(ansList))
-                        hintChoices.extend(provider.generatePromptsForAppProp(ansList))
-                        hintChoices.extend(provider.generatePumpsForAppProp(correctAnswer))
-                        hintChoices.extend(provider.generateElabForAppProp(ansList, correctAnswer))
+                        hintChoices.extend(provider.generatePumpsForAppProp(ansList))
+                        hintChoices.extend(provider.generatePromptsForAppProp(correctAnswer))
 
                         if hintChoices:
                             if len(hintChoices) > 5:
@@ -338,15 +338,15 @@ def determineSentenceType(sequence):
 
                     elif ansType == "attribute":
                         hintChoices.extend(provider.generateHintsForAttr(ansList))
-                        # hintChoices = provider.generatePromptsForAppProp()
+                        hintChoices.extend(provider.generateElabForAttr(ansList))
                         # hintChoices = provider.generatePumpsForAppProp()
                         # hintChoices = provider.generateElabForAppProp()
 
-                        hintList.extend(["I think it's " + entries + " What do you think is the reason? " for entries in hintChoices])
+                        hintList.extend(["I think it's " + entries for entries in hintChoices])
 
                     elif ansType == "action":
                         hintChoices.extend(provider.generateHintsForAction())
-                        #hintChoices = provider.generatePromptsForAppProp()
+                        #hintChoices.extend(provider.generateElabForAction())
                         #hintChoices = provider.generatePumpsForAppProp()
                         #hintChoices = provider.generateElabForAppProp()
 

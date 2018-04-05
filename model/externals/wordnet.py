@@ -18,9 +18,20 @@ def getAdjList(adj, negator=None):
         return list(set(dummy))
 
 
-def getDefinition(word):
-    syns = wordnet.synsets(word)
+def getSimilarAdjList(adj, negator=None):
+    if negator is not None:
+        getAdj = [x for x in wordnet.synsets(adj) if x.name().endswith('.s.01')][0]
+        return list(set([negator + "_" + x.name().split('.')[0] for x in getAdj.similar_tos()]))
+    else:
+        getAdj = [x for x in wordnet.synsets(adj) if x.name().endswith('.s.01')][0]
+        return list(set([x.name().split('.')[0] for x in getAdj.similar_tos()]))
 
-    print(syns[0].definition())
 
-    return syns[0].definition()
+def getDefinition(word, verb=None):
+    if verb == "Yes":
+        syns = wordnet.synset(word + '.v.01')
+        print(syns)
+    else:
+        syns = wordnet.synsets(word)[0]
+
+    return syns.definition()

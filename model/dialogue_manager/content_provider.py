@@ -492,16 +492,6 @@ def generateHintsForLocation(ansList):
     return hintChoices
 
 
-def generateHintsForAttr(ansList):
-    actor, act, attr, propType, prop = ansList
-    hintChoices = []
-
-    hintChoices.extend(
-        [" related to the " + propType + " of the " + attr.name + " " + actor.name.title() + " " + act + "."])
-
-    return hintChoices
-
-
 def generateHintsForAppProp(ansList):
     actor, prop = ansList
     hintChoices = []
@@ -509,9 +499,9 @@ def generateHintsForAppProp(ansList):
 
     for items in prop:
         if "not" in items:
-            temp.append((items, WordNet.getAdjList(items, negator="not")))
+            temp.append((items, WordNet.getSimilarAdjList(items, negator="not")))
         else:
-            temp.append((items, WordNet.getAdjList(items, negator=None)))
+            temp.append((items, WordNet.getSimilarAdjList(items, negator=None)))
 
     for entries in temp:
         adj, synonyms = entries
@@ -524,7 +514,7 @@ def generateHintsForAppProp(ansList):
     return hintChoices
 
 
-def generatePromptsForAppProp(ansList):
+def generatePumpsForAppProp(ansList):
     actor, prop = ansList
     hintChoices = []
 
@@ -533,39 +523,50 @@ def generatePromptsForAppProp(ansList):
     return hintChoices
 
 
-def generatePumpsForAppProp(correctAnswer):
-    actor, property = correctAnswer
+def generatePromptsForAppProp(correctAnswer):
+    actor, prop = correctAnswer
     hintChoices = []
 
-    hintChoices.extend(["What makes a person " + property + "? Can you give me some examples?",
-                        "Do you know anyone who is " + property + "? What makes them " + property + "? Can you describe?"])
+    hintChoices.extend(["What makes a person " + prop + "? Can you give me some examples?",
+                        "Do you know anyone who is " + prop + "? What makes them " + prop + "? Can you describe?"])
 
     return hintChoices
 
 
-def generateElabForAppProp(ansList, correctAnswer):
-    actor, prop = ansList
-    actor, ansProperty = correctAnswer
-    propDefs = []
-    ansDefs = []
+def generateHintsForAttr(ansList):
+    actor, act, attr, propType, prop = ansList
+    hintChoices = []
 
-    if type(prop) is list:
+    hintChoices.extend(
+        [" related to the " + propType + " of the " + attr.name + " " + actor.name.title() + " " + act + "."])
+
+    return hintChoices
+
+
+def generateElabForAttr(ansList):
+    actor, act, attr, propType, prop = ansList
+    propDefs = []
+    actDefs = []
+
+    if type(prop) is list and propType == "appearance":
         for properties in prop:
             propDefs.append(WordNet.getDefinition(properties))
 
     else:
         propDefs.append(WordNet.getDefinition(prop))
 
-    if type(ansProperty) is list:
-        for properties in ansProperty:
-            ansDefs.append(WordNet.getDefinition(properties))
-
-    else:
-        ansDefs.append(WordNet.getDefinition(ansProperty))
+    actDefs = WordNet.getDefinition(act, "Yes")
 
     hintChoices = []
 
-    hintChoices.extend(["I think " + actor.name.title() + " looks " + random.choice(propDefs) + ", so people treat " + actor.name.title() + " differently. Can you describe the appearance of " + actor.name.title() + "?",
-                        "I think someone is " + random.choice(ansDefs) + " depending on their appearance. So what is the appearance of " + actor.name.title() + "?"])
+    pronoun = "it"
+    if actor.gender == "female":
+        pronoun = "she"
+    elif actor.gender == "male":
+        pronoun = "he"
 
+    hintChoices.extend([" related to the " + attr.name + " " + actor.name.title() + " " + act + ". Since " +
+                        pronoun + " " + act + " " + attr.name + " that is " + random.choice(propDefs) + ". "])
+
+    print("hintChoices: ", hintChoices)
     return hintChoices
