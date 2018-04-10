@@ -28,10 +28,19 @@ def getSimilarAdjList(adj, negator=None):
 
 
 def getDefinition(word, verb=None):
-    if verb == "Yes":
-        syns = wordnet.synset(word + '.v.01')
-        print(syns)
-    else:
-        syns = wordnet.synsets(word)[0]
+    syns = ""
 
-    return syns.definition()
+    if verb == "Yes":
+        try:
+            syns = wordnet.synset(word + '.v.01')
+            return syns.definition()
+        except Exception as e:
+            print(e)
+    else:
+        try:
+            syns = wordnet.synsets(word)[0]
+            return syns.definition()
+        except Exception as e:
+            print(e)
+
+    return None

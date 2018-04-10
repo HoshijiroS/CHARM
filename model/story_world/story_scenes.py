@@ -490,10 +490,10 @@ def startScene3():
     scene_3.hasCharacter([Entity.charList["wanda"], Entity.charList["maddie"], Entity.charList["peggy"]])
 
     ####
-    Entity.charList["maddie"].hasState(["late to school"], scene_3.time + "ev1a")
+    Entity.charList["maddie"].hasState(("late", WordNet.getAdjList("late")), scene_3.time + "ev1a")
     lookup.append([scene_3.time + "ev1a", Entity.charList["maddie"].name, "state"])
 
-    Entity.charList["peggy"].hasState(["late to school"], scene_3.time + "ev1b")
+    Entity.charList["peggy"].hasState(("late", WordNet.getAdjList("late")), scene_3.time + "ev1b")
     lookup.append([scene_3.time + "ev1b", Entity.charList["peggy"].name, "state"])
 
     Entity.charList["maddie"].hasAction(("wait", WordNet.getVerbList("wait")), Entity.charList["wanda"].name, scene_3.time + "inf1a")

@@ -69,11 +69,9 @@ def whoQuestion(actor, person, relationship):
     if relationship is None and person is None:
         charType = actor.charType
 
-        output = formatMultipleItems(charType)
-
         # output = actor.name.title() + " is a " + output
 
-        return "type", [actor, output]
+        return "type", [actor, charType]
 
     elif person is None and relationship is not None:
         # output = actor.name.title() + "'s " + relationship + " is " + char.name.title()
@@ -186,11 +184,11 @@ def whyQuestion(actor, action):
 
     causeList = []
 
-    if state is None:
+    if state is None and act is not None:
         # output = act
         print("action: ", act[0])
 
-    elif act is None:
+    elif act is None and state is not None:
         event, actor, qType = ref.queryLookup(event)
 
         cause_event = ref.queryRelations(event, "cause")
@@ -199,7 +197,7 @@ def whyQuestion(actor, action):
 
         if cause_event is not None:
             for evs in cause_event:
-                causeList.append(assembleSentence(evs))
+                causeList.append(assembleSentence(evs, state[0]))
 
                 # if len(causeList) > 1:
                 #     return "; ".join(causeList[:-1]) + " and " + causeList[len(causeList) - 1]
@@ -207,7 +205,8 @@ def whyQuestion(actor, action):
                 # elif len(causeList) == 1:
                 #     return causeList[0]
 
-        return "cause", causeList
+        print("causeList: ", causeList)
+        return causeList
 
     else:
         # return "I don't know"
@@ -238,7 +237,7 @@ def assembleProp(attr, event):
     return None, None
 
 
-def assembleSentence(event):
+def assembleSentence(event, answer):
     try:
         event, actor, qType = ref.queryLookup(event)
         actor = Entity.charList[actor.lower()]
@@ -259,7 +258,7 @@ def assembleSentence(event):
 
         # output = "Because " + actor.name.title() + " was " + out_state
 
-        return "state", [actor, out_state]
+        return "state", [actor, out_state, answer]
 
     elif qType == "action":
         act, obj, scene = actor.queryAction(None, event)
@@ -268,7 +267,7 @@ def assembleSentence(event):
 
         # output = "Because " + actor.name.title() + " " + action[0] + " " + out_obj
 
-        return "action", [actor, act[0], out_obj]
+        return "action", [actor, act[0], out_obj, answer]
 
     elif qType == "desire":
         des, obj, scene = actor.queryDesire(None, event)
@@ -277,7 +276,7 @@ def assembleSentence(event):
 
         # output = "Because " + actor.name.title() + " desired to " + des[0] + " " + out_obj
 
-        return "desire", [actor, des[0], out_obj]
+        return "desire", [actor, des[0], out_obj, answer]
 
     elif qType == "feeling":
         feel, obj, scene = actor.queryFeeling(None, event)
@@ -286,7 +285,7 @@ def assembleSentence(event):
 
         # output = "Because " + actor.name.title() + " felt " + des[0] + " towards " + out_obj
 
-        return "feeling", [actor, feel[0], out_obj]
+        return "feeling", [actor, feel[0], out_obj, answer]
 
     elif qType == "attribute":
         act, attr, scene = actor.queryAttribute(None, None, event)
@@ -294,22 +293,22 @@ def assembleSentence(event):
         if type(attr) is str:
             propType, out_prop = assembleProp(attr, scene + "ext")
 
-            return "attribute", [actor, act[0], attr, propType, out_prop]
+            return "attribute", [actor, act[0], attr, propType, out_prop, answer]
 
         elif type(attr) is list:
             temp = []
             for items in attr:
                 propType, out_prop = assembleProp(attr, scene + "ext")
-                temp.append(actor, act[0], attr, propType, out_prop)
+                temp.append(actor, act[0], attr, propType, out_prop, answer)
 
             return "attribute", temp
 
         else:
             propType, out_prop = assembleProp(attr, scene + "ext")
 
-            return "attribute", [actor, act[0], attr, propType, out_prop]
+            return "attribute", [actor, act[0], attr, propType, out_prop, answer]
 
-        return "attribute", [actor, act[0], attr]
+        return "attribute", [actor, act[0], attr, answer]
 
     elif qType == "appProperty":
         prop = []
@@ -334,7 +333,7 @@ def assembleSentence(event):
 
         if prop:
             out_prop = formatMultipleItems(prop)
-            return "appProperty", [actor, prop]
+            return "appProperty", [actor, prop, answer]
 
     elif qType == "perProperty":
         prop = []
@@ -359,7 +358,7 @@ def assembleSentence(event):
 
         if prop:
             out_prop = formatMultipleItems(prop)
-            return "perProperty", [actor, out_prop]
+            return "perProperty", [actor, out_prop, answer]
 
     elif qType == "purpose":
         try:
@@ -368,9 +367,20 @@ def assembleSentence(event):
             a = 1
             # print("Error: ", e, " on ", time, " itemPurpose")
 
-        return "purpose", [actor, act[0], obj]
+        return "purpose", [actor, act[0], obj, answer]
 
     return "unknown", None
+
+
+def producePronoun(actor):
+    pronoun = "it"
+    if actor.gender:
+        if actor.gender == "female":
+            pronoun = "she"
+        elif actor.gender == "male":
+            pronoun = "he"
+
+    return pronoun
 
 
 def generateHintsForRelName(ansList):
@@ -390,79 +400,162 @@ def generateHintsForRelName(ansList):
     return hintChoices
 
 
+def replenishHintsB(actor, char):
+    hintTemplateB = []
+
+    hintTemplateB.extend([" What kind of relationship do you think they have?",
+                          " So, what do you think is their relationship with each other?",
+                          " What is their relationship to each other then?",
+                          " What can their relationship be?",
+                          " So, what do you think is their relationship?",
+                          " What are they to each other?",
+                          " So, what do you think is the relationship of " + char.name.title() + " to " + actor.name.title() + "?"
+                          ])
+
+    return hintTemplateB
+
+
 def generateHintsForRelRel(ansList):
     actor, rel, char = ansList
     hintChoices =  []
+    hintTemplateA = []
+    hintTemplateC = []
+
+    hintTemplateC.extend([" Who can " + char.name.title() + " be to " + actor.name.title() + "?",
+                          " So, what do you think is the relationship of " + char.name.title() + " to " + actor.name.title() + "?"
+                          ])
 
     if [x for x in rel if x == "classmate"] or rel == "classmate":
-        hintChoices.extend([
-            actor.name.title() + " and " + char.name.title() + " go to the same school. What kind of relationship do you think they have?",
-            actor.name.title() + " and " + char.name.title() + " are being taught by the same teacher. So, what do you think is their relationship with each other?",
-            actor.name.title() + " and " + char.name.title() + " attend the same classes. What is their relationship to each other then?"
+        hintTemplateA.extend([
+            actor.name.title() + " and " + char.name.title() + " go to the same school.",
+            actor.name.title() + " and " + char.name.title() + " are being taught by the same teacher.",
+            actor.name.title() + " and " + char.name.title() + " attend the same classes."
         ])
+
+        hintTemplateB = replenishHintsB(actor, char)
+
+        for hints in hintTemplateA:
+            r = random.choice(hintTemplateB)
+            hintTemplateB.remove(r)
+
+            hintChoices.append(hints + r)
 
     if [x for x in rel if x == "friend"] or rel == "friend":
-        hintChoices.extend([
-            actor.name.title() + " and " + char.name.title() + " talk to each other sometimes. Maybe they are a little more than acquaintances? What can their relationship be?",
-            actor.name.title() + " and " + char.name.title() + " can even become best friends if they spend more time together. So, what do you think is their relationship?",
-            actor.name.title() + " likes to talk to " + char.name.title() + ". What are they to each other?"
+        hintTemplateA.extend([
+            actor.name.title() + " and " + char.name.title() + " talk to each other sometimes. Maybe they are a little more than acquaintances?",
+            actor.name.title() + " and " + char.name.title() + " can even become best friends if they spend more time together.",
+            actor.name.title() + " likes to talk to " + char.name.title() + "."
         ])
+
+        hintTemplateB = replenishHintsB(actor, char)
+
+        for hints in hintTemplateA:
+            r = random.choice(hintTemplateB)
+            hintTemplateB.remove(r)
+
+            hintChoices.append(hints + r)
 
     if [x for x in rel if x == "best friend"] or rel == "best friend":
-        hintChoices.extend([
-            actor.name.title() + " and " + char.name.title() + " are always together. Maybe they are a little more than friends? What are they to each other?",
-            actor.name.title() + " and " + char.name.title() + " go to school together. So, what do you think is their relationship?",
-            actor.name.title() + " and " + char.name.title() + " even share items. What can their relationship be?"
+        hintTemplateA.extend([
+            actor.name.title() + " and " + char.name.title() + " are always together. Maybe they are a little more than friends?",
+            actor.name.title() + " and " + char.name.title() + " go to school together.",
+            actor.name.title() + " and " + char.name.title() + " even share items."
         ])
+
+        hintTemplateB = replenishHintsB(actor, char)
+
+        for hints in hintTemplateA:
+            r = random.choice(hintTemplateB)
+            hintTemplateB.remove(r)
+
+            hintChoices.append(hints + r)
 
     if [x for x in rel if x == "father"] or rel == "father":
-        hintChoices.extend([
-            actor.name.title() + " and " + char.name.title() + " live in the same house. Who can " + char.name.title() + " be to " + actor.name.title() + "?",
-            actor.name.title() + " and " + char.name.title() + " are relatives. So, what do you think is the relationship of " + char.name.title() + " to " + actor.name.title() + "?",
-            char.name.title() + " provides for " + actor.name.title() + "'s needs. Who can " + char.name.title() + " be to " + actor.name.title() + "?"
+        hintTemplateA.extend([
+            actor.name.title() + " and " + char.name.title() + " live in the same house.",
+            actor.name.title() + " and " + char.name.title() + " are relatives.",
+            char.name.title() + " provides for " + actor.name.title() + "'s needs."
         ])
+
+        for hints in hintTemplateA:
+            r = random.choice(hintTemplateC)
+
+            hintChoices.append(hints + r)
 
     if [x for x in rel if x == "daughter"] or rel == "daughter":
-        hintChoices.extend([
-            actor.name.title() + " and " + char.name.title() + " live in the same house. Who can " + char.name.title() + " be to " + actor.name.title() + "?",
-            actor.name.title() + " and " + char.name.title() + " are relatives. So, what do you think is the relationship of " + char.name.title() + " to " + actor.name.title() + "?",
-            actor.name.title() + " loves " + char.name.title() + " very much. Who can " + char.name.title() + " be to " + actor.name.title() + "?"
+        hintTemplateA.extend([
+            actor.name.title() + " and " + char.name.title() + " live in the same house.",
+            actor.name.title() + " and " + char.name.title() + " are relatives.",
+            actor.name.title() + " loves " + char.name.title() + " very much."
         ])
+
+        for hints in hintTemplateA:
+            r = random.choice(hintTemplateC)
+
+            hintChoices.append(hints + r)
 
     if [x for x in rel if x == "brother"] or rel == "brother":
-        hintChoices.extend([
-            actor.name.title() + " and " + char.name.title() + " live in the same house. Who can " + char.name.title() + " be to " + actor.name.title() + "?",
-            actor.name.title() + " and " + char.name.title() + " have the same surname! So, what do you think is the relationship of " + char.name.title() + " to " + actor.name.title() + "?",
-            char.name.title() + " and " + actor.name.title() + " are relatives. Who can " + char.name.title() + " be to " + actor.name.title() + "?"
+        hintTemplateA.extend([
+            actor.name.title() + " and " + char.name.title() + " live in the same house.",
+            actor.name.title() + " and " + char.name.title() + " have the same surname!",
+            char.name.title() + " and " + actor.name.title() + " are relatives."
         ])
+
+        for hints in hintTemplateA:
+            r = random.choice(hintTemplateC)
+
+            hintChoices.append(hints + r)
 
     if [x for x in rel if x == "sister"] or rel == "sister":
-        hintChoices.extend([
-            actor.name.title() + " and " + char.name.title() + " live in the same house. Who can " + char.name.title() + " be to " + actor.name.title() + "?",
-            actor.name.title() + " and " + char.name.title() + " have the same surname! So, what do you think is the relationship of " + char.name.title() + " to " + actor.name.title() + "?",
-            char.name.title() + " and " + actor.name.title() + " are relatives. Who can " + char.name.title() + " be to " + actor.name.title() + "?"
+        hintTemplateA.extend([
+            actor.name.title() + " and " + char.name.title() + " live in the same house.",
+            actor.name.title() + " and " + char.name.title() + " have the same surname!",
+            char.name.title() + " and " + actor.name.title() + " are relatives."
         ])
+
+        for hints in hintTemplateA:
+            r = random.choice(hintTemplateC)
+
+            hintChoices.append(hints + r)
 
     if [x for x in rel if x == "teacher"] or rel == "teacher":
-        hintChoices.extend([
-            actor.name.title() + " respects " + char.name.title() + " very much. Maybe they also see each other at school. Who can " + char.name.title() + " be to " + actor.name.title() + "?",
-            actor.name.title() + " learns a lot from listening to " + char.name.title() + ". So, who do you think is " + char.name.title() + " to " + actor.name.title() + "?",
-            "you can consider " + char.name.title() + " as " + actor.name.title() + "'s second mother. Who can " + char.name.title() + " be to " + actor.name.title() + "?"
+        hintTemplateA.extend([
+            actor.name.title() + " respects " + char.name.title() + " very much. Maybe they also see each other at school.",
+            actor.name.title() + " learns a lot from listening to " + char.name.title() + ".",
+            "you can consider " + char.name.title() + " as " + actor.name.title() + "'s second mother."
         ])
+
+        for hints in hintTemplateA:
+            r = random.choice(hintTemplateC)
+
+            hintChoices.append(hints + r)
 
     if [x for x in rel if x == "student"] or rel == "student":
-        hintChoices.extend([
-            char.name.title() + " respects " + actor.name.title() + " very much. Maybe they also see each other at school. Who can " + char.name.title() + " be to " + actor.name.title() + "?",
-            char.name.title() + " learns a lot from listening to " + actor.name.title() + ". So, who do you think is " + char.name.title() + " to " + actor.name.title() + "?",
-            "you can consider " + actor.name.title() + " as " + char.name.title() + "'s second mother. Who can " + char.name.title() + " be to " + actor.name.title() + "?"
+        hintTemplateA.extend([
+            char.name.title() + " respects " + actor.name.title() + " very much. Maybe they also see each other at school.",
+            char.name.title() + " learns a lot from listening to " + actor.name.title() + ".",
+            "you can consider " + actor.name.title() + " as " + char.name.title() + "'s second mother."
         ])
 
+        for hints in hintTemplateA:
+            r = random.choice(hintTemplateC)
+
+            hintChoices.append(hints + r)
+
     if [x for x in rel if x == "neighbor"] or rel == "neighbor":
-        hintChoices.extend([
-            char.name.title() + " and " + actor.name.title() + " live in the same neighborhood. What do you think is their relationship with each other?",
-            actor.name.title() + " lives near " + char.name.title() + ". So, who do you think is " + actor.name.title() + " to " + char.name.title() + "?",
-            "there is a possibility that " + actor.name.title() + "'s and " + char.name.title() + "'s houses are only beside each other! So, what do you think is their relationship?"
+        hintTemplateA.extend([
+            char.name.title() + " and " + actor.name.title() + " live in the same neighborhood.",
+            actor.name.title() + " lives near " + char.name.title() + ".",
+            "there is a possibility that " + actor.name.title() + "'s and " + char.name.title() + "'s houses are only beside each other!"
         ])
+
+        hintTemplateB = replenishHintsB(actor, char)
+
+        for hints in hintTemplateA:
+            r = random.choice(hintTemplateB)
+            hintTemplateB.remove(r)
+
+            hintChoices.append(hints + r)
 
     return hintChoices
 
@@ -526,27 +619,43 @@ def generatePumpsForAppProp(ansList):
 def generatePromptsForAppProp(correctAnswer):
     actor, prop = correctAnswer
     hintChoices = []
+    randTemplateA = []
+    randTemplateB = []
 
-    hintChoices.extend(["What makes a person " + prop + "? Can you give me some examples?",
-                        "Do you know anyone who is " + prop + "? What makes them " + prop + "? Can you describe?"])
+    randTemplateA.extend(["What makes a person " + prop + "?",
+                          "Do you know anyone who is " + prop + "?"])
+
+    randTemplateB.extend([" Can you give me some examples?",
+                          " What makes them " + prop + "? Can you describe?"])
+
+    for hints in randTemplateB:
+        r = random.choice(randTemplateA)
+        randTemplateA.remove(r)
+
+        hintChoices.append(r + hints)
 
     return hintChoices
 
 
-def generateHintsForAttr(ansList):
+def generatePromptForAttr(ansList, correctAnswer):
     actor, act, attr, propType, prop = ansList
+    actorAns, propAns = correctAnswer
+    pronoun = producePronoun(actor)
     hintChoices = []
 
     hintChoices.extend(
-        [" related to the " + propType + " of the " + attr.name + " " + actor.name.title() + " " + act + "."])
+        [" related to the " + propType + " of the " + attr.name + " " + actor.name.title() + " " + act + ". Say something about " + actor.name.title() + "'s " + attr.name + ".",
+         "Why do you think will a person become " + propAns + " because of the " + attr.name + " " + pronoun + " " + act + "?",
+         "Do you know anyone who is " + propAns + "? What is the " + propType + " of the " + attr.name + " they " + act + "?"
+         ])
 
     return hintChoices
 
 
 def generateElabForAttr(ansList):
     actor, act, attr, propType, prop = ansList
+    pronoun = producePronoun(actor)
     propDefs = []
-    actDefs = []
 
     if type(prop) is list and propType == "appearance":
         for properties in prop:
@@ -555,18 +664,63 @@ def generateElabForAttr(ansList):
     else:
         propDefs.append(WordNet.getDefinition(prop))
 
-    actDefs = WordNet.getDefinition(act, "Yes")
-
     hintChoices = []
-
-    pronoun = "it"
-    if actor.gender == "female":
-        pronoun = "she"
-    elif actor.gender == "male":
-        pronoun = "he"
 
     hintChoices.extend([" related to the " + attr.name + " " + actor.name.title() + " " + act + ". Since " +
                         pronoun + " " + act + " " + attr.name + " that is " + random.choice(propDefs) + ". "])
 
-    print("hintChoices: ", hintChoices)
+    return hintChoices
+
+
+def replenishHintsC(actor):
+    hintTemplateC = []
+
+    hintTemplateC.extend(["I think the role of " + actor.name.title() + " in the story",
+                          "I think " + actor.name.title() + "'s role in the story"])
+
+    return hintTemplateC
+
+
+def generateHintsForType(ansList):
+    actor, charType = ansList
+    hintTemplateA = []
+    hintTemplateB = []
+    hintChoices = []
+
+    hintTemplateA.extend([" What do you think is the word?",
+                          " So, can you guess the word?",
+                          " Can you give me the correct word to describe " + actor.name.title() + "'s role?",
+                          " What is the role of " + actor.name.title() + " in the story?"
+                          ])
+
+    for entries in charType:
+        wordCount = len(entries)
+        wordCount = str(wordCount)
+
+        if wordCount == 1:
+            letter = " letter"
+        else:
+            letter = " letters"
+
+        definition = WordNet.getDefinition(entries)
+        if definition:
+            hintTemplateB.append(" is a word that means " + definition + ".")
+
+        hintTemplateB.extend([" is a word that starts with " + entries[:1] + " and has " + wordCount + letter + ".",
+                              " is a word that has the letter " + entries[2] + " and has " + wordCount + letter + "."
+                              ])
+
+    hintTemplateC = replenishHintsC(actor)
+
+    for hints in hintTemplateB:
+        if not hintTemplateC:
+            hintTemplateC = replenishHintsC(actor)
+
+        r = random.choice(hintTemplateC)
+        s = random.choice(hintTemplateA)
+
+        hintTemplateC.remove(r)
+
+        hintChoices.append(r + hints + s)
+
     return hintChoices

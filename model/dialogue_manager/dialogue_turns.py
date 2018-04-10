@@ -59,7 +59,6 @@ def gotCorrectAnswer(preparedString, followUpSent):
     result = []
     result.append(preparedString + followUpSent)
 
-
 def formatMultipleItems(listAnswer):
     if len(listAnswer) > 1 and type(listAnswer) is not str:
         out = ", ".join(listAnswer[:-1]) + " and " + listAnswer[len(listAnswer) - 1]
@@ -229,6 +228,7 @@ def determineSentenceType(sequence):
     if question is True:
         answerList = []
         answerList.extend(temp)
+        print("answerList: ", answerList)
 
     if question is True or followUp is True:
         result = []
@@ -236,6 +236,7 @@ def determineSentenceType(sequence):
         incorrect = True
 
         answerList = [x for x in answerList if x[0] != "unknown"]
+        print("answerList1: ", answerList)
         tempResult = []
 
         if not answerList:
@@ -259,7 +260,8 @@ def determineSentenceType(sequence):
                 for answers in answerList:
                     ansType, ansList = answers
                     hintChoices = []
-                    print("answers: ", answers)
+                    #if ansType == "cause":
+                    #    ansType, ansList
 
                     if ansType == "relationship_name":
                         actor, rel, char = ansList
@@ -337,7 +339,7 @@ def determineSentenceType(sequence):
                                 hintList.extend(hintChoices)
 
                     elif ansType == "attribute":
-                        hintChoices.extend(provider.generateHintsForAttr(ansList))
+                        hintChoices.extend(provider.generatePromptForAttr(ansList, correctAnswer))
                         hintChoices.extend(provider.generateElabForAttr(ansList))
                         # hintChoices = provider.generatePumpsForAppProp()
                         # hintChoices = provider.generateElabForAppProp()
@@ -345,10 +347,28 @@ def determineSentenceType(sequence):
                         hintList.extend(["I think it's " + entries for entries in hintChoices])
 
                     elif ansType == "action":
-                        hintChoices.extend(provider.generateHintsForAction())
-                        #hintChoices.extend(provider.generateElabForAction())
-                        #hintChoices = provider.generatePumpsForAppProp()
-                        #hintChoices = provider.generateElabForAppProp()
+                        hintChoices.extend(provider.generatePumpsForAction(ansList))
+                        hintChoices.extend(provider.generatePromptForAction(ansList))
+                        hintChoices.extend(provider.generateElabForAction(ansList))
+
+                        hintList.extend(hintChoices)
+
+                    elif ansType == "type":
+                        hintChoices.extend(provider.generateHintsForType(ansList))
+
+                        hintList.extend(hintChoices)
+
+                    elif ansType == "item_appearance":
+                        a = 1
+
+                    elif ansType == "item_amount":
+                        a = 1
+
+                    elif ansType == "actor_appearance":
+                        a = 1
+
+                    elif ansType == "actor_personality":
+                        a = 1
 
                     elif ansType == "confirmation":
                         hintList.append("Do you mean " + ansList.name.title() + "?")
@@ -371,9 +391,6 @@ def determineSentenceType(sequence):
         wrongMessage = resetWrongMessage()
         for answers in answerList:
             ansType, ansList = answers
-
-            print("ansType: ", ansType)
-            print("ansList: ", ansList)
 
             if ansType == "relationship_name":
                 actor, rel, char = ansList
@@ -477,7 +494,7 @@ def determineSentenceType(sequence):
         elif len(result) == 1:
             return result[0]
     else:
-        return "Try asking me a question!"
+        return "Try asking me a question."
 
 
 def generateFollowUp(answer, questType, ansList):
@@ -528,12 +545,7 @@ def generateFollowUp(answer, questType, ansList):
         if correctAnswer:
             actor, personality = correctAnswer
 
-            pronoun = "it"
-            if actor.gender:
-                if actor.gender == "female":
-                    pronoun = "she"
-                elif actor.gender == "male":
-                    pronoun = "he"
+            pronoun = provider.producePronoun(actor)
 
             preparedString = "Hooray! I also think " + actor.name.title() + " is " + personality + " because " + pronoun + " is " + answer + "."
             gotCorrectAnswer(preparedString, " Blah")

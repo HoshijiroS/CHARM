@@ -83,6 +83,12 @@ def parseWhyMessage(charList, verbList):
 
     for character in charList:
         for action in verbList:
-            output.append(cont_plan.confirmCharacter(character, 3, action=action))
+            getOutput = cont_plan.confirmCharacter(character, 3, action=action)
+
+            if type(getOutput) is list:
+                output.extend(getOutput)
+
+            else:
+                output.append(getOutput)
 
     return output
