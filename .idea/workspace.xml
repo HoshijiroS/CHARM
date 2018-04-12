@@ -4,10 +4,6 @@
     <list default="true" id="feb6c143-884b-4904-8969-3d7a3e6685ab" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model/dialogue_manager/content_provider.py" afterPath="$PROJECT_DIR$/model/dialogue_manager/content_provider.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model/dialogue_manager/dialogue_turns.py" afterPath="$PROJECT_DIR$/model/dialogue_manager/dialogue_turns.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model/dialogue_manager/sentence_parser.py" afterPath="$PROJECT_DIR$/model/dialogue_manager/sentence_parser.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model/story_world/classes/Character.py" afterPath="$PROJECT_DIR$/model/story_world/classes/Character.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model/story_world/story_scenes.py" afterPath="$PROJECT_DIR$/model/story_world/story_scenes.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -27,42 +23,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="450">
-      <file leaf-file-name="content_provider.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="content_provider.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/model/dialogue_manager/content_provider.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="199">
-              <caret line="1124" column="38" lean-forward="true" selection-start-line="1124" selection-start-column="38" selection-end-line="1124" selection-end-column="38" />
+            <state relative-caret-position="273">
+              <caret line="1089" column="39" lean-forward="false" selection-start-line="1089" selection-start-column="39" selection-end-line="1089" selection-end-column="39" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
                 <element signature="e#267#520#0" expanded="false" />
                 <element signature="e#674#1891#0" expanded="false" />
                 <element signature="e#1944#2841#0" expanded="false" />
-                <element signature="e#4678#5698#0" expanded="false" />
-                <element signature="e#5737#7185#0" expanded="false" />
-                <element signature="e#7223#7866#0" expanded="false" />
-                <element signature="e#8670#9326#0" expanded="false" />
-                <element signature="e#9364#9619#0" expanded="false" />
-                <element signature="e#9657#9923#0" expanded="false" />
-                <element signature="e#9962#10235#0" expanded="false" />
-                <element signature="e#15213#15580#0" expanded="false" />
-                <element signature="e#15620#15997#0" expanded="false" />
-                <element signature="e#16073#16680#0" expanded="false" />
-                <element signature="e#16724#17253#0" expanded="false" />
-                <element signature="e#17986#23981#0" expanded="false" />
-                <element signature="e#24026#24878#0" expanded="false" />
-                <element signature="e#25726#25953#0" expanded="false" />
-                <element signature="e#26005#26543#0" expanded="false" />
-                <element signature="e#26601#27249#0" expanded="false" />
-                <element signature="e#27290#27869#0" expanded="false" />
-                <element signature="e#28164#29572#0" expanded="false" />
-                <element signature="e#30780#31909#0" expanded="false" />
-                <element signature="e#31956#34915#0" expanded="false" />
                 <element signature="e#34964#36871#0" expanded="false" />
-                <element signature="e#38594#41708#0" expanded="false" />
-                <element signature="e#41758#43898#0" expanded="false" />
-                <element signature="e#43946#45533#0" expanded="false" />
-                <marker date="1523559088447" expanded="false" signature="17289:17943" ph="..." />
-                <marker date="1523559088447" expanded="false" signature="27899:28123" ph="..." />
+                <element signature="e#36918#38472#0" expanded="false" />
+                <element signature="e#38520#41446#0" expanded="false" />
+                <element signature="e#41496#43636#0" expanded="false" />
+                <marker date="1523561527664" expanded="false" signature="43679:45271" ph="..." />
               </folding>
             </state>
           </provider>
@@ -88,11 +63,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="dialogue_turns.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="dialogue_turns.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/dialogue_manager/dialogue_turns.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="394">
-              <caret line="382" column="0" lean-forward="true" selection-start-line="382" selection-start-column="0" selection-end-line="382" selection-end-column="0" />
+            <state relative-caret-position="344">
+              <caret line="382" column="0" lean-forward="false" selection-start-line="382" selection-start-column="0" selection-end-line="382" selection-end-column="0" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
                 <element signature="e#2224#2459#0" expanded="false" />
@@ -107,6 +82,7 @@
                 <element signature="e#8958#9837#0" expanded="false" />
                 <element signature="e#9914#10744#0" expanded="false" />
                 <element signature="e#11293#11577#0" expanded="false" />
+                <element signature="e#12234#12567#0" expanded="false" />
                 <element signature="e#14092#15004#0" expanded="false" />
                 <element signature="e#15062#15290#0" expanded="false" />
                 <element signature="e#17684#19596#0" expanded="false" />
@@ -218,7 +194,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>actor_appearance</find>
       <find>attribute</find>
       <find>wordnet</find>
       <find>aspec</find>
@@ -233,7 +208,6 @@
       <find>print</find>
       <find>flat_list</find>
       <find>WordNet</find>
-      <find>out_prop</find>
       <find>(props,</find>
       <find>is list</find>
       <find>appPropert</find>
@@ -247,6 +221,8 @@
       <find>+ def_prop +</find>
       <find>assembleSentence</find>
       <find>looks</find>
+      <find>out_prop</find>
+      <find>print(&quot;out_prop</find>
       <find>try askin</find>
     </findStrings>
     <replaceStrings>
@@ -338,8 +314,8 @@
         <option value="$PROJECT_DIR$/model/story_world/story_scenes.py" />
         <option value="$PROJECT_DIR$/model/dialogue_manager/sentence_parser.py" />
         <option value="$PROJECT_DIR$/model/story_world/classes/Character.py" />
-        <option value="$PROJECT_DIR$/model/dialogue_manager/content_provider.py" />
         <option value="$PROJECT_DIR$/model/dialogue_manager/dialogue_turns.py" />
+        <option value="$PROJECT_DIR$/model/dialogue_manager/content_provider.py" />
       </list>
     </option>
   </component>
@@ -776,7 +752,14 @@
       <option name="project" value="LOCAL" />
       <updated>1523522130838</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="Added dialogue turns to other answer types.">
+      <created>1523559143246</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1523559143246</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -807,6 +790,7 @@
     <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25964913" sideWeight="0.5177719" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32931727" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32921347" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
@@ -1166,49 +1150,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/model/dialogue_manager/content_provider.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="199">
-          <caret line="1124" column="38" lean-forward="true" selection-start-line="1124" selection-start-column="38" selection-end-line="1124" selection-end-column="38" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-            <element signature="e#267#520#0" expanded="false" />
-            <element signature="e#674#1891#0" expanded="false" />
-            <element signature="e#1944#2841#0" expanded="false" />
-            <element signature="e#4678#5698#0" expanded="false" />
-            <element signature="e#5737#7185#0" expanded="false" />
-            <element signature="e#7223#7866#0" expanded="false" />
-            <element signature="e#8670#9326#0" expanded="false" />
-            <element signature="e#9364#9619#0" expanded="false" />
-            <element signature="e#9657#9923#0" expanded="false" />
-            <element signature="e#9962#10235#0" expanded="false" />
-            <element signature="e#15213#15580#0" expanded="false" />
-            <element signature="e#15620#15997#0" expanded="false" />
-            <element signature="e#16073#16680#0" expanded="false" />
-            <element signature="e#16724#17253#0" expanded="false" />
-            <element signature="e#17986#23981#0" expanded="false" />
-            <element signature="e#24026#24878#0" expanded="false" />
-            <element signature="e#25726#25953#0" expanded="false" />
-            <element signature="e#26005#26543#0" expanded="false" />
-            <element signature="e#26601#27249#0" expanded="false" />
-            <element signature="e#27290#27869#0" expanded="false" />
-            <element signature="e#28164#29572#0" expanded="false" />
-            <element signature="e#30780#31909#0" expanded="false" />
-            <element signature="e#31956#34915#0" expanded="false" />
-            <element signature="e#34964#36871#0" expanded="false" />
-            <element signature="e#38594#41708#0" expanded="false" />
-            <element signature="e#41758#43898#0" expanded="false" />
-            <element signature="e#43946#45533#0" expanded="false" />
-            <marker date="1523559088447" expanded="false" signature="17289:17943" ph="..." />
-            <marker date="1523559088447" expanded="false" signature="27899:28123" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/model/dialogue_manager/dialogue_turns.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="394">
-          <caret line="382" column="0" lean-forward="true" selection-start-line="382" selection-start-column="0" selection-end-line="382" selection-end-column="0" />
+        <state relative-caret-position="344">
+          <caret line="382" column="0" lean-forward="false" selection-start-line="382" selection-start-column="0" selection-end-line="382" selection-end-column="0" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
             <element signature="e#2224#2459#0" expanded="false" />
@@ -1223,9 +1168,28 @@
             <element signature="e#8958#9837#0" expanded="false" />
             <element signature="e#9914#10744#0" expanded="false" />
             <element signature="e#11293#11577#0" expanded="false" />
+            <element signature="e#12234#12567#0" expanded="false" />
             <element signature="e#14092#15004#0" expanded="false" />
             <element signature="e#15062#15290#0" expanded="false" />
             <element signature="e#17684#19596#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model/dialogue_manager/content_provider.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="273">
+          <caret line="1089" column="39" lean-forward="false" selection-start-line="1089" selection-start-column="39" selection-end-line="1089" selection-end-column="39" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+            <element signature="e#267#520#0" expanded="false" />
+            <element signature="e#674#1891#0" expanded="false" />
+            <element signature="e#1944#2841#0" expanded="false" />
+            <element signature="e#34964#36871#0" expanded="false" />
+            <element signature="e#36918#38472#0" expanded="false" />
+            <element signature="e#38520#41446#0" expanded="false" />
+            <element signature="e#41496#43636#0" expanded="false" />
+            <marker date="1523561527664" expanded="false" signature="43679:45271" ph="..." />
           </folding>
         </state>
       </provider>

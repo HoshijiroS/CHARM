@@ -1111,9 +1111,7 @@ def generatePumpForAppearance(ansList):
         for causes in causeList:
             out_prop, event = causes
             results = assembleSentence(event, out_prop, genType="sentence", turnType="pump", ansType="appearance")
-            print("results: ", results)
             sent = results[0]
-            print("sent: ", sent)
             results.remove(sent)
 
             hintTemplateB.extend([" Can you describe " + actor.name.title() + "'s appearance?",
@@ -1211,22 +1209,19 @@ def generateElabForPersonality(ansList):
                 if def_prop:
                     hintChoices.append([
                         "Since " + actor.name.title() + "'s personality is " + def_prop + ", " + entries + ".",
-                        "I think " + actor.name.title() + "'s appearance is " + def_prop + ", " + entries + ". Describe "
+                        "I think " + actor.name.title() + "'s personality is " + def_prop + ", " + entries + ". Describe "
                         + actor.name.title() + "'s personality."
                     ])
 
     temp = []
 
     for props in out_prop:
-        ans_props, event = actor.queryProperty(props, "personality", None)
-        sent = assembleSentence(event, ans_props, genType="sentence")
         def_prop = WordNet.getDefinition(props)
 
-        for entries in temp:
-            if def_prop:
-                hintChoices.append(
-                    "I think " + actor.name.title() + "'s appearance is " + def_prop + ". Describe "
-                    + actor.name.title() + "'s personality.")
+        if def_prop:
+            hintChoices.append(
+                "I think " + actor.name.title() + "'s personality is " + def_prop + ". Describe "
+                + actor.name.title() + "'s personality.")
 
     return hintChoices
 
