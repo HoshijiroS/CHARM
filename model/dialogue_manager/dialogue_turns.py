@@ -359,13 +359,22 @@ def determineSentenceType(sequence):
                         hintList.extend(hintChoices)
 
                     elif ansType == "item_appearance":
-                        a = 1
+                        hintChoices.extend(provider.generateElabForItem(ansList))
+                        hintChoices.extend(provider.generatePumpsForItem(ansList))
+
+                        hintList.extend(["I think " + entries for entries in hintChoices])
 
                     elif ansType == "item_amount":
                         a = 1
 
                     elif ansType == "actor_appearance":
-                        a = 1
+                        hintChoices.extend(provider.generatePromptForAppearance(ansList))
+                        hintChoices.extend(provider.generatePumpForAppearance(ansList))
+                        hintChoices.extend(provider.generateElabForAppearance(ansList))
+
+                        print("hintChoices: ", hintChoices)
+
+                        hintList.extend(["I think " + entries for entries in hintChoices])
 
                     elif ansType == "actor_personality":
                         a = 1

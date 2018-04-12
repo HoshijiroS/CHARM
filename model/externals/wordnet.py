@@ -35,12 +35,12 @@ def getDefinition(word, verb=None):
             syns = wordnet.synset(word + '.v.01')
             return syns.definition()
         except Exception as e:
-            print(e)
+            print("Error on getDefintion: ", e)
     else:
         try:
             syns = wordnet.synsets(word)[0]
             return syns.definition()
         except Exception as e:
-            print(e)
+            print("Error on getDefinition: ", e)
 
     return None

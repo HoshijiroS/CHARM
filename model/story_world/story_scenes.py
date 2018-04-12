@@ -1265,6 +1265,18 @@ def queryRelations(event, relType):
                     if items == event:
                         return b
 
+    elif relType == "reason":
+        for entries in relations.causeList:
+            a, b = entries
+
+            if type(b) is str and b == event:
+                return a
+
+            elif type(b) is list:
+                for items in b:
+                    if items == event:
+                        return a
+
     return None
 
 

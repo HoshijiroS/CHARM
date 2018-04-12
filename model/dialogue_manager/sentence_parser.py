@@ -66,8 +66,16 @@ def parseWhatMessage(sequence, posList, ofList, charList, andList, itemList):
                                                       propType="appearance"))
 
         else:
-            charList.remove("appearance")
-            charList.remove("look")
+            try:
+                charList.remove("appearance")
+            except Exception as e:
+                a = 1
+
+            try:
+                charList.remove("look")
+            except Exception as e:
+                a = 1
+
             for character in charList:
                 output.append(cont_plan.confirmCharacter(character, 2, propType="appearance"))
 

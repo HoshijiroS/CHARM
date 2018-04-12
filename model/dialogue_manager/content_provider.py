@@ -3,9 +3,9 @@ import re
 
 import distance
 
+import model.externals.wordnet as WordNet
 import model.story_world.entities as Entity
 import model.story_world.story_scenes as ref
-import model.externals.wordnet as WordNet
 
 
 def formatMultipleItems(listAnswer):
@@ -94,8 +94,7 @@ def whatQuestion(actor, item, propType, action):
     try:
         act, item, event = actor.queryAttribute(action, Entity.itemList[item].name, None)
     except Exception as e:
-        print(e)
-        return "unknown", None
+        a = 1
 
     if action is None and item is not None:
         if propType == "appearance":
@@ -106,41 +105,41 @@ def whatQuestion(actor, item, propType, action):
             for properties in item.amtProp:
                 prop.append(properties[0])
 
-        if prop is not None:
-            out_prop = formatMultipleItems(prop)
+                # if prop is not None:
+                #    out_prop = formatMultipleItems(prop)
 
-            if propType == "appearance":
-                # output = actor.name.title() + "'s " + item.name + " is " + out_prop
+        if propType == "appearance":
+            # output = actor.name.title() + "'s " + item.name + " is " + out_prop
 
-                return "item_appearance", [actor, item.name, out_prop]
-            else:
-                # output = actor.name.title() + " has " + out_prop + " " + item.name
+            return "item_appearance", [actor, act, item, prop]
+        else:
+            # output = actor.name.title() + " has " + out_prop + " " + item.name
 
-                return "item_amount", [actor, item.name, out_prop]
+            return "item_amount", [actor, act, item, prop]
 
-    elif action is None and item is None:
+    elif actor and propType:
         prop = []
         if propType == "appearance":
             for properties in actor.appProp:
                 prop.append(properties[0])
 
-            if prop is not None:
-                out_prop = formatMultipleItems(prop)
+                # if prop is not None:
+                #    out_prop = formatMultipleItems(prop)
 
                 # output = actor.name.title() + "'s appearance is " + out_prop
 
-                return "actor_appearance", [actor, out_prop]
+                return "actor_appearance", [actor, prop]
 
         elif propType == "property":
             for properties in actor.perProp:
                 prop.append(properties[0])
 
-            if prop is not None:
-                out_prop = formatMultipleItems(prop)
+                # if prop is not None:
+                #    out_prop = formatMultipleItems(prop)
 
                 # output = actor.name.title() + "'s personality is " + out_prop
 
-                return "actor_personality", [actor, out_prop]
+                return "actor_personality", [actor, prop]
 
     else:
         return "unknown", None
@@ -165,12 +164,10 @@ def whereQuestion(actor, action, location):
 
         if type(location) is str:
             output = actor.name.title() + " " + action[0] + " in " + loc
-            print(output)
 
             return "location", [actor, action, loc]
         else:
             output = actor.name.title() + " " + action[0] + " in " + loc.name
-            print(output)
 
             return "location", [actor, action[0], loc.name]
 
@@ -196,8 +193,11 @@ def whyQuestion(actor, action):
         print("cause_event: ", cause_event)
 
         if cause_event is not None:
-            for evs in cause_event:
-                causeList.append(assembleSentence(evs, state[0]))
+            if type(cause_event) is list:
+                for evs in cause_event:
+                    causeList.append(assembleSentence(evs, state[0])[0])
+            else:
+                causeList.append(assembleSentence(cause_event, state[0])[0])
 
                 # if len(causeList) > 1:
                 #     return "; ".join(causeList[:-1]) + " and " + causeList[len(causeList) - 1]
@@ -205,7 +205,6 @@ def whyQuestion(actor, action):
                 # elif len(causeList) == 1:
                 #     return causeList[0]
 
-        print("causeList: ", causeList)
         return causeList
 
     else:
@@ -237,26 +236,34 @@ def assembleProp(attr, event):
     return None, None
 
 
-def assembleSentence(event, answer):
+def assembleSentence(event, answer, genType=None):
     try:
         event, actor, qType = ref.queryLookup(event)
+    except Exception as e:
+        print("Error on assembleSentence: ", e)
+
+    try:
         actor = Entity.charList[actor.lower()]
+    except Exception as e:
+        print("Error on assembleSentence: ", e)
+
+    try:
         actor = Entity.itemList[actor.lower()]
+    except Exception as e:
+        print("Error on assembleSentence: ", e)
+
+    try:
         actor = Entity.locList[actor.lower()]
     except Exception as e:
-        print(e)
-        #return "unknown", None
-
-    print("qType: ", qType)
-    out_obj = ""
-    out_state = ""
+        print("Error on assembleSentence: ", e)
 
     if qType == "state":
         state, scene = actor.queryState(None, event)
 
         out_state = formatMultipleItems(state[0])
 
-        # output = "Because " + actor.name.title() + " was " + out_state
+        if genType == "sentence":
+            return actor.name.title() + " was " + out_state, [actor, out_state, answer]
 
         return "state", [actor, out_state, answer]
 
@@ -265,7 +272,8 @@ def assembleSentence(event, answer):
 
         out_obj = formatMultipleItems(obj)
 
-        # output = "Because " + actor.name.title() + " " + action[0] + " " + out_obj
+        if genType == "sentence":
+            return actor.name.title() + " " + act[0] + " " + out_obj, [actor, act[0], out_obj, answer]
 
         return "action", [actor, act[0], out_obj, answer]
 
@@ -274,7 +282,8 @@ def assembleSentence(event, answer):
 
         out_obj = formatMultipleItems(obj)
 
-        # output = "Because " + actor.name.title() + " desired to " + des[0] + " " + out_obj
+        if genType == "sentence":
+            return actor.name.title() + " desired to " + des[0] + " " + out_obj, [actor, des[0], out_obj, answer]
 
         return "desire", [actor, des[0], out_obj, answer]
 
@@ -283,30 +292,56 @@ def assembleSentence(event, answer):
 
         out_obj = formatMultipleItems(obj)
 
-        # output = "Because " + actor.name.title() + " felt " + des[0] + " towards " + out_obj
+        if genType == "sentence":
+            return actor.name.title() + " felt " + feel[0] + " towards " + out_obj, [actor, feel[0], out_obj, answer]
 
         return "feeling", [actor, feel[0], out_obj, answer]
 
     elif qType == "attribute":
         act, attr, scene = actor.queryAttribute(None, None, event)
+        out_sent = []
 
         if type(attr) is str:
             propType, out_prop = assembleProp(attr, scene + "ext")
+            sent_prop = formatMultipleItems(out_prop)
+
+            if genType == "sentence":
+                if propType == "amount":
+                    return actor.name.title() + " " + act[0] + " " + out_prop + " " + attr, [actor, act[0], attr, propType, out_prop, answer]
+                else:
+                    return actor.name.title() + " " + act[0] + " a " + attr + " that is " + out_prop, [actor, act[0], attr, propType, out_prop, answer]
 
             return "attribute", [actor, act[0], attr, propType, out_prop, answer]
 
         elif type(attr) is list:
             temp = []
             for items in attr:
-                propType, out_prop = assembleProp(attr, scene + "ext")
-                temp.append(actor, act[0], attr, propType, out_prop, answer)
+                propType, out_prop = assembleProp(items, scene + "ext")
+                temp.append([actor, act[0], items, propType, out_prop, answer])
+                if propType == "amount":
+                    out_sent.append(actor.name.title() + " " + act[0] + " " + out_prop + " " + attr.name, [actor, act[0], items, propType, out_prop, answer])
+                else:
+                    out_sent.append(actor.name.title() + " " + act[0] + " a " + attr.name + " that is " + out_prop, [actor, act[0], items, propType, out_prop, answer])
 
-            return "attribute", temp
+            if genType == "sentence":
+                out_attrs = formatMultipleItems(out_sent)
+                return out_sent, "multiple"
+
+            return "multiple_attribute", temp
 
         else:
             propType, out_prop = assembleProp(attr, scene + "ext")
 
+            if genType == "sentence":
+                if propType == "amount":
+                    return actor.name.title() + " " + act[0] + " " + out_prop + " " + attr.name, [actor, act[0], attr, propType, out_prop, answer]
+                else:
+                    return actor.name.title() + " " + act[0] + " a " + attr.name + " that is " + out_prop, [actor, act[0], attr, propType, out_prop, answer]
+
             return "attribute", [actor, act[0], attr, propType, out_prop, answer]
+
+        if genType == "sentence":
+            return actor.name.title() + " " + act[0] + " " + attr.name, [actor, act[0], attr, answer]
 
         return "attribute", [actor, act[0], attr, answer]
 
@@ -333,6 +368,10 @@ def assembleSentence(event, answer):
 
         if prop:
             out_prop = formatMultipleItems(prop)
+
+            if genType == "sentence":
+                return actor.name.title() + " looks " + out_prop, [actor, prop, answer]
+
             return "appProperty", [actor, prop, answer]
 
     elif qType == "perProperty":
@@ -358,6 +397,10 @@ def assembleSentence(event, answer):
 
         if prop:
             out_prop = formatMultipleItems(prop)
+
+            if genType == "sentence":
+                return actor.name.title() + " is " + out_prop, [actor, out_prop, answer]
+
             return "perProperty", [actor, out_prop, answer]
 
     elif qType == "purpose":
@@ -367,18 +410,44 @@ def assembleSentence(event, answer):
             a = 1
             # print("Error: ", e, " on ", time, " itemPurpose")
 
+        if genType == "sentence":
+            return actor.name + " " + act[0] + " " + obj, [actor, act[0], obj, answer]
+
         return "purpose", [actor, act[0], obj, answer]
+
+    elif qType == "location":
+        try:
+            act, loc, scene = actor.queryLocation(None, None, event)
+        except Exception as e:
+            a = 1
+            # print("Error: ", e, " on ", time, " itemPurpose")
+
+        if genType == "sentence":
+            return actor.name + " " + act[0] + " in " + loc.name, [actor, act[0], loc, answer]
+
+        return "location", [actor, act[0], loc, answer]
 
     return "unknown", None
 
 
-def producePronoun(actor):
-    pronoun = "it"
+def producePronoun(actor, genType=None):
     if actor.gender:
-        if actor.gender == "female":
-            pronoun = "she"
-        elif actor.gender == "male":
-            pronoun = "he"
+        if genType == "objPro":
+            pronoun = "its"
+            if actor.gender == "female":
+                pronoun = "her"
+            elif actor.gender == "male":
+                pronoun = "him"
+            elif actor.gender == "collective":
+                pronoun = "their"
+        else:
+            pronoun = "it"
+            if actor.gender == "female":
+                pronoun = "she"
+            elif actor.gender == "male":
+                pronoun = "he"
+            elif actor.gender == "collective":
+                pronoun = "they"
 
     return pronoun
 
@@ -417,7 +486,7 @@ def replenishHintsB(actor, char):
 
 def generateHintsForRelRel(ansList):
     actor, rel, char = ansList
-    hintChoices =  []
+    hintChoices = []
     hintTemplateA = []
     hintTemplateC = []
 
@@ -579,7 +648,8 @@ def generateHintsForLocation(ansList):
 
         hintChoices.extend([
             "the name of the place where " + actor.name.title() + " " + action + " starts with " + loc[:1] + ".",
-            "the name of the place where " + actor.name.title() + " " + action + " is composed of " + str(wordCount) + " " + words + ".",
+            "the name of the place where " + actor.name.title() + " " + action + " is composed of " + str(
+                wordCount) + " " + words + ".",
             "the name of the place where " + actor.name.title() + " " + action + " has the letter " + loc[2] + "."])
 
     return hintChoices
@@ -601,8 +671,9 @@ def generateHintsForAppProp(ansList):
 
         for synonym in synonyms:
             if synonym != adj:
-                hintChoices.append("I think it's because " + actor.name.title() + " is __. The word in the blank starts with " + adj[
-                    0] + " and its synonym is " + synonym + ". Can you complete the sentence?")
+                hintChoices.append(
+                    "I think it's because " + actor.name.title() + " is __. The word in the blank starts with " + adj[
+                        0] + " and its synonym is " + synonym + ". Can you complete the sentence?")
 
     return hintChoices
 
@@ -611,7 +682,8 @@ def generatePumpsForAppProp(ansList):
     actor, prop = ansList
     hintChoices = []
 
-    hintChoices.extend(["I think it's related to " + actor.name.title() + "'s appearance. Can you describe " + actor.name.title() + "'s appearance?"])
+    hintChoices.extend([
+        "I think it's related to " + actor.name.title() + "'s appearance. Can you describe " + actor.name.title() + "'s appearance?"])
 
     return hintChoices
 
@@ -644,10 +716,11 @@ def generatePromptForAttr(ansList, correctAnswer):
     hintChoices = []
 
     hintChoices.extend(
-        [" related to the " + propType + " of the " + attr.name + " " + actor.name.title() + " " + act + ". Say something about " + actor.name.title() + "'s " + attr.name + ".",
-         "Why do you think will a person become " + propAns + " because of the " + attr.name + " " + pronoun + " " + act + "?",
-         "Do you know anyone who is " + propAns + "? What is the " + propType + " of the " + attr.name + " they " + act + "?"
-         ])
+        [
+            " related to the " + propType + " of the " + attr.name + " " + actor.name.title() + " " + act + ". Say something about " + actor.name.title() + "'s " + attr.name + ".",
+            "Why do you think will a person become " + propAns + " because of the " + attr.name + " " + pronoun + " " + act + "?",
+            "Do you know anyone who is " + propAns + "? What is the " + propType + " of the " + attr.name + " they " + act + "?"
+        ])
 
     return hintChoices
 
@@ -722,5 +795,199 @@ def generateHintsForType(ansList):
         hintTemplateC.remove(r)
 
         hintChoices.append(r + hints + s)
+
+    return hintChoices
+
+
+def generateElabForItem(ansList):
+    causeList = []
+    hintChoices = []
+    actor, item, out_prop = ansList
+    act, attr, event = actor.queryAttribute(None, item.name, None)
+    cause_event = ref.queryRelations(event, "cause")
+
+    if cause_event is not None:
+        if type(cause_event) is list:
+            for evs in cause_event:
+                sent, ans = assembleSentence(evs, attr, genType="sentence")
+                temp = (sent, ans)
+                causeList.append(sent)
+        else:
+            sent, ans = assembleSentence(cause_event, attr, genType="sentence")
+            temp = (sent, ans)
+            causeList.append(sent)
+
+    for entries in causeList:
+        hintChoices.append("because " + entries + ", " + actor.name.title() + "'s " + item.name + " look a certain way.")
+
+    return causeList
+
+
+def generatePumpsForItem(ansList):
+    events = []
+    hintTemplateA = []
+    hintTemplateB = []
+    hintChoices = []
+    actor, item, out_prop = ansList
+    act, attr, event = actor.queryAttribute(None, item.name, None)
+    cause_event = ref.queryRelations(event, "cause")
+    pronoun = producePronoun(actor, genType="objPro")
+
+    if type(attr) is not str:
+        attr = attr.name
+
+    hintTemplateA.extend(
+        [" So, what do you think is the appearance of " + actor.name.title() + "'s " + attr + "?",
+         " What does " + actor.name.title() + "'s " + attr + " look like?"])
+
+    if cause_event:
+        if type(cause_event) is list:
+            for evs in cause_event:
+                events.append(ref.queryLookup(evs))
+
+        else:
+            events.append(ref.queryLookup(cause_event))
+
+    for evs in events:
+        event, actor, qType = evs
+
+        hintTemplateB.extend(
+            [" the reason why " + actor + "'s " + attr + " look like that is related to "
+             + pronoun + " " + qType + "."])
+
+    for hints in hintTemplateB:
+        r = random.choice(hintTemplateA)
+
+        hintChoices.append(hints + r)
+
+    return hintChoices
+
+
+def generateElabForAppearance(ansList):
+    reasonList = []
+    causeList = []
+    hintChoices = []
+    def_prop = []
+    actor, out_prop = ansList
+    pronoun_obj = producePronoun(actor, genType="objPro")
+    flat_list = [item for sublist in out_prop for item in sublist]
+
+    for props in out_prop:
+        ans_prop, event = actor.queryProperty(props, "appearance", None)
+        reason_event = ref.queryRelations(event, "reason")
+        cause_event = ref.queryRelations(event, "cause")
+
+        if reason_event:
+            reasonList.append(reason_event)
+
+        if cause_event:
+            causeList.append(cause_event)
+
+    for props in flat_list:
+        def_prop.append(WordNet.getDefinition(props))
+
+    out_prop = formatMultipleItems(out_prop)
+
+    if reasonList:
+        for causes in reasonList:
+            sent, ans = assembleSentence(causes, out_prop, genType="sentence")
+            actor, out_prop, answer = ans
+
+            hintChoices.append("you should describe " + actor.name.title() + "'s appearance. " + sent + " because " + pronoun_obj + " appearance is " + random.choice(def_prop) + ".")
+
+    if causeList:
+        for causes in causeList:
+            sent, ans = assembleSentence(causes, out_prop, genType="sentence")
+            actor, out_prop, answer = ans
+
+            hintChoices.append("Since " + actor.name.title() + "'s appearance is " + random.choice(def_prop) + ", " + sent + ".")
+
+    return hintChoices
+
+
+def generatePromptForAppearance(ansList):
+    reasonList = []
+    causeList = []
+    hintChoices = []
+    actor, out_prop = ansList
+    for props in out_prop:
+        ans_prop, event = actor.queryProperty(props, "appearance", None)
+        reason_event = ref.queryRelations(event, "reason")
+        cause_event = ref.queryRelations(event, "cause")
+        reasonList.append(reason_event)
+        causeList.append(cause_event)
+
+    pronoun_obj = producePronoun(actor, genType="objPro")
+
+    out_prop = formatMultipleItems(out_prop)
+
+    if reasonList is not None:
+        for causes in reasonList:
+            hintTemplateA = []
+            hintTemplateB = []
+
+            sent, ans = assembleSentence(causes, out_prop, genType="sentence")
+            actor, out_prop, answer = ans
+
+            hintTemplateA.extend(
+                [". So maybe what causes " + pronoun_obj + " to be " + out_prop + " has something to do with " +
+                 pronoun_obj + " appearance.",
+                 " because of " + pronoun_obj + " appearance. "
+                 ])
+
+            hintTemplateB.extend([" What is the appearance of someone who is " + out_prop + "?",
+                                  " What about " + actor.name.title() + "'s appearance makes " + pronoun_obj
+                                  + " " + out_prop + "?"])
+
+            i = 0
+            while i < 2:
+                r = random.choice(hintTemplateA)
+                s = random.choice(hintTemplateB)
+                hintTemplateB.remove(s)
+
+                hintChoices.append(sent + r + s)
+
+                i = i + 1
+
+            hintTemplateA.clear()
+
+    return hintChoices
+
+
+def generatePumpForAppearance(ansList):
+    causeList = []
+    hintChoices = []
+    hintTemplateA = []
+    hintTemplateB = []
+    actor, out_prop = ansList
+    for props in out_prop:
+        ans_prop, event = actor.queryProperty(props, "appearance", None)
+        cause_event = ref.queryRelations(event, "reason")
+        causeList.append(cause_event)
+
+    pronoun_obj = producePronoun(actor, genType="objPro")
+
+    out_prop = formatMultipleItems(out_prop)
+
+    if causeList is not None:
+        for causes in causeList:
+            sent, ans = assembleSentence(causes, out_prop, genType="sentence")
+            actor, out_prop, answer = ans
+
+            hintTemplateB.extend([" What is the appearance of someone who is " + out_prop + "?",
+                                  " Can you describe " + actor.name.title() + "'s appearance?"])
+
+            hintTemplateA.extend([" " + actor.name.title() + " is "
+                                   + out_prop + " because of " + pronoun_obj + " appearance." ,
+                                  sent + " and " + pronoun_obj + " appearance is the reason."])
+
+            i = 0
+            while i < 2:
+                r = random.choice(hintTemplateA)
+                s = random.choice(hintTemplateB)
+                hintTemplateB.remove(s)
+
+                hintChoices.append(r + s)
+                i = i + 1
 
     return hintChoices
