@@ -4,7 +4,6 @@ import model.story_world.classes.Relations as Rel
 import model.story_world.classes.Scene as Scene
 import model.story_world.entities as Entity
 import model.story_world.rules as Rule
-import random
 
 lookup = []
 
@@ -53,6 +52,9 @@ def formatMultipleItems(listAnswer):
 
 def assembleSentence():
     sentences = {}
+
+    act = ""
+    obj = ""
 
     for entry in lookup:
         time, actor, entryType = entry
@@ -271,9 +273,6 @@ def assembleSentence():
 def printSentences():
     output_sentences = []
     sentences = assembleSentence()
-
-    # for key in sentences.keys():
-    #     print(key, sentences[key])
 
     for entries in relations.causeList:
         a, b = entries

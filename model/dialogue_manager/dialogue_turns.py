@@ -59,7 +59,9 @@ def gotCorrectAnswer(preparedString, followUpSent):
     result = []
     result.append(preparedString + followUpSent)
 
+
 def formatMultipleItems(listAnswer):
+    print("type: ", type(listAnswer), "length: ", len(listAnswer))
     if len(listAnswer) > 1 and type(listAnswer) is not str:
         out = ", ".join(listAnswer[:-1]) + " and " + listAnswer[len(listAnswer) - 1]
     elif type(listAnswer) is str:
@@ -228,7 +230,6 @@ def determineSentenceType(sequence):
     if question is True:
         answerList = []
         answerList.extend(temp)
-        print("answerList: ", answerList)
 
     if question is True or followUp is True:
         result = []
@@ -236,7 +237,6 @@ def determineSentenceType(sequence):
         incorrect = True
 
         answerList = [x for x in answerList if x[0] != "unknown"]
-        print("answerList1: ", answerList)
         tempResult = []
 
         if not answerList:
@@ -275,13 +275,13 @@ def determineSentenceType(sequence):
                             guessesExhausted()
 
                         else:
-                            hintChoices.extend(provider.generateHintsForRelName(ansList))
+                            hintChoices.extend(provider.generateHintForRelName(ansList))
                             hintList.extend(
                                 ["I think " + entries + " Which of the characters has a name like this?" for entries in
                                  hintChoices])
 
                     elif ansType == "relationship_rel":
-                        hintChoices.extend(provider.generateHintsForRelRel(ansList))
+                        hintChoices.extend(provider.generateHintForRelRel(ansList))
 
                         if len(hintChoices) > 3:
                             i = 0
@@ -298,7 +298,7 @@ def determineSentenceType(sequence):
                             hintList.extend(["I think " + entries for entries in hintChoices])
 
                     elif ansType == "location":
-                        hintChoices.extend(provider.generateHintsForLocation(ansList))
+                        hintChoices.extend(provider.generateHintForLocation(ansList))
 
                         if len(hintChoices) > 3:
                             i = 0
@@ -319,9 +319,9 @@ def determineSentenceType(sequence):
                                  hintChoices])
 
                     elif ansType == "appProperty":
-                        hintChoices.extend(provider.generateHintsForAppProp(ansList))
-                        hintChoices.extend(provider.generatePumpsForAppProp(ansList))
-                        hintChoices.extend(provider.generatePromptsForAppProp(correctAnswer))
+                        hintChoices.extend(provider.generateHintForAppProp(ansList))
+                        hintChoices.extend(provider.generatePumpForAppProp(ansList))
+                        hintChoices.extend(provider.generatePromptForAppProp(correctAnswer))
 
                         if hintChoices:
                             if len(hintChoices) > 5:
@@ -354,13 +354,13 @@ def determineSentenceType(sequence):
                         hintList.extend(hintChoices)
 
                     elif ansType == "type":
-                        hintChoices.extend(provider.generateHintsForType(ansList))
+                        hintChoices.extend(provider.generateHintForType(ansList))
 
                         hintList.extend(hintChoices)
 
                     elif ansType == "item_appearance":
                         hintChoices.extend(provider.generateElabForItem(ansList))
-                        hintChoices.extend(provider.generatePumpsForItem(ansList))
+                        hintChoices.extend(provider.generatePumpForItem(ansList))
 
                         hintList.extend(["I think " + entries for entries in hintChoices])
 
@@ -372,12 +372,14 @@ def determineSentenceType(sequence):
                         hintChoices.extend(provider.generatePumpForAppearance(ansList))
                         hintChoices.extend(provider.generateElabForAppearance(ansList))
 
-                        print("hintChoices: ", hintChoices)
-
                         hintList.extend(["I think " + entries for entries in hintChoices])
 
                     elif ansType == "actor_personality":
-                        a = 1
+                        hintChoices.extend(provider.generatePromptForPersonality(ansList))
+                        hintChoices.extend(provider.generatePumpForPersonality(ansList))
+                        hintChoices.extend(provider.generateElabForPersonality(ansList))
+
+                        hintList.extend(["I think " + entries for entries in hintChoices])
 
                     elif ansType == "confirmation":
                         hintList.append("Do you mean " + ansList.name.title() + "?")
