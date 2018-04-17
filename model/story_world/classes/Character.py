@@ -119,7 +119,6 @@ class Character:
             elif type_name == "amount":
                 if scene_name is None:
                     for entity in self.amtProp:
-                        print("entity[0]: ", entity[0])
                         for items in entity[0]:
                             if items == prop_name:
                                 return entity[0], entity[1]
@@ -179,32 +178,32 @@ class Character:
 
         return None, None, None
 
-    def queryDesire(self, act_name, ev_name):
+    def queryDesire(self, act_name, object_name, scene_name):
         # entity[0] = actions
         # entity[1] = object
         # entity[2] = scene
 
-        if act_name and not ev_name:
-            for entity in self.des:
-                for action in entity[0][1]:
-                    if action == act_name:
+        if scene_name is None and object_name is not None:
+            for entity in self.act:
+                if entity[0][0] == act_name:
+                    if entity[1].lower == object_name:
                         return entity[0], entity[1], entity[2]
         else:
             for entity in self.des:
-                if entity[2] == ev_name:
+                if entity[2] == scene_name:
                     return entity[0], entity[1], entity[2]
 
         return None, None, None
 
-    def queryAction(self, act_name, scene_name):
+    def queryAction(self, act_name, object_name, scene_name):
         # entity[0] = actions
         # entity[1] = object
         # entity[2] = scene
 
-        if scene_name is None:
+        if scene_name is None and object_name is not None:
             for entity in self.act:
-                for action in entity[0][1]:
-                    if action == act_name:
+                if entity[0][0] == act_name:
+                    if entity[1].lower() == object_name:
                         return entity[0], entity[1], entity[2]
 
         elif act_name is None:

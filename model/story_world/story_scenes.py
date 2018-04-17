@@ -544,10 +544,10 @@ def startScene3():
     Entity.charList["peggy"].hasAttribute(mad_clothes, ("wear", WordNet.getVerbList("wear")), scene_3.time + "inf11")
     lookup.append([scene_3.time + "inf11", Entity.charList["peggy"].name, "attribute"])
 
-    mad_clothes.hasAmtProperty("many", scene_3.time + "inf11ext")
+    mad_clothes.hasAmtProperty(["many"], scene_3.time + "inf11ext")
     lookup.append([scene_3.time + "inf11ext", mad_clothes.name, "amtProperty"])
 
-    Entity.charList["peggy"].hasPerProperty("popular", scene_3.time + "inf10")
+    Entity.charList["peggy"].hasPerProperty(["popular"], scene_3.time + "inf10")
     lookup.append([scene_3.time + "inf10", Entity.charList["peggy"].name, "perProperty"])
 
     relations.causedBy(scene_3.time + "inf10", [scene_3.time + "inf8", scene_3.time + "inf9"])
@@ -574,7 +574,7 @@ def startScene4():
     Entity.charList["wanda"].hasAttribute(Entity.itemList["mother"], ("have", WordNet.getVerbList("have")), scene_4.time + "inf3")
     lookup.append([scene_4.time + "inf3", Entity.charList["wanda"].name, "attribute"])
 
-    Entity.itemList["mother"].hasAmtProperty("no", scene_4.time + "inf3ext")
+    Entity.itemList["mother"].hasAmtProperty(["no"], scene_4.time + "inf3ext")
     lookup.append([scene_4.time + "inf3ext", Entity.itemList["mother"].name, "amtProperty"])
 
     Entity.charList["svenson"].hasLocation(Entity.locList["svenson's house"], ("live", WordNet.getVerbList("live")), scene_4.time + "inf6")
@@ -622,8 +622,8 @@ def startScene5():
     Entity.charList["girls"].hasLocation(Entity.locList["oliver street"], ("wait", WordNet.getVerbList("wait")), scene_5.time + "ev1")
     lookup.append([scene_5.time + "ev1", Entity.charList["girls"].name, "location"])
 
-    Entity.charList["girls"].hasDesire(("bully", WordNet.getVerbList("bully")), Entity.charList["wanda"].name, scene_5.time + "ev2")
-    lookup.append([scene_5.time + "ev2", Entity.charList["girls"].name, "desire"])
+    Entity.charList["girls"].hasAction(("bully", WordNet.getVerbList("bully")), Entity.charList["wanda"].name, scene_5.time + "ev2")
+    lookup.append([scene_5.time + "ev2", Entity.charList["girls"].name, "action"])
 
     relations.causedBy(scene_5.time + "ev1", scene_5.time + "ev2")
     relations.causedBy(scene_5.time + "ev2", [scene_5.time + "inf1", scene_5.time + "inf2", scene_1.time + "inf3"])
@@ -659,13 +659,13 @@ def startScene6():
     ####
 
     ####
-    Entity.charList["maddie"].hasPerProperty("poor", scene_6.time + "inf1")
+    Entity.charList["maddie"].hasPerProperty(["poor"], scene_6.time + "inf1")
     lookup.append([scene_6.time + "inf1", Entity.charList["maddie"].name, "perProperty"])
 
     Entity.charList["maddie"].hasAttribute(mad_clothes, ("wear", WordNet.getVerbList("wear")), scene_6.time + "inf2")
     lookup.append([scene_6.time + "inf2", Entity.charList["maddie"].name, "attribute"])
 
-    mad_clothes.hasPerProperty("peggy's hand-me-down", scene_6.time + "inf2ext")
+    mad_clothes.hasPerProperty(["peggy's hand-me-down"], scene_6.time + "inf2ext")
     lookup.append([scene_6.time + "inf2ext", mad_clothes.name, "perProperty"])
 
     Entity.charList["maddie"].hasAction(("sympathize", WordNet.getVerbList("sympathize")), Entity.charList["wanda"].name,
@@ -816,10 +816,10 @@ def startScene9():
 
     lookup.append([scene_9.time + "ev1", Entity.charList["wanda"].name, "action"])
 
-    Entity.charList["wanda"].hasPerProperty("timid", scene_9.time + "inf1")
+    Entity.charList["wanda"].hasPerProperty(["timid"], scene_9.time + "inf1")
     lookup.append([scene_9.time + "inf1", Entity.charList["wanda"].name, "perProperty"])
 
-    Entity.charList["wanda"].hasPerProperty("not smart", scene_9.time + "inf2")
+    Entity.charList["wanda"].hasPerProperty(["not smart"], scene_9.time + "inf2")
     lookup.append([scene_9.time + "inf2", Entity.charList["wanda"].name, "perProperty"])
 
     relations.causedBy(scene_9.time + "ev1", [scene_9.time + "inf1", scene_9.time + "inf2"])
@@ -829,7 +829,7 @@ def startScene9():
     # ent.charList["wanda"].hasAction("describe", ent.itemList["dress"].hasProperty(["jungle green", "with red sash"]), scene_9.time + "ev3")
 
     ####
-    Entity.charList["peggy"].hasPerProperty("artistic", scene_9.time + "ev2")
+    Entity.charList["peggy"].hasPerProperty(["artistic"], scene_9.time + "ev2")
     lookup.append([scene_9.time + "ev2", Entity.charList["peggy"].name, "perProperty"])
 
     Entity.charList["maddie"].hasAction(("know", WordNet.getAdjList("know")), "winner", scene_9.time + "ev3")
@@ -858,7 +858,7 @@ def startScene10():
     Entity.locList["room 13"].hasAttribute(Entity.itemList["drawing"], ("post", WordNet.getVerbList("post")), scene_10.time + "inf1")
     lookup.append([scene_10.time + "inf1", Entity.locList["room 13"].name, "attribute"])
 
-    Entity.itemList["drawing"].hasAmtProperty("100 pieces", scene_10.time + "inf1ext")
+    Entity.itemList["drawing"].hasAmtProperty(["100 pieces"], scene_10.time + "inf1ext")
     lookup.append([scene_10.time + "inf1ext", Entity.itemList["drawing"].name, "amtProperty"])
 
     Entity.itemList["drawing"].hasAppProperty(["pretty"], scene_10.time + "inf2")
@@ -1080,7 +1080,7 @@ def startScene15():
     Entity.charList["maddie"].hasState((["downcast", "discouraged"], [WordNet.getAdjList("downcast"), WordNet.getAdjList("discouraged")]), scene_15.time + "ev2")
     lookup.append([scene_15.time + "ev2", Entity.charList["maddie"].name, "state"])
 
-    Entity.locList["frame house"].hasPerProperty(("empty", WordNet.getAdjList("empty")), scene_15.time + "inf1")
+    Entity.locList["frame house"].hasPerProperty(["empty"], scene_15.time + "inf1")
     lookup.append([scene_15.time + "inf1", Entity.locList["frame house"].name, "state"])
 
     Entity.charList["peggy"].hasAction(("not meet", WordNet.getVerbList("meet", negator="not")), Entity.charList["wanda"].name, scene_15.time + "ev3")
@@ -1150,7 +1150,7 @@ def startScene16():
     Entity.charList["wanda"].hasAttribute(wan_dress, ("have", WordNet.getVerbList("have")), scene_16.time + "inf1")
     lookup.append([scene_16.time + "inf1", Entity.charList["wanda"].name, "attribute"])
 
-    wan_dress.hasAmtProperty("only one", scene_16.time + "inf1ext")
+    wan_dress.hasAmtProperty(["only one"], scene_16.time + "inf1ext")
     lookup.append([scene_16.time + "inf1ext", wan_dress.name, "amtProperty"])
     # ent.charList["wanda"].hasAction("iron", ent.itemList["clothes"], scene_16.time + "inf2")
 
@@ -1172,7 +1172,7 @@ def startScene17():
     Entity.charList["miss mason"].hasAction(("receive", WordNet.getVerbList("receive")), Entity.itemList["letter"], scene_17.time + "ev1")
     lookup.append([scene_17.time + "ev1", Entity.charList["miss mason"].name, "action"])
 
-    Entity.itemList["letter"].hasPerProperty("from Wanda", scene_17.time + "ev1ext")
+    Entity.itemList["letter"].hasPerProperty(["from Wanda"], scene_17.time + "ev1ext")
     lookup.append([scene_17.time + "ev1ext", Entity.itemList["letter"].name, "perProperty"])
 
     Entity.charList["miss mason"].hasAction(("know", WordNet.getVerbList("know")), Entity.charList["wanda"].name + " new house", scene_17.time + "inf1")
@@ -1247,6 +1247,7 @@ def startScene18():
 
 
 def queryLookup(event):
+    print("event: ", event)
     count = [lookup.index(x) for x in lookup if x[0] == event][0]
     return lookup[count]
 

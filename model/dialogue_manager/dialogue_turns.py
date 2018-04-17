@@ -2,6 +2,7 @@ import random
 
 import nltk
 from nltk.tag.stanford import CoreNLPParser
+from nltk.tag import SennaTagger
 from nltk.tree import ParentedTree
 
 import model.dialogue_manager.sentence_parser as parser
@@ -143,8 +144,9 @@ def combine_similar(user_input, tags):
 
 
 def single_sentence(sequence):
+    t = SennaTagger('C:/Senna')
     tags = ["NNP", "NNS", "NNPS"]
-    processed_message = combine_similar(sequence.pos(), tags)
+    processed_message = combine_similar(t.tag(sequence), tags)
 
     return determineSentenceType(processed_message)
 
@@ -259,6 +261,7 @@ def determineSentenceType(sequence):
 
                 for answers in answerList:
                     ansType, ansList = answers
+                    print("ansType: ", ansType)
                     hintChoices = []
                     #if ansType == "cause":
                     #    ansType, ansList
@@ -344,14 +347,15 @@ def determineSentenceType(sequence):
                         # hintChoices = provider.generatePumpsForAppProp()
                         # hintChoices = provider.generateElabForAppProp()
 
-                        hintList.extend(["I think it's " + entries for entries in hintChoices])
-
-                    elif ansType == "action":
-                        hintChoices.extend(provider.generatePumpsForAction(ansList))
-                        hintChoices.extend(provider.generatePromptForAction(ansList))
-                        hintChoices.extend(provider.generateElabForAction(ansList))
-
                         hintList.extend(hintChoices)
+
+                    elif ansType == "cause":
+                        hintChoices.extend(provider.generatePumpForActs(ansList))
+                        hintChoices.extend(provider.generatePromptForActs(ansList))
+                        hintChoices.extend(provider.generateElabForActs(ansList))
+                        print("hintChoices: ", hintChoices)
+
+                        hintList.extend(["I think " + entries for entries in hintChoices])
 
                     elif ansType == "type":
                         hintChoices.extend(provider.generateHintForType(ansList))
@@ -362,7 +366,7 @@ def determineSentenceType(sequence):
                         hintChoices.extend(provider.generateElabForItem(ansList))
                         hintChoices.extend(provider.generatePumpForItem(ansList))
 
-                        hintList.extend(["I think " + entries for entries in hintChoices])
+                        hintList.extend(hintChoices)
 
                     elif ansType == "item_amount":
                         a = 1
@@ -376,8 +380,8 @@ def determineSentenceType(sequence):
 
                     elif ansType == "actor_personality":
                         hintChoices.extend(provider.generatePromptForPersonality(ansList))
-                        hintChoices.extend(provider.generatePumpForPersonality(ansList))
-                        hintChoices.extend(provider.generateElabForPersonality(ansList))
+                        #hintChoices.extend(provider.generatePumpForPersonality(ansList))
+                        #hintChoices.extend(provider.generateElabForPersonality(ansList))
 
                         hintList.extend(["I think " + entries for entries in hintChoices])
 
@@ -526,6 +530,7 @@ def generateFollowUp(answer, questType, ansList):
         if perProp:
             current = random.choice(perProp)
             personality, event = current
+            personality = ref.formatMultipleItems(personality)
 
             if event is not None:
                 followUpResult = ref.queryRelations("Wednesday3inf10", "cause")
@@ -564,6 +569,7 @@ def generateFollowUp(answer, questType, ansList):
 
 def parse_message(message):
     r = CoreNLPParser('http://localhost:9000/')
+    t = nltk.word_tokenize(message)
     user_input = ParentedTree.convert(list(r.raw_parse(message))[0])
 
     user_input.pretty_print()
@@ -572,7 +578,7 @@ def parse_message(message):
     messages = [split_compound(user_input, 0, messages)][0]
 
     if not messages:
-        messages.append(single_sentence(user_input))
+        messages.append(single_sentence(t))
 
     if len(messages) > 1:
         output_message = " ".join(messages)
