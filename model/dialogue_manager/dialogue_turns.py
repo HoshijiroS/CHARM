@@ -259,12 +259,18 @@ def determineSentenceType(sequence):
 
                 answerList = cleanList(answerList)
 
-                for answers in answerList:
-                    ansType, ansList = answers
+                # r = [x for x in answerList if x[0] == "cause"]
+                # answerList = [x for x in answerList if x[0] != "cause"]
+                # for entries in r:
+                #     ansType, ansList = entries
+                #     answerList.extend(ansList)
+
+                print("answerList: ", answerList)
+
+                for entries in answerList:
+                    ansType, ansList = entries
                     print("ansType: ", ansType)
                     hintChoices = []
-                    #if ansType == "cause":
-                    #    ansType, ansList
 
                     if ansType == "relationship_name":
                         actor, rel, char = ansList
@@ -380,8 +386,8 @@ def determineSentenceType(sequence):
 
                     elif ansType == "actor_personality":
                         hintChoices.extend(provider.generatePromptForPersonality(ansList))
-                        #hintChoices.extend(provider.generatePumpForPersonality(ansList))
-                        #hintChoices.extend(provider.generateElabForPersonality(ansList))
+                        hintChoices.extend(provider.generatePumpForPersonality(ansList))
+                        hintChoices.extend(provider.generateElabForPersonality(ansList))
 
                         hintList.extend(["I think " + entries for entries in hintChoices])
 
@@ -496,6 +502,12 @@ def determineSentenceType(sequence):
                     actor, action, loc = ansList
 
                     result.append("I think " + actor.name.title() + " " + action + " in " + loc + ".")
+                    guessesExhausted()
+
+                if ansType == "state":
+                    actor, action, loc = ansList
+
+                    result.append("I think " + actor.name.title() + " is " + action + " in " + loc + ".")
                     guessesExhausted()
 
     elif gotHints is False and incorrect is True:

@@ -76,9 +76,8 @@ class Character:
 
         if scene_name is None:
             for entity in self.state:
-                for action in entity[0][1]:
-                    if action == state_name:
-                        return entity[0], entity[1]
+                if entity[0][0] == state_name:
+                    return entity[0], entity[1]
 
         elif state_name is None:
             for entity in self.state:

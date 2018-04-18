@@ -205,17 +205,31 @@ def whyQuestion(actor, action, item):
     state, state_event = actor.queryState(action, None)
     answer = ""
 
+    print("here")
+
     causeList = []
 
     cause_event = None
 
     if state is None and act is not None:
         ans_event, actor, qType = ref.queryLookup(act_event)
+
+        try:
+            actor = Entity.charList[actor.lower()]
+        except Exception as e:
+            print("Error on assembleSentence on actor assignment: ", e)
+
         answer = act[0]
         cause_event = ref.queryRelations(ans_event, "cause")
 
     elif act is None and state is not None:
         ans_event, actor, qType = ref.queryLookup(state_event)
+
+        try:
+            actor = Entity.charList[actor.lower()]
+        except Exception as e:
+            print("Error on assembleSentence on actor assignment: ", e)
+
         answer = state[0]
         cause_event = ref.queryRelations(ans_event, "cause")
 
@@ -309,7 +323,7 @@ def assembleSentence(event, genType=None, turnType=None, ansType=None, relType=N
     pronoun = producePronoun(actor)
     pronoun_obj = producePronoun(actor, genType="objPro")
     poss = determinePossessiveForm(actor)
-    
+
     if actor.gender == "collective":
         verb = "were"
     else:
@@ -1856,38 +1870,50 @@ def generatePromptForActs(ansList):
 
     for entries in ansList:
         ansType, answers = entries
-        ans_actor = answers[0].name.title()
-        actor, ans_act, obj = answers[len(answers) - 1]
+        ans_actor = answers[0]
+        actor, ans_action, obj = answers[len(answers) - 1]
 
-        poss = determinePossessiveForm(actor)
-        ans_act = determineVerbForm(actor, ans_act, "present")
+        if ans_actor.gender == "collective":
+            sent_ans_actor = ans_actor.name
+        else:
+            sent_ans_actor = ans_actor.name.title()
+
+        if actor.gender == "collective":
+            sent_actor = actor.name
+        else:
+            sent_actor = actor.name.title()
+
+        poss = determinePossessiveForm(ans_actor)
+        ans_act = determineVerbForm(actor, ans_action, "past")
+        pres_ans_act = determineVerbForm(actor, ans_action, "present")
+        have = determineVerbForm(ans_actor, "have", "present")
 
         if ansType == "action":
-            actionWord = "what " + ans_actor + " did"
+            actionWord = "what " + sent_ans_actor + " did"
 
         elif ansType == "desire":
-            actionWord = "how " + ans_actor + " felt"
+            actionWord = "how " + sent_ans_actor + " felt"
 
         elif ansType == "state" or ansType == "location":
-            actionWord = ans_actor + poss + ansType
+            actionWord = sent_ans_actor + poss + ansType
 
         elif ansType == "actor_appearance":
-            actionWord = ans_actor + poss + "appearance"
+            actionWord = sent_ans_actor + poss + "appearance"
 
         elif ansType == "actor_personality":
-            actionWord = ans_actor + poss + "personality"
+            actionWord = sent_ans_actor + poss + "personality"
 
         elif ansType == "attribute":
-            actionWord = ans_actor + poss + "items"
+            actionWord = sent_ans_actor + poss + "items"
 
         elif ansType == "item_appearance":
-            actionWord = "the appearance of " + ans_actor + " items"
+            actionWord = "the appearance of " + sent_ans_actor + " items"
 
         elif ansType == "item_amount":
-            actionWord = "the amount of items " + ans_actor + " has"
+            actionWord = "the amount of items " + sent_ans_actor + " " + have
 
         elif ansType == "location":
-            actionWord = ans_actor + "'s location"
+            actionWord = sent_ans_actor + poss + "location"
 
         resForChar = None
 
@@ -1901,13 +1927,13 @@ def generatePromptForActs(ansList):
             resForChar = " someone"
 
         hintTemplateA.extend([" What causes a person to " + ans_act + resForChar + "? Can you tell me?",
-                              " Do you know anyone who has " + ans_act + resForChar + " before? What happened?",
-                              " What is something that could make you " + ans_act + resForChar + "? Maybe that also made "
-                              + actor.title() + " " + ans_act + " " + obj + "."])
+                              " Do you know anyone who has " + pres_ans_act + resForChar + " before? What happened?",
+                              " What is something that could make you " + pres_ans_act + resForChar + "? Maybe that also made "
+                              + sent_actor + " " + pres_ans_act + " " + obj + "."])
 
-        hintTemplateB.extend([actor.title() + " " + ans_act + " " + obj + " because of "
+        hintTemplateB.extend([sent_actor + " " + ans_act + " " + obj + " because of "
                               + actionWord + ".",
-                              "the reason why " + actor.title() + " " + ans_act + " " + obj + " is related to " + actionWord + "."])
+                              "the reason why " + sent_actor + " " + ans_act + " " + obj + " is related to " + actionWord + "."])
 
     for hints in hintTemplateA:
         r = random.choice(hintTemplateB)
@@ -1924,45 +1950,56 @@ def generatePumpForActs(ansList):
 
     for entries in ansList:
         ansType, answers = entries
-        ans_actor = answers[0].name.title()
-        actor, ans_act, obj = answers[len(answers)-1]
+        ans_actor = answers[0]
+        actor, ans_action, obj = answers[len(answers) - 1]
 
-        poss = determinePossessiveForm(actor)
-        ans_act = determineVerbForm(actor, ans_act, "present")
+        if ans_actor.gender == "collective":
+            sent_ans_actor = ans_actor.name
+        else:
+            sent_ans_actor = ans_actor.name.title()
+
+        if actor == "collective":
+            sent_actor = actor.name
+        else:
+            sent_actor = actor.name.title()
+
+        poss = determinePossessiveForm(ans_actor)
+        ans_act = determineVerbForm(actor, ans_action, "past")
+        have = determineVerbForm(ans_actor, "have", "present")
 
         if ansType == "action":
-            actionWord = "what " + ans_actor + " did"
+            actionWord = "what " + sent_ans_actor + " did"
 
         elif ansType == "desire":
-            actionWord = "how " + ans_actor + " felt"
+            actionWord = "how " + sent_ans_actor + " felt"
 
         elif ansType == "state" or ansType == "location":
-            actionWord = ans_actor + poss + ansType
+            actionWord = sent_ans_actor + poss + ansType
 
         elif ansType == "actor_appearance":
-            actionWord = ans_actor + poss + "appearance"
+            actionWord = sent_ans_actor + poss + "appearance"
 
         elif ansType == "actor_personality":
-            actionWord = ans_actor + poss + "personality"
+            actionWord = sent_ans_actor + poss + "personality"
 
         elif ansType == "attribute":
-            actionWord = ans_actor + poss + "items"
+            actionWord = sent_ans_actor + poss + "items"
 
         elif ansType == "item_appearance":
-            actionWord = "the appearance of " + ans_actor + " items"
+            actionWord = "the appearance of " + sent_ans_actor + " items"
 
         elif ansType == "item_amount":
-            actionWord = "the amount of items " + ans_actor + " has"
+            actionWord = "the amount of items " + sent_ans_actor + " " + have
 
         elif ansType == "location":
-            actionWord = ans_actor + poss + "location"
+            actionWord = sent_ans_actor + poss + "location"
 
         hintTemplateA.extend([" Can you tell me about " + actionWord + "?",
-                              " How does that affect " + actor.title() + poss + "actions? "])
+                              " How does that affect " + sent_actor + poss + "actions? "])
 
-        hintTemplateB.extend(["the reason why " + actor.title() + " " + ans_act + " " + obj + " has something to do with " + actionWord + ".",
-                              actor.title() + " " + ans_act + " " + obj + " because of " + actionWord + "."
-                              ])
+        hintTemplateB.extend([ "the reason why " + sent_actor + " " + ans_act + " " + obj + " has something to do with " + actionWord + ".",
+                                 sent_actor + " " + ans_act + " " + obj + " because of " + actionWord + "."
+                                 ])
 
     for hints in hintTemplateA:
         r = random.choice(hintTemplateB)
@@ -1976,40 +2013,51 @@ def generateElabForActs(ansList):
 
     for entries in ansList:
         ansType, answers = entries
-        ans_actor = answers[0].name.title()
+        ans_actor = answers[0]
         actor, ans_act, obj = answers[len(answers) - 1]
         def_prop = WordNet.getDefinition(ans_act, verb="Yes")
 
-        poss = determinePossessiveForm(actor)
+        if ans_actor.gender == "collective":
+            sent_ans_actor = ans_actor.name
+        else:
+            sent_ans_actor = ans_actor.name.title()
+
+        if actor.gender == "collective":
+            sent_actor = actor.name
+        else:
+            sent_actor = actor.name.title()
+
+        poss = determinePossessiveForm(ans_actor)
         ans_act = determineVerbForm(actor, ans_act, "present")
+        have = determineVerbForm(ans_actor, "have", "present")
 
         actionWord = ""
         if ansType == "action":
-            actionWord = "what " + ans_actor + " did"
+            actionWord = "what " + sent_ans_actor + " did"
 
         elif ansType == "desire":
-            actionWord = "how " + ans_actor + " felt"
+            actionWord = "how " + sent_ans_actor + " felt"
 
         elif ansType == "state" or ansType == "location":
-            actionWord = ans_actor + poss + ansType
+            actionWord = sent_ans_actor + poss + ansType
 
         elif ansType == "actor_appearance":
-            actionWord = ans_actor + "'s appearance"
+            actionWord = sent_ans_actor + poss + "appearance"
 
         elif ansType == "actor_personality":
-            actionWord = ans_actor + "'s personality"
+            actionWord = sent_ans_actor + poss + "personality"
 
         elif ansType == "attribute":
-            actionWord = ans_actor + poss + " items"
+            actionWord = sent_ans_actor + poss + " items"
 
         elif ansType == "item_appearance":
-            actionWord = "the appearance of " + ans_actor + " items"
+            actionWord = "the appearance of " + sent_ans_actor + " items"
 
         elif ansType == "item_amount":
-            actionWord = "the amount of items " + ans_actor + " has"
+            actionWord = "the amount of items " + sent_ans_actor + " " + have
 
         elif ansType == "location":
-            actionWord = ans_actor + poss + " location"
+            actionWord = sent_ans_actor + poss + " location"
 
         if obj:
             try:
@@ -2021,7 +2069,8 @@ def generateElabForActs(ansList):
             resForChar = " a person"
 
         if def_prop:
-            hintChoices.append(actor.title() + " " + ans_act + " " + ans_actor + " because of " + actionWord + ". "
-                                + ans_act.title() + " means " + def_prop + resForChar + ".")
+            hintChoices.append(
+                sent_actor + " " + ans_act + " " + sent_ans_actor + " because of " + actionWord + ". "
+                + ans_act.title() + " means " + def_prop + resForChar + ".")
 
     return hintChoices

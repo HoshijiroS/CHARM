@@ -4,7 +4,7 @@ import model.story_world.classes.Location as Loc
 
 # def generateAllchar.Characteracters():
 students = Char.Character("students", "collective", ["Student", "Townsperson"])
-girls = Char.Character("girls", "female", ["Student", "Townsperson"])
+girls = Char.Character("girls", "collective", ["Student", "Townsperson"])
 wanda = Char.Character("Wanda", "female", ["Student", "Townsperson"])
 bill_byron = Char.Character("Bill Byron", "male", ["Student", "Townsperson"])
 peggy = Char.Character("Peggy", "female", ["Student", "Townsperson"])
