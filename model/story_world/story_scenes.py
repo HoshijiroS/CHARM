@@ -1074,10 +1074,10 @@ def startScene15():
     scene_15.hasCharacter([Entity.charList["wanda"], Entity.charList["maddie"], Entity.charList["peggy"]])
 
     ####
-    Entity.charList["peggy"].hasState((["downcast", "discouraged"], [WordNet.getAdjList("downcast"), WordNet.getAdjList("discouraged")]), scene_15.time + "ev1")
+    Entity.charList["peggy"].hasState(("discouraged", WordNet.getAdjList("downcast")), scene_15.time + "ev1")
     lookup.append([scene_15.time + "ev1", Entity.charList["peggy"].name, "state"])
 
-    Entity.charList["maddie"].hasState((["downcast", "discouraged"], [WordNet.getAdjList("downcast"), WordNet.getAdjList("discouraged")]), scene_15.time + "ev2")
+    Entity.charList["maddie"].hasState(("discouraged", WordNet.getAdjList("downcast")), scene_15.time + "ev2")
     lookup.append([scene_15.time + "ev2", Entity.charList["maddie"].name, "state"])
 
     Entity.locList["frame house"].hasPerProperty(["empty"], scene_15.time + "inf1")

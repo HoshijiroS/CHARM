@@ -4,6 +4,7 @@ import nltk
 from nltk.tag.stanford import CoreNLPParser
 from nltk.tag import SennaTagger
 from nltk.tree import ParentedTree
+from nltk.stem import WordNetLemmatizer
 
 import model.dialogue_manager.sentence_parser as parser
 import model.dialogue_manager.content_provider as provider
@@ -59,18 +60,6 @@ def gotCorrectAnswer(preparedString, followUpSent):
 
     result = []
     result.append(preparedString + followUpSent)
-
-
-def formatMultipleItems(listAnswer):
-    print("type: ", type(listAnswer), "length: ", len(listAnswer))
-    if len(listAnswer) > 1 and type(listAnswer) is not str:
-        out = ", ".join(listAnswer[:-1]) + " and " + listAnswer[len(listAnswer) - 1]
-    elif type(listAnswer) is str:
-        out = listAnswer
-    else:
-        out = listAnswer[0]
-
-    return out
 
 
 def resetWrongMessage():
@@ -182,6 +171,8 @@ def determineSentenceType(sequence):
     global compMessage
     global wrongMessage
     global followUp
+
+    wnl = WordNetLemmatizer()
 
     print("sequence: ", sequence)
     beg = sequence[0][0]
@@ -415,10 +406,12 @@ def determineSentenceType(sequence):
 
             if ansType == "relationship_name":
                 actor, rel, char = ansList
+                answer = provider.formatMultipleItems(rel)
                 if charList:
                     for character in charList:
                         if char[0].name.lower() == character:
-                            generateFollowUp(character.title(), "relationship_name", ansList)
+                            sentence_answer = char.name + " is " + actor.name + "'s " + answer
+                            generateFollowUp(sentence_answer, "relationship_name", ansList)
 
             elif ansType == "relationship_rel":
                 actor, rel, char = ansList
@@ -428,12 +421,14 @@ def determineSentenceType(sequence):
                     pluralAnswer = list(set(pluralList) & set(charList))
 
                     if answer:
-                        answer = formatMultipleItems(answer)
-                        generateFollowUp(answer, "relationship_rel", ansList)
+                        answer = provider.formatMultipleItems(answer)
+                        sentence_answer = char.name + " is " + actor.name + "'s " + answer
+                        generateFollowUp(sentence_answer, "relationship_rel", ansList)
 
                     elif pluralAnswer:
-                        pluralAnswer = formatMultipleItems(pluralAnswer)
-                        generateFollowUp(pluralAnswer, "relationship_rel", ansList)
+                        pluralAnswer = provider.formatMultipleItems(pluralAnswer)
+                        sentence_answer = char.name + " is " + actor.name + "'s " + pluralAnswer
+                        generateFollowUp(sentence_answer, "relationship_rel", ansList)
 
                 elif type(rel) is str:
                     if charList:
@@ -446,7 +441,8 @@ def determineSentenceType(sequence):
                 if charList:
                     for character in charList:
                         if character in loc.lower():
-                            generateFollowUp(loc, "location", ansList)
+                            sentence_answer = actor.name + " " + action + " at " + loc
+                            generateFollowUp(sentence_answer, "location", ansList)
 
             elif ansType == "appProperty":
                 actor, prop = ansList
@@ -455,16 +451,385 @@ def determineSentenceType(sequence):
                     for adjective in adjList:
                         for entries in prop:
                             if entries == adjective:
-                                generateFollowUp(entries, "appProperty", ansList)
+                                sentence_answer = actor.name + " is " + entries
+                                generateFollowUp(sentence_answer, "appProperty", ansList)
 
                 if advList:
                     for adverb in advList:
                         for entries in prop:
                             if entries == adverb:
-                                generateFollowUp(entries, "appProperty", ansList)
+                                sentence_answer = actor.name + " is " + entries
+                                generateFollowUp(sentence_answer, "appProperty", ansList)
 
-            #elif ansType == "attribute":
-            #    print("a")
+            elif ansType == "cause":
+                for entries in ansList:
+                    ansType, answers = entries
+
+                    if ansType == "action":
+                        actor, act, out_obj = answers
+                        givenAnswers = []
+                        out_objList = out_obj.split()
+                        givenAnswers.extend([actor.name])
+                        givenAnswers.extend(out_objList)
+                        verbPresent = False
+
+                        givenAnswers = [x.lower() for x in givenAnswers]
+                        formatted_seq = []
+                        for words in sequence:
+                            if words[1] in verbTags:
+                                formatted_seq.append(wnl.lemmatize(words[0], 'v'))
+                            else:
+                                formatted_seq.append(words[0])
+
+                        sentence = [x.lower() for x in formatted_seq]
+
+                        for verb in act[1]:
+                            if verb in sentence:
+                                verbPresent = True
+
+                        act = provider.determineVerbForm(actor, act[0], "past")
+
+                        if set(sentence).issuperset(set(givenAnswers)) and verbPresent:
+                            sentence_answer = actor.name + " " + act + " " + out_obj
+                            generateFollowUp(sentence_answer, "action", answers)
+
+                    elif ansType == "desire":
+                        actor, act, out_obj = answers
+                        givenAnswers = []
+                        out_objList = out_obj.split()
+                        givenAnswers.extend([actor.name])
+                        givenAnswers.extend(out_objList)
+                        givenAnswers = [x.lower() for x in givenAnswers]
+                        formatted_seq = []
+                        for words in sequence:
+                            if words[1] in verbTags:
+                                formatted_seq.append(wnl.lemmatize(words[0], 'v'))
+                            else:
+                                formatted_seq.append(words[0])
+
+                        sentence = [x.lower() for x in formatted_seq]
+                        verbPresent = False
+
+                        for verb in act[1]:
+                            if verb in sentence:
+                                verbPresent = True
+
+                        act = provider.determineVerbForm(actor, act[0], "past")
+
+                        if set(sentence).issuperset(set(givenAnswers)) and verbPresent:
+                            sentence_answer = actor.name + " desired to " + act + " " + out_obj
+                            generateFollowUp(sentence_answer, "desire", answers)
+
+                    elif ansType == "state":
+                        actor, out_state = answers
+                        givenAnswers = []
+                        givenAnswers.extend([actor.name])
+                        givenAnswers = [x.lower() for x in givenAnswers]
+                        formatted_seq = []
+                        for words in sequence:
+                            if words[1] in verbTags:
+                                formatted_seq.append(wnl.lemmatize(words[0], 'v'))
+                            else:
+                                formatted_seq.append(words[0])
+
+                        sentence = [x.lower() for x in formatted_seq]
+                        verbPresent = False
+
+                        for verb in out_state[1]:
+                            if verb in sentence:
+                                verbPresent = True
+
+                        if set(sentence).issuperset(set(givenAnswers)) and verbPresent:
+                            sentence_answer = actor.name + " is " + out_state
+                            generateFollowUp(sentence_answer, "state", answers)
+
+                    elif ansType == "location":
+                        actor, action, loc = answers
+                        givenAnswers = []
+                        givenAnswers.extend([actor.name])
+                        givenAnswers.append(loc)
+                        givenAnswers = [x.lower() for x in givenAnswers]
+                        formatted_seq = []
+                        for words in sequence:
+                            if words[1] in verbTags:
+                                formatted_seq.append(wnl.lemmatize(words[0], 'v'))
+                            else:
+                                formatted_seq.append(words[0])
+
+                        sentence = [x.lower() for x in formatted_seq]
+                        verbPresent = False
+
+                        for verb in action[1]:
+                            if verb in sentence:
+                                verbPresent = True
+
+                        action = provider.determineVerbForm(actor, action[0], "past")
+
+                        if set(sentence).issuperset(set(givenAnswers)) and verbPresent:
+                            sentence_answer = actor.name + " " + action + " at " + loc
+                            generateFollowUp(sentence_answer, "location", answers)
+
+                    elif ansType == "actor_appearance":
+                        actor, prop  = answers
+
+                        givenAnswers = []
+                        givenAnswers.append(actor.name)
+                        if type(prop) is list:
+                            givenAnswers.extend(prop)
+                        else:
+                            givenAnswers.append(prop)
+
+                        out_prop = provider.formatMultipleItems(prop)
+
+                        if set(sentence).issuperset(set(givenAnswers)):
+                            sentence_answer = actor.name + " looks " + out_prop
+                            generateFollowUp(sentence_answer, "actor_appearance", answers)
+
+                    elif ansType == "actor_personality":
+                        actor, prop = answers
+
+                        givenAnswers = []
+                        givenAnswers.append(actor.name)
+                        if type(prop) is list:
+                            givenAnswers.extend(prop)
+                        else:
+                            givenAnswers.append(prop)
+
+                        out_prop = provider.formatMultipleItems(prop)
+
+                        if set(sentence).issuperset(set(givenAnswers)):
+                            sentence_answer = actor.name + " is " + out_prop
+                            generateFollowUp(sentence_answer, "actor_personality", answers)
+
+                    elif ansType == "attribute":
+                        actor, act, attr, propType, out_prop = answers
+
+                        givenAnswers = []
+                        givenAnswers.extend([actor.name])
+                        givenAnswers.extend(out_prop)
+                        givenAnswers.extend(attr.split())
+                        givenAnswers = [x.lower() for x in givenAnswers]
+                        formatted_seq = []
+                        for words in sequence:
+                            if words[1] in verbTags:
+                                formatted_seq.append(wnl.lemmatize(words[0], 'v'))
+                            else:
+                                formatted_seq.append(words[0])
+
+                        sentence = [x.lower() for x in formatted_seq]
+                        verbPresent = False
+
+                        for verb in act[1]:
+                            if verb in sentence:
+                                verbPresent = True
+
+                        act = provider.determineVerbForm(actor, act[0], "past")
+
+                        if out_prop:
+                            sent_prop = provider.formatMultipleItems(out_prop)
+                            sent_add = " that is "
+                        else:
+                            sent_prop = ""
+                            sent_add = ""
+
+                        if set(sentence).issuperset(set(givenAnswers)) and verbPresent:
+                            if propType == "amount":
+                                sentence_answer = actor.name + " " + act + " " + sent_prop + " " + attr
+                            else:
+                                sentence_answer = actor.name + " " + act + " " + attr + sent_add + sent_prop
+
+                            generateFollowUp(sentence_answer, "attribute", answers)
+
+            elif ansType == "item_appearance":
+                actor, act, item, prop = ansList
+
+                givenAnswers = []
+                givenAnswers.append(item)
+                if type(prop) is list:
+                    givenAnswers.extend(prop)
+                else:
+                    givenAnswers.append(prop)
+
+                out_prop = provider.formatMultipleItems(prop)
+
+                verbPresent = False
+
+                givenAnswers = [x.lower() for x in givenAnswers]
+                print("sequence: ", sequence)
+
+                formatted_seq = []
+                for words in sequence:
+                    if words[1] in verbTags:
+                        formatted_seq.append(wnl.lemmatize(words[0], 'v'))
+                    else:
+                        formatted_seq.append(words[0])
+
+                sentence = [x.lower() for x in formatted_seq]
+
+                print("sentence: ", sentence)
+                print("givenAnswers: ", givenAnswers)
+
+                act = provider.determineVerbForm(actor, act[0], "past")
+
+                if set(sentence).issuperset(set(givenAnswers)):
+                    sentence_answer = actor.name + " " + act + " a " + item + " that looks " + out_prop
+                    print("here!")
+                    generateFollowUp(sentence_answer, "item_appearance", answers)
+
+            elif ansType == "item_amount":
+                a = 1
+
+            elif ansType == "action":
+                actor, act, out_obj = ansList
+                givenAnswers = []
+                out_objList = out_obj.split()
+                givenAnswers.extend([actor.name])
+                givenAnswers.extend(out_objList)
+                verbPresent = False
+
+                givenAnswers = [x.lower() for x in givenAnswers]
+                formatted_seq = []
+                for words in sequence:
+                    if words[1] in verbTags:
+                        formatted_seq.append(wnl.lemmatize(words[0], 'v'))
+                    else:
+                        formatted_seq.append(words[0])
+
+                sentence = [x.lower() for x in formatted_seq]
+
+                for verb in act[1]:
+                    if verb in sentence:
+                        verbPresent = True
+
+                act = provider.determineVerbForm(actor, act[0], "past")
+
+                if set(sentence).issuperset(set(givenAnswers)) and verbPresent:
+                    sentence_answer = actor.name + " " + act + " " + out_obj
+                    generateFollowUp(sentence_answer, "action", ansList)
+
+            elif ansType == "desire":
+                actor, act, out_obj = ansList
+                givenAnswers = []
+                out_objList = out_obj.split()
+                givenAnswers.extend([actor.name])
+                givenAnswers.extend(out_objList)
+                givenAnswers = [x.lower() for x in givenAnswers]
+                formatted_seq = []
+                for words in sequence:
+                    if words[1] in verbTags:
+                        formatted_seq.append(wnl.lemmatize(words[0], 'v'))
+                    else:
+                        formatted_seq.append(words[0])
+
+                sentence = [x.lower() for x in formatted_seq]
+                verbPresent = False
+
+                for verb in act[1]:
+                    if verb in sentence:
+                        verbPresent = True
+
+                act = provider.determineVerbForm(actor, act[0], "past")
+
+                if set(sentence).issuperset(set(givenAnswers)) and verbPresent:
+                    sentence_answer = actor.name + " desired to " + act + " " + out_obj
+                    generateFollowUp(sentence_answer, "desire", ansList)
+
+            elif ansType == "state":
+                actor, out_state = ansList
+                givenAnswers = []
+                givenAnswers.extend([actor.name])
+                givenAnswers = [x.lower() for x in givenAnswers]
+                formatted_seq = []
+                for words in sequence:
+                    if words[1] in verbTags:
+                        formatted_seq.append(wnl.lemmatize(words[0], 'v'))
+                    else:
+                        formatted_seq.append(words[0])
+
+                sentence = [x.lower() for x in formatted_seq]
+                verbPresent = False
+
+                for verb in out_state[1]:
+                    if verb in sentence:
+                        verbPresent = True
+
+                if set(sentence).issuperset(set(givenAnswers)) and verbPresent:
+                    sentence_answer = actor.name + " is " + out_state
+                    generateFollowUp(sentence_answer, "state", ansList)
+
+            elif ansType == "actor_appearance":
+                actor, prop = ansList
+
+                givenAnswers = []
+                givenAnswers.append(actor.name)
+                if type(prop) is list:
+                    givenAnswers.extend(prop)
+                else:
+                    givenAnswers.append(prop)
+
+                out_prop = provider.formatMultipleItems(prop)
+
+                if set(sentence).issuperset(set(givenAnswers)):
+                    sentence_answer = actor.name + " looks " + out_prop
+                    generateFollowUp(sentence_answer, "actor_appearance", ansList)
+
+            elif ansType == "actor_personality":
+                actor, prop = ansList
+
+                givenAnswers = []
+                givenAnswers.append(actor.name)
+                if type(prop) is list:
+                    givenAnswers.extend(prop)
+                else:
+                    givenAnswers.append(prop)
+
+                out_prop = provider.formatMultipleItems(prop)
+
+                if set(sentence).issuperset(set(givenAnswers)):
+                    sentence_answer = actor.name + " is " + out_prop
+                    generateFollowUp(sentence_answer, "actor_personality", ansList)
+
+            elif ansType == "attribute":
+                actor, act, attr, propType, out_prop = ansList
+
+                givenAnswers = []
+                givenAnswers.extend([actor.name])
+                givenAnswers.extend(out_prop)
+                givenAnswers.extend(attr.split())
+                givenAnswers = [x.lower() for x in givenAnswers]
+                formatted_seq = []
+                for words in sequence:
+                    if words[1] in verbTags:
+                        formatted_seq.append(wnl.lemmatize(words[0], 'v'))
+                    else:
+                        formatted_seq.append(words[0])
+
+                sentence = [x.lower() for x in formatted_seq]
+                verbPresent = False
+
+                for verb in act[1]:
+                    if verb in sentence:
+                        verbPresent = True
+
+                act = provider.determineVerbForm(actor, act[0], "past")
+
+                if out_prop:
+                    sent_prop = provider.formatMultipleItems(out_prop)
+                    sent_add = " that is "
+                else:
+                    sent_prop = ""
+                    sent_add = ""
+
+                if set(sentence).issuperset(set(givenAnswers)) and verbPresent:
+                    if propType == "amount":
+                        sentence_answer = actor.name + " " + act + " " + sent_prop + " " + attr
+                    else:
+                        sentence_answer = actor.name + " " + act + " " + attr + sent_add + sent_prop
+
+                    generateFollowUp(sentence_answer, "attribute", ansList)
+
+            elif ansType == "type":
+                a = 1
 
     if gotHints is True and incorrect is True:
         result = []
@@ -485,7 +850,7 @@ def determineSentenceType(sequence):
                 if ansType == "relationship_name":
                     actor, rel, char = ansList
 
-                    out = formatMultipleItems(rel)
+                    out = provider.formatMultipleItems(rel)
 
                     result.append("I think " + actor.name.title() + "'s " + out + " is " + char[0].name.title() + ".")
                     guessesExhausted()
@@ -493,7 +858,7 @@ def determineSentenceType(sequence):
                 if ansType == "relationship_rel":
                     actor, rel, char = ansList
 
-                    out = formatMultipleItems(rel)
+                    out = provider.formatMultipleItems(rel)
 
                     result.append("I think " + char.name.title() + " is " + actor.name.title() + "'s " + out + ".")
                     guessesExhausted()
@@ -509,6 +874,139 @@ def determineSentenceType(sequence):
 
                     result.append("I think " + actor.name.title() + " is " + action + " in " + loc + ".")
                     guessesExhausted()
+
+                elif ansType == "cause":
+                    for entries in ansList:
+                        ansType, answers = entries
+
+                        if ansType == "action":
+                            actor, act, out_obj = answers
+                            act = provider.determineVerbForm(actor, act[0], "past")
+
+                            result.append(actor.name + " " + act + " " + out_obj)
+                            guessesExhausted()
+
+                        elif ansType == "desire":
+                            actor, act, out_obj = answers
+                            act = provider.determineVerbForm(actor, act[0], "past")
+
+                            result.append(actor.name + " desired to " + act + " " + out_obj)
+                            guessesExhausted()
+
+                        elif ansType == "state":
+                            actor, out_state = answers
+
+                            result.append(actor.name + " is " + out_state)
+                            guessesExhausted()
+
+                        elif ansType == "location":
+                            actor, action, loc = answers
+                            action = provider.determineVerbForm(actor, action[0], "past")
+
+                            result.append(actor.name + " " + action + " at " + loc)
+                            guessesExhausted()
+
+                        elif ansType == "actor_appearance":
+                            actor, prop = answers
+                            out_prop = provider.formatMultipleItems(prop)
+
+                            result.append(actor.name + " looks " + out_prop)
+                            guessesExhausted()
+
+                        elif ansType == "actor_personality":
+                            actor, prop = answers
+                            out_prop = provider.formatMultipleItems(prop)
+
+                            result.append(actor.name + " is " + out_prop)
+                            guessesExhausted()
+
+                        elif ansType == "attribute":
+                            actor, act, attr, propType, out_prop = answers
+                            act = provider.determineVerbForm(actor, act[0], "past")
+
+                            if out_prop:
+                                sent_prop = provider.formatMultipleItems(out_prop)
+                                sent_add = " that is "
+                            else:
+                                sent_prop = ""
+                                sent_add = ""
+
+                            if propType == "amount":
+                                result.append(actor.name + " " + act + " " + sent_prop + " " + attr)
+                                guessesExhausted()
+                            else:
+                                result.append(actor.name + " " + act + " " + attr + sent_add + sent_prop)
+                                guessesExhausted()
+
+                elif ansType == "item_appearance":
+                    actor, act, item, prop = ansList
+
+                    out_prop = provider.formatMultipleItems(prop)
+                    act = provider.determineVerbForm(actor, act[0], "past")
+
+                    result.append(actor.name + " " + act + " a " + item + " that is " + out_prop + ".")
+                    guessesExhausted()
+
+                elif ansType == "item_amount":
+                    a = 1
+
+                elif ansType == "action":
+                    actor, act, out_obj = ansList
+
+                    act = provider.determineVerbForm(actor, act[0], "past")
+
+                    result.append(actor.name + " " + act + " " + out_obj)
+                    guessesExhausted()
+
+                elif ansType == "desire":
+                    actor, act, out_obj = ansList
+
+                    act = provider.determineVerbForm(actor, act[0], "past")
+
+                    result.append(actor.name + " desired to " + act + " " + out_obj)
+                    guessesExhausted()
+
+                elif ansType == "state":
+                    actor, out_state = ansList
+
+                    result.append(actor.name + " is " + out_state)
+                    guessesExhausted()
+
+                elif ansType == "location":
+                    actor, action, loc = ansList
+
+                    action = provider.determineVerbForm(actor, action[0], "past")
+
+                    result.append(actor.name + " " + action + " at " + loc)
+                    guessesExhausted()
+
+                elif ansType == "actor_appearance":
+                    actor, prop = ansList
+
+                    out_prop = provider.formatMultipleItems(prop)
+
+                    result.append(actor.name + " looks " + out_prop)
+                    guessesExhausted()
+
+                elif ansType == "actor_personality":
+                    actor, prop = ansList
+
+                    out_prop = provider.formatMultipleItems(prop)
+
+                    result.append(actor.name + " is " + out_prop)
+                    guessesExhausted()
+
+                elif ansType == "attribute":
+                    actor, act, attr, propType, out_prop = ansList
+
+                    act = provider.determineVerbForm(actor, act[0], "past")
+
+                    if propType == "amount":
+                        result.append(actor.name + " " + act + " " + sent_prop + " " + attr)
+                        guessesExhausted()
+                    else:
+                        result.append(actor.name + " " + act + " " + attr + sent_add + sent_prop)
+                        guessesExhausted()
 
     elif gotHints is False and incorrect is True:
         result = []
@@ -542,7 +1040,7 @@ def generateFollowUp(answer, questType, ansList):
         if perProp:
             current = random.choice(perProp)
             personality, event = current
-            personality = ref.formatMultipleItems(personality)
+            personality = ref.provider.formatMultipleItems(personality)
 
             if event is not None:
                 followUpResult = ref.queryRelations("Wednesday3inf10", "cause")
@@ -569,7 +1067,7 @@ def generateFollowUp(answer, questType, ansList):
         preparedString = "Hooray! I think " + answer + " is the answer too!"
         gotCorrectAnswer(preparedString, " Blah")
 
-    elif questType == "appProperty":
+    elif questType == "actor_appearance":
         if correctAnswer:
             actor, personality = correctAnswer
 
@@ -577,6 +1075,11 @@ def generateFollowUp(answer, questType, ansList):
 
             preparedString = "Hooray! I also think " + actor.name.title() + " is " + personality + " because " + pronoun + " is " + answer + "."
             gotCorrectAnswer(preparedString, " Blah")
+
+    elif questType == "item_appearance":
+        print("here!")
+        preparedString = "Hooray! I also think " + answer + "."
+        gotCorrectAnswer(preparedString, " Blah")
 
 
 def parse_message(message):
