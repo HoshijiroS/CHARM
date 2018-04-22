@@ -167,6 +167,7 @@ def determineSentenceType(sequence):
     global first
     global answerList
     global hintList
+    global finalHintList
     global result
     global compMessage
     global wrongMessage
@@ -245,6 +246,7 @@ def determineSentenceType(sequence):
 
             if gotHints is False:
                 hintList = []
+                finalHintList = []
                 wrongMessage = [""]
                 incorrect = True
 
@@ -387,15 +389,15 @@ def determineSentenceType(sequence):
 
             if hintList:
                 if len(hintList) > 5:
-                    temp = hintList
-                    hintList = []
-
                     i = 0
                     while i < 5:
-                        r = random.choice(temp)
-                        temp.remove(r)
-                        hintList.append(r)
+                        r = random.choice(hintList)
+                        hintList.remove(r)
+                        finalHintList.append(r)
                         i = i + 1
+
+                else:
+                    finalHintList.extend(hintList)
 
                 gotHints = True
 
@@ -466,7 +468,7 @@ def determineSentenceType(sequence):
                     ansType, answers = entries
 
                     if ansType == "action":
-                        actor, act, out_obj = answers
+                        actor, act, out_obj, get_ans = answers
                         givenAnswers = []
                         out_objList = out_obj.split()
                         givenAnswers.extend([actor.name])
@@ -494,7 +496,7 @@ def determineSentenceType(sequence):
                             generateFollowUp(sentence_answer, "action", answers)
 
                     elif ansType == "desire":
-                        actor, act, out_obj = answers
+                        actor, act, out_obj, get_ans = answers
                         givenAnswers = []
                         out_objList = out_obj.split()
                         givenAnswers.extend([actor.name])
@@ -521,7 +523,7 @@ def determineSentenceType(sequence):
                             generateFollowUp(sentence_answer, "desire", answers)
 
                     elif ansType == "state":
-                        actor, out_state = answers
+                        actor, out_state, get_ans = answers
                         givenAnswers = []
                         givenAnswers.extend([actor.name])
                         givenAnswers = [x.lower() for x in givenAnswers]
@@ -544,7 +546,7 @@ def determineSentenceType(sequence):
                             generateFollowUp(sentence_answer, "state", answers)
 
                     elif ansType == "location":
-                        actor, action, loc = answers
+                        actor, action, loc, get_ans = answers
                         givenAnswers = []
                         givenAnswers.extend([actor.name])
                         givenAnswers.append(loc)
@@ -570,7 +572,7 @@ def determineSentenceType(sequence):
                             generateFollowUp(sentence_answer, "location", answers)
 
                     elif ansType == "actor_appearance":
-                        actor, prop  = answers
+                        actor, prop, get_ans = answers
 
                         givenAnswers = []
                         givenAnswers.append(actor.name)
@@ -586,7 +588,7 @@ def determineSentenceType(sequence):
                             generateFollowUp(sentence_answer, "actor_appearance", answers)
 
                     elif ansType == "actor_personality":
-                        actor, prop = answers
+                        actor, prop, get_ans = answers
 
                         givenAnswers = []
                         givenAnswers.append(actor.name)
@@ -602,11 +604,12 @@ def determineSentenceType(sequence):
                             generateFollowUp(sentence_answer, "actor_personality", answers)
 
                     elif ansType == "attribute":
-                        actor, act, attr, propType, out_prop = answers
+                        actor, act, attr, propType, out_prop, get_ans = answers
 
                         givenAnswers = []
                         givenAnswers.extend([actor.name])
-                        givenAnswers.extend(out_prop)
+                        if out_prop:
+                            givenAnswers.extend(out_prop)
                         givenAnswers.extend(attr.split())
                         givenAnswers = [x.lower() for x in givenAnswers]
                         formatted_seq = []
@@ -794,7 +797,8 @@ def determineSentenceType(sequence):
 
                 givenAnswers = []
                 givenAnswers.extend([actor.name])
-                givenAnswers.extend(out_prop)
+                if out_prop:
+                    givenAnswers.extend(out_prop)
                 givenAnswers.extend(attr.split())
                 givenAnswers = [x.lower() for x in givenAnswers]
                 formatted_seq = []
@@ -833,9 +837,9 @@ def determineSentenceType(sequence):
 
     if gotHints is True and incorrect is True:
         result = []
-        if hintList != [[]] and hintList != []:
-            r = random.choice(hintList)
-            hintList.remove(r)
+        if finalHintList != [[]] and finalHintList != []:
+            r = random.choice(finalHintList)
+            finalHintList.remove(r)
 
             if first is True:
                 result.append(random.choice(compMessage) + r)
@@ -880,48 +884,48 @@ def determineSentenceType(sequence):
                         ansType, answers = entries
 
                         if ansType == "action":
-                            actor, act, out_obj = answers
+                            actor, act, out_obj, get_ans = answers
                             act = provider.determineVerbForm(actor, act[0], "past")
 
                             result.append(actor.name + " " + act + " " + out_obj)
                             guessesExhausted()
 
                         elif ansType == "desire":
-                            actor, act, out_obj = answers
+                            actor, act, out_obj, get_ans = answers
                             act = provider.determineVerbForm(actor, act[0], "past")
 
                             result.append(actor.name + " desired to " + act + " " + out_obj)
                             guessesExhausted()
 
                         elif ansType == "state":
-                            actor, out_state = answers
+                            actor, out_state, get_ans = answers
 
                             result.append(actor.name + " is " + out_state)
                             guessesExhausted()
 
                         elif ansType == "location":
-                            actor, action, loc = answers
+                            actor, action, loc, get_ans = answers
                             action = provider.determineVerbForm(actor, action[0], "past")
 
                             result.append(actor.name + " " + action + " at " + loc)
                             guessesExhausted()
 
                         elif ansType == "actor_appearance":
-                            actor, prop = answers
+                            actor, prop, get_ans = answers
                             out_prop = provider.formatMultipleItems(prop)
 
                             result.append(actor.name + " looks " + out_prop)
                             guessesExhausted()
 
                         elif ansType == "actor_personality":
-                            actor, prop = answers
+                            actor, prop, get_ans = answers
                             out_prop = provider.formatMultipleItems(prop)
 
                             result.append(actor.name + " is " + out_prop)
                             guessesExhausted()
 
                         elif ansType == "attribute":
-                            actor, act, attr, propType, out_prop = answers
+                            actor, act, attr, propType, out_prop, get_ans = answers
                             act = provider.determineVerbForm(actor, act[0], "past")
 
                             if out_prop:
@@ -1026,6 +1030,10 @@ def generateFollowUp(answer, questType, ansList):
     global answerList
     global result
     global correctAnswer
+    praiseChoices = []
+
+    praiseChoices.extend(["Hooray! I also think ",
+                          "You got it! "])
 
     if questType == "relationship_name":
         actor, rel, char = ansList
@@ -1057,28 +1065,29 @@ def generateFollowUp(answer, questType, ansList):
                     else:
                         answerList.append(provider.assembleSentence(followUpResult))
 
-                    preparedString = "Hooray! I think " + answer + " is the answer too!"
+                    r = random.choice(praiseChoices)
+                    preparedString = r + answer + "."
                     followUpSent = " Why do you think is " + actor.name.title() + " " + personality + "?"
 
                     correctAnswer = (actor, personality)
                     gotCorrectAnswer(preparedString, followUpSent)
 
     elif questType == "location" or questType == "relationship_rel":
-        preparedString = "Hooray! I think " + answer + " is the answer too!"
+        r = random.choice(praiseChoices)
+        preparedString = r + answer + "."
         gotCorrectAnswer(preparedString, " Blah")
 
     elif questType == "actor_appearance":
         if correctAnswer:
             actor, personality = correctAnswer
 
-            pronoun = provider.producePronoun(actor)
-
-            preparedString = "Hooray! I also think " + actor.name.title() + " is " + personality + " because " + pronoun + " is " + answer + "."
+            r = random.choice(praiseChoices)
+            preparedString = r + actor.name.title() + " is " + personality + " because " + answer + "."
             gotCorrectAnswer(preparedString, " Blah")
 
     elif questType == "item_appearance":
-        print("here!")
-        preparedString = "Hooray! I also think " + answer + "."
+        r = random.choice(praiseChoices)
+        preparedString = r + answer + "."
         gotCorrectAnswer(preparedString, " Blah")
 
 

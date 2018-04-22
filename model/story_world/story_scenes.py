@@ -602,8 +602,8 @@ def startScene5():
     Entity.charList["wanda"].hasAttribute(wan_name, ("have", WordNet.getVerbList("have")), scene_5.time + "inf1")
     lookup.append([scene_5.time + "inf1", Entity.charList["wanda"].name, "attribute"])
 
-    wan_name.hasPerProperty(["weird", "not easy to say"], scene_5.time + "inf1ext")
-    lookup.append([scene_5.time + "inf1ext", wan_name.name, "perProperty"])
+    wan_name.hasAppProperty(["weird", "not easy to say"], scene_5.time + "inf1ext")
+    lookup.append([scene_5.time + "inf1ext", wan_name.name, "appProperty"])
 
     relations.causedBy(scene_1.time + "inf1", scene_5.time + "inf1")
     ####

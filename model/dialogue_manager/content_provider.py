@@ -1049,8 +1049,13 @@ def assembleSentence(event, genType=None, turnType=None, ansType=None, relType=N
 
         act = determineVerbForm(actor, out_act[0], "past")
 
+        if type(loc) is str:
+            loc = loc
+        else:
+            loc = loc.name
+
         if genType == "sentence":
-            return actor.name + " " + act + " at " + loc.name
+            return actor.name + " " + act + " at " + loc
 
         if answer:
             return "location", [actor, out_act, loc, answer]
@@ -1896,8 +1901,6 @@ def generatePromptForActs(ansList):
         ans_actor = answers[0]
         actor, ans_action, obj = answers[len(answers) - 1]
 
-        ans_action = ans_action[0]
-
         sent_ans_actor = ans_actor.name
         sent_actor = actor.name
 
@@ -1922,7 +1925,7 @@ def generatePromptForActs(ansList):
             actionWord = sent_ans_actor + poss + "personality"
 
         elif ansType == "attribute":
-            actionWord = sent_ans_actor + poss + "items"
+            actionWord = "what " + sent_ans_actor + " has"
 
         elif ansType == "item_appearance":
             actionWord = "the appearance of " + sent_ans_actor + " items"
@@ -1944,18 +1947,17 @@ def generatePromptForActs(ansList):
         if resForChar:
             resForChar = " someone"
 
-        hintTemplateA.extend([" What causes a person to " + ans_act + resForChar + "? Can you tell me?",
+        hintTemplateA.extend([" What causes a person to " + pres_ans_act + resForChar + "? Can you tell me?",
                               " Do you know anyone who has " + pres_ans_act + resForChar + " before? What happened?",
                               " What is something that could make you " + pres_ans_act + resForChar + "? Maybe that also made "
                               + sent_actor + " " + pres_ans_act + " " + obj + "."])
 
         hintTemplateB.extend([sent_actor + " " + ans_act + " " + obj + " because of "
-                              + actionWord + ".",
-                              "the reason why " + sent_actor + " " + ans_act + " " + obj + " is related to " + actionWord + "."])
+                              + actionWord + "."])
 
-    for hints in hintTemplateA:
-        r = random.choice(hintTemplateB)
-        hintChoices.append(r + hints)
+        for hints in hintTemplateA:
+            r = random.choice(hintTemplateB)
+            hintChoices.append(r + hints)
 
     return hintChoices
 
@@ -1970,8 +1972,6 @@ def generatePumpForActs(ansList):
         ansType, answers = entries
         ans_actor = answers[0]
         actor, ans_action, obj = answers[len(answers) - 1]
-
-        ans_action = ans_action[0]
 
         sent_ans_actor = ans_actor.name
         sent_actor = actor.name
@@ -1997,7 +1997,7 @@ def generatePumpForActs(ansList):
             actionWord = sent_ans_actor + poss + "personality"
 
         elif ansType == "attribute":
-            actionWord = sent_ans_actor + poss + "items"
+            actionWord = "what " + sent_ans_actor + " has"
 
         elif ansType == "item_appearance":
             actionWord = "the appearance of " + sent_ans_actor + " items"
@@ -2011,13 +2011,11 @@ def generatePumpForActs(ansList):
         hintTemplateA.extend([" Can you tell me about " + actionWord + "?",
                               " How does that affect " + sent_actor + actor_poss + "actions? "])
 
-        hintTemplateB.extend([ "the reason why " + sent_actor + " " + ans_act + " " + obj + " has something to do with " + actionWord + ".",
-                                 sent_actor + " " + ans_act + " " + obj + " because of " + actionWord + "."
-                                 ])
+        hintTemplateB.extend(["the reason why " + sent_actor + " " + ans_act + " " + obj + " has something to do with " + actionWord + "."])
 
-    for hints in hintTemplateA:
-        r = random.choice(hintTemplateB)
-        hintChoices.append(r + hints)
+        for hints in hintTemplateA:
+            r = random.choice(hintTemplateB)
+            hintChoices.append(r + hints)
 
     return hintChoices
 
@@ -2030,8 +2028,6 @@ def generateElabForActs(ansList):
         ans_actor = answers[0]
         actor, ans_act, obj = answers[len(answers) - 1]
         def_prop = WordNet.getDefinition(ans_act, verb="Yes")
-
-        ans_act = ans_act[0]
 
         sent_ans_actor = ans_actor.name
         sent_actor = actor.name
@@ -2058,7 +2054,7 @@ def generateElabForActs(ansList):
             actionWord = sent_ans_actor + poss + "personality"
 
         elif ansType == "attribute":
-            actionWord = sent_ans_actor + poss + " items"
+            actionWord = "what " + sent_ans_actor + " has"
 
         elif ansType == "item_appearance":
             actionWord = "the appearance of " + sent_ans_actor + " items"
