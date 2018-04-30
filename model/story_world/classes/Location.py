@@ -36,8 +36,9 @@ class Location:
             if type_name == "personality":
                 if scene_name is None:
                     for entity in self.perProp:
-                        if entity[0] == prop_name:
-                            return entity[0], entity[1]
+                        for items in entity[0]:
+                            if items == prop_name:
+                                return entity[0], entity[1]
 
                 elif prop_name is None:
                     for entity in self.perProp:
@@ -47,8 +48,9 @@ class Location:
             elif type_name == "appearance":
                 if scene_name is None:
                     for entity in self.appProp:
-                        if entity[0] == prop_name:
-                            return entity[0], entity[1]
+                        for items in entity[0]:
+                            if items == prop_name:
+                                return entity[0], entity[1]
 
                 elif prop_name is None:
                     for entity in self.appProp:
@@ -58,8 +60,9 @@ class Location:
             elif type_name == "amount":
                 if scene_name is None:
                     for entity in self.amtProp:
-                        if entity[0] == prop_name:
-                            return entity[0], entity[1]
+                        for items in entity[0]:
+                            if items == prop_name:
+                                return entity[0], entity[1]
 
                 elif prop_name is None:
                     for entity in self.amtProp:

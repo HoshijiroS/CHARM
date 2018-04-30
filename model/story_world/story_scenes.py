@@ -739,7 +739,7 @@ def startScene7():
     lookup.append([scene_7.time + "ev5", Entity.charList["cecile"].name, "action"])
     lookup.append([scene_7.time + "ev5ext", cec_clothes.name, "appProperty"])
 
-    Entity.charList["girls"].hasAction(("admire", WordNet.getVerbList("admire")), Entity.charList["cecile"].name,scene_7.time + "ev6")
+    Entity.charList["girls"].hasAction(("admire", WordNet.getVerbList("admire")), Entity.charList["cecile"].name, scene_7.time + "ev6")
     lookup.append([scene_7.time + "ev6", Entity.charList["girls"].name, "action"])
 
     Entity.charList["cecile"].hasAttribute(cec_clothes, ("wear", WordNet.getVerbList("wear")), scene_7.time + "inf1")
@@ -772,8 +772,6 @@ def startScene7():
 def startScene8():
     scene_8.hasLocation([Entity.locList["school"], Entity.locList["room 13"]])
     scene_8.hasCharacter([Entity.charList["wanda"], Entity.charList["maddie"], Entity.charList["peggy"]])
-
-    relations = Rel.Relations("Relation for Scene 8")
 
     ####
     Entity.charList["maddie"].hasDesire(("wish", WordNet.getVerbList("wish")), "stop " + Entity.charList["peggy"].name, scene_8.time + "ev1")
@@ -931,10 +929,6 @@ def startScene11():
                                             scene_11.time + "ev4")
     lookup.append([scene_11.time + "ev4", Entity.charList["miss mason"].name, "action"])
 
-    Entity.charList["miss mason"].hasAction(("state", WordNet.getVerbList("state")), Entity.charList["students"].name + "' defense",
-                                            scene_11.time + "ev6")
-    lookup.append([scene_11.time + "ev6", Entity.charList["miss mason"].name, "action"])
-
     Entity.charList["students"].hasAction(("not want", WordNet.getVerbList("want", negator="not")),
                                           "sadden " + Entity.charList["wanda"].name, scene_11.time + "ev7")
     lookup.append([scene_11.time + "ev7", Entity.charList["students"].name, "action"])
@@ -951,7 +945,7 @@ def startScene11():
 
     relations.sequence(scene_11.time + "ev5", scene_11.time + "ev7")
 
-    relations.causedBy(scene_11.time + "ev4", scene_11.time + "ev6")
+    relations.causedBy(scene_11.time + "ev4", scene_11.time + "ev7")
     relations.causedBy(scene_11.time + "ev5", scene_11.time + "ev3")
     ####
 
@@ -1183,7 +1177,7 @@ def startScene17():
 
     relations.consequence(scene_17.time + "ev1", scene_17.time + "inf1")
     relations.consequence(scene_17.time + "inf1", scene_17.time + "ev2")
-    relations.causedBy(scene_17.time + "ev2", scene_10.time + "ev4")
+    relations.causedBy(scene_17.time + "ev2", scene_17.time + "ev1")
     ####
 
     ####
@@ -1247,7 +1241,6 @@ def startScene18():
 
 
 def queryLookup(event):
-    print("event: ", event)
     count = [lookup.index(x) for x in lookup if x[0] == event][0]
     return lookup[count]
 
