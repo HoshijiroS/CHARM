@@ -485,7 +485,7 @@ def determineSentenceType(sequence):
                 for entries in ansList:
                     ansType, answers = entries
                     get_ans = answers[len(answers)-1]
-                    get_actor, get_act, get_obj = get_ans
+                    get_actor, get_act, get_obj, get_propType, get_prop = get_ans
                     get_act = provider.determineVerbForm(get_actor, get_act, "past")
 
                     if type(get_obj) is str:
@@ -493,10 +493,19 @@ def determineSentenceType(sequence):
                     else:
                         get_obj = get_obj.name
 
+                    if get_prop:
+                        get_prop = provider.formatMultipleItems(get_prop)
+
+                    if get_propType == "appearance" or get_propType == "personality":
+                        get_obj = get_obj + " that is " + get_prop
+
+                    elif get_propType == "amount":
+                        get_obj = get_prop + " " + get_obj
+
                     sentence_answer = "I think " + get_actor.name + " " + get_act + " " + get_obj + " because "
 
                     if ansType == "action":
-                        actor, act, out_obj, get_ans = answers
+                        actor, act, out_obj, propType, prop, get_ans = answers
                         givenAnswers = []
                         out_objList = out_obj.split()
                         givenAnswers.extend([actor.name])
@@ -518,6 +527,13 @@ def determineSentenceType(sequence):
                                 verbPresent = True
 
                         act = provider.determineVerbForm(actor, act[0], "past")
+
+                        if prop:
+                            prop = provider.formatMultipleItems(prop)
+                            if propType == "appearance" or propType == "personality":
+                                out_obj = out_obj + " that is " + prop
+                            elif propType == "amount":
+                                out_obj = prop + " " + out_obj
 
                         if set(sentence).issuperset(set(givenAnswers)) and verbPresent:
                             sentence_answer = sentence_answer + actor.name + " " + act + " " + out_obj
@@ -709,7 +725,7 @@ def determineSentenceType(sequence):
                 a = 1
 
             elif ansType == "action":
-                actor, act, out_obj = ansList
+                actor, act, out_obj, propType, prop = ansList
                 givenAnswers = []
                 out_objList = out_obj.split()
                 givenAnswers.extend([actor.name])
@@ -908,7 +924,7 @@ def determineSentenceType(sequence):
                         ansType, answers = entries
 
                         if ansType == "action":
-                            actor, act, out_obj, get_ans = answers
+                            actor, act, out_obj, propType, prop, get_ans = answers
                             act = provider.determineVerbForm(actor, act[0], "past")
 
                             temp.append(actor.name + " " + act + " " + out_obj)
@@ -916,12 +932,12 @@ def determineSentenceType(sequence):
                         elif ansType == "desire":
                             actor, act, out_obj, get_ans = answers
 
-                            temp.append(actor.name + " desired to " + act + " " + out_obj)
+                            temp.append(actor.name + " desired to " + act[0] + " " + out_obj)
 
                         elif ansType == "state":
                             actor, out_state, get_ans = answers
 
-                            out_state = provider.determineVerbForm(actor, out_state[0], "past")
+                            out_state = provider.determineVerbForm(actor, out_state[0], "present")
 
                             temp.append(actor.name + " is " + out_state)
 
@@ -959,11 +975,21 @@ def determineSentenceType(sequence):
                             else:
                                 temp.append(actor.name + " " + act + " " + attr + sent_add + sent_prop)
 
-                    get_actor, get_act, get_obj = get_ans
+                    get_actor, get_act, get_obj, propType, prop = get_ans
 
                     get_act = provider.determineVerbForm(get_actor, get_act, "past")
 
                     sentence = provider.formatMultipleItems(temp)
+
+                    get_obj = provider.formatMultipleItems(get_obj)
+                    if propType and prop:
+                        prop = provider.formatMultipleItems(prop)
+
+                        if propType == "appearance" or propType == "personality":
+                            get_obj = get_obj + " that looks " + prop
+                        elif propType == "amount":
+                            get_obj = prop + " " + get_obj
+
                     result.append("I think " + get_actor.name + " " + get_act + " " + get_obj + " because " + sentence + ".")
 
                 elif ansType == "item_appearance":
@@ -978,7 +1004,16 @@ def determineSentenceType(sequence):
                     a = 1
 
                 elif ansType == "action":
-                    actor, act, out_obj = ansList
+                    actor, act, out_obj, propType, prop = ansList
+
+                    out_obj = provider.formatMultipleItems(out_obj)
+                    if propType and prop:
+                        prop = provider.formatMultipleItems(prop)
+
+                        if propType == "appearance" or propType == "personality":
+                            out_obj = out_obj + " that looks " + prop
+                        elif propType == "amount":
+                            out_obj = prop + " " + out_obj
 
                     act = provider.determineVerbForm(actor, act[0], "past")
 
@@ -987,10 +1022,12 @@ def determineSentenceType(sequence):
                 elif ansType == "desire":
                     actor, act, out_obj = ansList
 
-                    result.append(actor.name + " desired to " + act + " " + out_obj)
+                    result.append(actor.name + " desired to " + act[0] + " " + out_obj)
 
                 elif ansType == "state":
                     actor, out_state = ansList
+
+                    out_state = provider.determineVerbForm(actor, out_state[0], "present")
 
                     result.append(actor.name + " is " + out_state)
 
@@ -1071,6 +1108,7 @@ def generateFollowUpSentence():
             current = random.choice(choices)
             choices.remove(current)
             act, obj, event = current
+            print("object: ", obj)
             followUpResult = ref.queryRelations(event, "cause")
 
     if type(obj) is str:
