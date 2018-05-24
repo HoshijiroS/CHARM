@@ -273,144 +273,145 @@ def assembleSentence():
 def printSentences():
     output_sentences = []
     sentences = assembleSentence()
+    print("sentences: ", sentences)
 
-    for entries in relations.causeList:
-        a, b = entries
-        comp_sent_a = []
-        comp_sent_b = []
-
-        if type(a) is str:
-            comp_sent_a = sentences["sentence for " + a]
-
-        elif type(a) is list:
-            temp = []
-            for sent in a:
-                temp.append(sentences["sentence for " + sent])
-
-            comp_sent_a = formatMultipleItems(temp)
-
-        if type(b) is str:
-            comp_sent_b = sentences["sentence for " + b]
-
-        elif type(b) is list:
-            temp = []
-            for sent in b:
-                temp.append(sentences["sentence for " + sent])
-
-            comp_sent_b = formatMultipleItems(temp)
-
-        output_sentences.append(comp_sent_a + ", because " + comp_sent_b + ".")
-
-    for entries in relations.elabList:
-        a, b = entries
-        comp_sent_a = []
-        comp_sent_b = []
-
-        if type(a) is str:
-            comp_sent_a = sentences["sentence for " + a]
-
-        elif type(a) is list:
-            temp = []
-            for sent in a:
-                temp.append(sentences["sentence for " + sent])
-
-            comp_sent_a = formatMultipleItems(temp)
-
-        if type(b) is str:
-            comp_sent_b = sentences["sentence for " + b]
-
-        elif type(b) is list:
-            temp = []
-            for sent in b:
-                temp.append(sentences["sentence for " + sent])
-
-            comp_sent_b = formatMultipleItems(temp)
-
-        output_sentences.append(comp_sent_a + ", that " + comp_sent_b + ".")
-
-    for entries in relations.summary:
-        a, b = entries
-        comp_sent_a = []
-        comp_sent_b = []
-
-        if type(a) is str:
-            comp_sent_a = sentences["sentence for " + a]
-
-        elif type(a) is list:
-            temp = []
-            for sent in a:
-                temp.append(sentences["sentence for " + sent])
-
-            comp_sent_a = formatMultipleItems(temp)
-
-        if type(b) is str:
-            comp_sent_b = sentences["sentence for " + b]
-
-        elif type(b) is list:
-            temp = []
-            for sent in b:
-                temp.append(sentences["sentence for " + sent])
-
-            comp_sent_b = formatMultipleItems(temp)
-
-        output_sentences.append(comp_sent_a + ", then " + comp_sent_b + ".")
-
-    for entries in relations.contList:
-        a, b = entries
-        comp_sent_a = []
-        comp_sent_b = []
-
-        if type(a) is str:
-            comp_sent_a = sentences["sentence for " + a]
-
-        elif type(a) is list:
-            temp = []
-            for sent in a:
-                temp.append(sentences["sentence for " + sent])
-
-            comp_sent_a = formatMultipleItems(temp)
-
-        if type(b) is str:
-            comp_sent_b = sentences["sentence for " + b]
-
-        elif type(b) is list:
-            temp = []
-            for sent in b:
-                temp.append(sentences["sentence for " + sent])
-
-            comp_sent_b = formatMultipleItems(temp)
-
-        output_sentences.append(comp_sent_a + ", but " + comp_sent_b + ".")
-
-    for entries in relations.consList:
-        a, b = entries
-        comp_sent_a = []
-        comp_sent_b = []
-
-        if type(a) is str:
-            comp_sent_a = sentences["sentence for " + a]
-
-        elif type(a) is list:
-            temp = []
-            for sent in a:
-                temp.append(sentences["sentence for " + sent])
-
-            comp_sent_a = formatMultipleItems(temp)
-
-        if type(b) is str:
-            comp_sent_b = sentences["sentence for " + b]
-
-        elif type(b) is list:
-            temp = []
-            for sent in b:
-                temp.append(sentences["sentence for " + sent])
-
-            comp_sent_b = formatMultipleItems(temp)
-
-        output_sentences.append(comp_sent_a + ", so " + comp_sent_b + ".")
-
-    for sent in output_sentences:
-        print(sent)
+    # for entries in relations.causeList:
+    #     a, b = entries
+    #     comp_sent_a = []
+    #     comp_sent_b = []
+    #
+    #     if type(a) is str:
+    #         comp_sent_a = sentences["sentence for " + a]
+    #
+    #     elif type(a) is list:
+    #         temp = []
+    #         for sent in a:
+    #             temp.append(sentences["sentence for " + sent])
+    #
+    #         comp_sent_a = formatMultipleItems(temp)
+    #
+    #     if type(b) is str:
+    #         comp_sent_b = sentences["sentence for " + b]
+    #
+    #     elif type(b) is list:
+    #         temp = []
+    #         for sent in b:
+    #             temp.append(sentences["sentence for " + sent])
+    #
+    #         comp_sent_b = formatMultipleItems(temp)
+    #
+    #     output_sentences.append(comp_sent_a + ", because " + comp_sent_b + ".")
+    #
+    # for entries in relations.elabList:
+    #     a, b = entries
+    #     comp_sent_a = []
+    #     comp_sent_b = []
+    #
+    #     if type(a) is str:
+    #         comp_sent_a = sentences["sentence for " + a]
+    #
+    #     elif type(a) is list:
+    #         temp = []
+    #         for sent in a:
+    #             temp.append(sentences["sentence for " + sent])
+    #
+    #         comp_sent_a = formatMultipleItems(temp)
+    #
+    #     if type(b) is str:
+    #         comp_sent_b = sentences["sentence for " + b]
+    #
+    #     elif type(b) is list:
+    #         temp = []
+    #         for sent in b:
+    #             temp.append(sentences["sentence for " + sent])
+    #
+    #         comp_sent_b = formatMultipleItems(temp)
+    #
+    #     output_sentences.append(comp_sent_a + ", that " + comp_sent_b + ".")
+    #
+    # for entries in relations.summary:
+    #     a, b = entries
+    #     comp_sent_a = []
+    #     comp_sent_b = []
+    #
+    #     if type(a) is str:
+    #         comp_sent_a = sentences["sentence for " + a]
+    #
+    #     elif type(a) is list:
+    #         temp = []
+    #         for sent in a:
+    #             temp.append(sentences["sentence for " + sent])
+    #
+    #         comp_sent_a = formatMultipleItems(temp)
+    #
+    #     if type(b) is str:
+    #         comp_sent_b = sentences["sentence for " + b]
+    #
+    #     elif type(b) is list:
+    #         temp = []
+    #         for sent in b:
+    #             temp.append(sentences["sentence for " + sent])
+    #
+    #         comp_sent_b = formatMultipleItems(temp)
+    #
+    #     output_sentences.append(comp_sent_a + ", then " + comp_sent_b + ".")
+    #
+    # for entries in relations.contList:
+    #     a, b = entries
+    #     comp_sent_a = []
+    #     comp_sent_b = []
+    #
+    #     if type(a) is str:
+    #         comp_sent_a = sentences["sentence for " + a]
+    #
+    #     elif type(a) is list:
+    #         temp = []
+    #         for sent in a:
+    #             temp.append(sentences["sentence for " + sent])
+    #
+    #         comp_sent_a = formatMultipleItems(temp)
+    #
+    #     if type(b) is str:
+    #         comp_sent_b = sentences["sentence for " + b]
+    #
+    #     elif type(b) is list:
+    #         temp = []
+    #         for sent in b:
+    #             temp.append(sentences["sentence for " + sent])
+    #
+    #         comp_sent_b = formatMultipleItems(temp)
+    #
+    #     output_sentences.append(comp_sent_a + ", but " + comp_sent_b + ".")
+    #
+    # for entries in relations.consList:
+    #     a, b = entries
+    #     comp_sent_a = []
+    #     comp_sent_b = []
+    #
+    #     if type(a) is str:
+    #         comp_sent_a = sentences["sentence for " + a]
+    #
+    #     elif type(a) is list:
+    #         temp = []
+    #         for sent in a:
+    #             temp.append(sentences["sentence for " + sent])
+    #
+    #         comp_sent_a = formatMultipleItems(temp)
+    #
+    #     if type(b) is str:
+    #         comp_sent_b = sentences["sentence for " + b]
+    #
+    #     elif type(b) is list:
+    #         temp = []
+    #         for sent in b:
+    #             temp.append(sentences["sentence for " + sent])
+    #
+    #         comp_sent_b = formatMultipleItems(temp)
+    #
+    #     output_sentences.append(comp_sent_a + ", so " + comp_sent_b + ".")
+    #
+    # for sent in output_sentences:
+    #     print(sent)
 
 
 def startScene1():
@@ -847,10 +848,10 @@ def startScene10():
         [Entity.charList["wanda"], Entity.charList["maddie"], Entity.charList["peggy"], Entity.charList["miss mason"]])
 
     ####
-    Entity.charList["maddie"].hasState(("shocked", WordNet.getAdjList("shocked")), scene_10.time + "ev1a")
+    Entity.charList["maddie"].hasState(("shock", WordNet.getAdjList("shock")), scene_10.time + "ev1a")
     lookup.append([scene_10.time + "ev1a", Entity.charList["maddie"].name, "state"])
 
-    Entity.charList["peggy"].hasState(("shocked", WordNet.getAdjList("shocked")), scene_10.time + "ev1b")
+    Entity.charList["peggy"].hasState(("shock", WordNet.getAdjList("shock")), scene_10.time + "ev1b")
     lookup.append([scene_10.time + "ev1b", Entity.charList["peggy"].name, "state"])
 
     Entity.locList["room 13"].hasAttribute(Entity.itemList["drawing"], ("post", WordNet.getVerbList("post")), scene_10.time + "inf1")
@@ -1181,8 +1182,10 @@ def startScene17():
     ####
 
     ####
-    Entity.charList["wanda"].hasAction(("forgive", WordNet.getVerbList("forgive")), [Entity.charList["peggy"].name, Entity.charList["maddie"].name], scene_17.time + "ev3")
-    lookup.append([scene_17.time + "ev3", Entity.charList["wanda"].name, "action"])
+    Entity.charList["wanda"].hasAction(("forgive", WordNet.getVerbList("forgive")), Entity.charList["peggy"].name, scene_17.time + "ev3a")
+    Entity.charList["wanda"].hasAction(("forgive", WordNet.getVerbList("forgive")), Entity.charList["maddie"].name, scene_17.time + "ev3b")
+    lookup.append([scene_17.time + "ev3a", Entity.charList["wanda"].name, "action"])
+    lookup.append([scene_17.time + "ev3b", Entity.charList["wanda"].name, "action"])
 
     Entity.charList["wanda"].hasAction(("give", WordNet.getVerbList("give")), giv_mad_dress, scene_17.time + "ev4")
     lookup.append([scene_17.time + "ev4", Entity.charList["wanda"].name, "action"])
@@ -1199,9 +1202,12 @@ def startScene17():
     Entity.charList["wanda"].hasAction(("receive", WordNet.getVerbList("receive")), Entity.itemList["friendly letter"].name, scene_17.time + "ev6")
     lookup.append([scene_17.time + "ev6", Entity.charList["wanda"].name, "action"])
 
-    relations.contradiction(scene_17.time + "ev3", scene_5.time + "ev2")
-    relations.causedBy([scene_17.time + "ev4", scene_17.time + "ev5"], scene_17.time + "ev3")
-    relations.causedBy(scene_17.time + "ev3", scene_17.time + "ev6")
+    relations.contradiction(scene_17.time + "ev3a", scene_5.time + "ev2")
+    relations.contradiction(scene_17.time + "ev3b", scene_5.time + "ev2")
+    relations.causedBy([scene_17.time + "ev4", scene_17.time + "ev5"], scene_17.time + "ev3a")
+    relations.causedBy([scene_17.time + "ev4", scene_17.time + "ev5"], scene_17.time + "ev3b")
+    relations.causedBy(scene_17.time + "ev3a", scene_17.time + "ev6")
+    relations.causedBy(scene_17.time + "ev3b", scene_17.time + "ev6")
     relations.causedBy(scene_17.time + "ev6", [scene_16.time + "ev3", scene_16.time + "ev4"])
     ####
 
@@ -1225,7 +1231,8 @@ def startScene18():
     Entity.charList["maddie"].hasState(("cry", WordNet.getVerbList("cry")), scene_18.time + "ev3")
     lookup.append([scene_18.time + "ev3", Entity.charList["maddie"].name, "state"])
 
-    relations.causedBy(scene_18.time + "ev3", [scene_6.time + "inf5", scene_17.time + "ev3"])
+    relations.causedBy(scene_18.time + "ev3", [scene_6.time + "inf5", scene_17.time + "ev3a"])
+    relations.causedBy(scene_18.time + "ev3", [scene_6.time + "inf5", scene_17.time + "ev3b"])
     ####
 
     ####
@@ -1292,3 +1299,5 @@ def executeAll():
     startScene16()
     startScene17()
     startScene18()
+
+

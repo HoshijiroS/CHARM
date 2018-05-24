@@ -1,4 +1,5 @@
 from nltk.corpus import wordnet
+from nltk.stem.wordnet import WordNetLemmatizer
 
 def getVerbList(verb, negator=None):
     if negator is not None:

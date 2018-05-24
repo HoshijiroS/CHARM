@@ -57,8 +57,8 @@ class Item:
 
         if type_name is not None:
             if type_name == "personality":
-                print("personality")
-                print("scene_name: ", scene_name)
+                #print("personality")
+                #print("scene_name: ", scene_name)
                 if scene_name is None:
                     for entity in self.perProp:
                         for items in entity[0]:
@@ -66,14 +66,14 @@ class Item:
                                 return entity[0], entity[1]
 
                 elif scene_name:
-                    print("scene in personality")
+                    #print("scene in personality")
                     for entity in self.perProp:
-                        print("entity[1]: ", entity[1])
+                        #print("entity[1]: ", entity[1])
                         if entity[1] == scene_name:
                             return entity[0], entity[1]
 
             elif type_name == "appearance":
-                print("appearance")
+                #print("appearance")
                 if scene_name is None:
                     for entity in self.appProp:
                         for items in entity[0]:
@@ -82,12 +82,12 @@ class Item:
 
                 elif scene_name:
                     for entity in self.appProp:
-                        print("entity[1]: ", entity[1])
+                        #print("entity[1]: ", entity[1])
                         if entity[1] == scene_name:
                             return entity[0], entity[1]
 
             elif type_name == "amount":
-                print("amount")
+                #print("amount")
                 if scene_name is None:
                     for entity in self.amtProp:
                         for items in entity[0]:
@@ -96,7 +96,7 @@ class Item:
 
                 elif scene_name:
                     for entity in self.amtProp:
-                        print("entity[1]: ", entity[1])
+                        #print("entity[1]: ", entity[1])
                         if entity[1] == scene_name:
                             return entity[0], entity[1]
 

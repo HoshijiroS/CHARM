@@ -92,15 +92,27 @@ def parseWhatMessage(sequence, posList, ofList, charList, andList, itemList):
         for character in charList:
             output.append(cont_plan.confirmCharacter(character, 2, propType="personality"))
 
+    elif [item for item in sequence if "meaning" in item] and [item for item in sequence if "of" in item]:
+        output.append(cont_plan.generateMeaningForWord(sequence, word="end"))
+
+    elif [item for item in sequence if "mean" in item]:
+        output.append(cont_plan.generateMeaningForWord(sequence, word="mid"))
+
     return output
 
 
-def parseWhyMessage(charList, verbList):
+def parseWhyMessage(charList, verbList, advList, itemList):
     output = []
 
+    verbList.extend(advList)
+    charList.extend(itemList)
+
     for character in charList:
+        #print("character: ", character)
         for action in verbList:
+            #print("action: ", action)
             for object in charList:
+                #print("object: ", object)
                 getOutput = cont_plan.confirmCharacter(character, 3, action=action, item=object)
 
                 if type(getOutput) is list:

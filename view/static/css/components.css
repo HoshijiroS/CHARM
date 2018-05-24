@@ -264,55 +264,10 @@ input, button {
 	background-color: #ffffff;
 	border-color: #343434;
 	font-family: Montserrat-Bold;
-	/* padding: 16px; */
 	font-size: 16px;
 	border: none;
 	cursor: pointer;
-}
-
-/* The container <div> - needed to position the dropdown content */
-.dropdown {
-    position: relative;
-    float: right;
-    display: inline-block;
-    text-transform: uppercase;
-    font-size: 15px;
-    font-family: Montserrat-Bold;
-    margin: 0px 0px 0px 50px;
-}
-
-/* Dropdown Content (Hidden by Default) */
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f6f6f6;
-    min-width: 160px;
-    /* margin-top: 10px; */
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
-}
-
-/* Links inside the dropdown */
-.dropdown-content a {
-	font-family: Montserrat-Bold;
-	color: #343434;
-	padding: 12px 16px;
-	text-decoration: none;
-	display: block;
-	font-size: 12px;
-}
-
-/* Change color of dropdown links on hover */
-.dropdown-content a:hover {background-color: #efefef}
-
-/* Show the dropdown menu on hover */
-.dropdown:hover .dropdown-content {
-    display: block;
-}
-
-/* Change the background color of the dropdown button when the dropdown content is shown */
-.dropdown:hover .dropbtn {
-    color: #4974ed;
+	text-transform: uppercase;
 }
 
 .bookmark-btn {

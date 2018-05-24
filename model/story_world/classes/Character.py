@@ -202,8 +202,12 @@ class Character:
         if scene_name is None and object_name is not None:
             for entity in self.act:
                 if entity[0][0] == act_name:
-                    if entity[1].lower() == object_name:
-                        return entity[0], entity[1], entity[2]
+                    if type(entity[1]) is str:
+                        if entity[1].lower() == object_name:
+                            return entity[0], entity[1], entity[2]
+                    else:
+                        if entity[1].name.lower() == object_name:
+                            return entity[0], entity[1], entity[2]
 
         elif act_name is None:
             for entity in self.act:

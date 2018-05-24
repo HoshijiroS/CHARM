@@ -12,24 +12,23 @@ from nltk.corpus import wordnet as wordnet
 
 
 def formatMultipleItems(listAnswer):
-    out = ""
+    if type(listAnswer) is list and listAnswer:
+        if len(listAnswer) > 1:
+            return ", ".join(listAnswer[:-1]) + " and " + listAnswer[len(listAnswer) - 1]
 
-    try:
-        if len(listAnswer) > 1 and type(listAnswer) is list:
-            out = ", ".join(listAnswer[:-1]) + " and " + listAnswer[len(listAnswer) - 1]
-    except Exception as e:
-        print("Error in formatMultipleItems: ", e)
+        else:
+            return listAnswer[0]
 
     if type(listAnswer) is str:
-        out = listAnswer
+        return listAnswer
 
     elif type(listAnswer) is item_type.Item:
-        out = listAnswer.name
+        return listAnswer.name
 
     else:
-        out = listAnswer[0]
+        return listAnswer
 
-    return out
+    return None
 
 
 def determinePossessiveForm(actor):
@@ -153,7 +152,7 @@ def whatQuestion(actor, item, propType, action):
     except Exception as e:
         a = 1
 
-    if action is None and item is not None:
+    if action is None and item and actor and propType:
         if propType == "appearance":
             for properties in item.appProp:
                 if type(properties[0]) is list and len(properties[0]) > 1:
@@ -244,15 +243,20 @@ def whereQuestion(actor, action, location):
 
 
 def whyQuestion(actor, action, item):
+    print("actor: ", actor, "action: ", action, "item: ", item)
     act, obj, act_event = actor.queryAction(action, item, None)
+    des, des_obj, des_event = actor.queryDesire(action, item, None)
     state, state_event = actor.queryState(action, None)
+
+    print("state: ", state)
+
     answer = ""
 
     causeList = []
 
     cause_event = None
 
-    if state is None and act is not None:
+    if state is None and des is None and act is not None:
         ans_event, actor, qType = ref.queryLookup(act_event)
 
         try:
@@ -263,7 +267,18 @@ def whyQuestion(actor, action, item):
         answer = act[0]
         cause_event = ref.queryRelations(ans_event, "cause")
 
-    elif act is None and state is not None:
+    if state is None and act is None and des is not None:
+        ans_event, actor, qType = ref.queryLookup(act_event)
+
+        try:
+            actor = Entity.charList[actor.lower()]
+        except Exception as e:
+            print("Error on assembleSentence on actor assignment: ", e)
+
+        answer = des[0]
+        cause_event = ref.queryRelations(ans_event, "cause")
+
+    elif act is None and des is None and state is not None:
         ans_event, actor, qType = ref.queryLookup(state_event)
 
         try:
@@ -280,25 +295,28 @@ def whyQuestion(actor, action, item):
     if cause_event:
         if type(cause_event) is list:
             for evs in cause_event:
+                print("events: ", evs)
                 if act:
-                    #if type(obj) is item_type.Item:
-                    #    propType, prop = assembleProp(obj, evs + "ext")
-                    #temp = (actor, answer, obj, propType, prop)
                     temp = (actor, answer, obj, propType, prop)
+                elif des:
+                    temp = (actor, answer, des_obj, propType, prop)
                 else:
                     temp = (actor, answer)
                 container = assembleSentence(evs, answer=temp)
+                print("container: ", container)
                 if type(container) is list:
                     for entries in container:
                         if entries[1]:
                             causeList.append(entries)
                 else:
-                    print("container: ", container)
                     if container[1]:
                         causeList.append(container)
+
         else:
             if act:
                 temp = (actor, answer, obj, propType, prop)
+            elif des:
+                temp = (actor, answer, des_obj, propType, prop)
             else:
                 temp = (actor, answer)
             container = assembleSentence(cause_event, answer=temp)
@@ -1342,7 +1360,12 @@ def generateHintForLocation(ansList):
     actor, action, loc = ansList
     hintChoices = []
 
-    temp = Entity.locList[loc.name.lower()].appProp
+    temp = None
+    if type(loc) is str:
+        temp = Entity.locList[loc.lower()].appProp
+    else:
+        temp = Entity.locList[loc.name.lower()].appProp
+
     if temp:
         for properties in temp:
             hintChoices.append(
@@ -1983,7 +2006,6 @@ def generatePromptForActs(ansList):
             obj = obj.name
 
         obj = formatMultipleItems(obj)
-        print("obj in generatePromptForActs: ", obj)
 
         sent_ans_actor = ans_actor.name
         sent_actor = actor.name
@@ -2079,11 +2101,7 @@ def generatePumpForActs(ansList):
 
     for entries in ansList:
         ansType, answers = entries
-        print("answers: ", answers)
         ans_actor = answers[0]
-        print("answers[len]: ", answers[len(answers) - 1])
-
-        print("length: ", len(answers[len(answers) - 1]))
 
         actor = ""
         action = ""
@@ -2100,7 +2118,6 @@ def generatePumpForActs(ansList):
             obj = obj.name
 
         obj = formatMultipleItems(obj)
-        print("obj in generatePumpForActs: ", obj)
 
         if obj != "":
             if prop:
@@ -2190,7 +2207,6 @@ def generateElabForActs(ansList):
             obj = obj.name
 
         obj = formatMultipleItems(obj)
-        print("obj in generatePumpForActs: ", obj)
 
         sent_ans_actor = ans_actor.name
         sent_actor = actor.name
@@ -2266,3 +2282,18 @@ def generateElabForActs(ansList):
                 + pres_ans_act.title() + " means " + def_prop + resForChar + resForItem + ".")
 
     return hintChoices
+
+
+def generateMeaningForWord(sequence, word=None):
+    if word == "last":
+        queryWord = "_".join([x[0].lower() for x in sequence[5:-1]])
+
+    elif word == "mid":
+        queryWord = "_".join([x[0].lower() for x in sequence[2:-2]])
+
+    def_word = WordNet.getDefinition(queryWord)
+
+    return "meaning", queryWord.title() + " means " + def_word + "."
+
+    return hintChoices
+

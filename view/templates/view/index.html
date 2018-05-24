@@ -68,7 +68,7 @@
                     url: '/view/ajax/process_message/',
                     data: JSON.stringify({'message': message}),
                     contentType: 'application/json'
-                })
+                });
 
                 $submit.done(function(statement){
                     $('#chat-area').append("<div class = 'chat-bubble-container'>\n" +
@@ -87,6 +87,57 @@
 			    $('#message').val('');
             }
 
+            function generate_log(){
+			    var $submit = $.ajax({
+                    type: 'POST',
+                    url: '/view/ajax/generate_log/'
+                });
+
+                $submit.done(function(statement){
+                    alert("The log file has been successfully generated.")
+                });
+
+			    $submit.fail(function(){
+
+                });
+            }
+
+            function nextPage(){
+			    var $nextpage = $.ajax({
+                    type: 'POST',
+                    url: '/view/ajax/next_page/'
+                });
+
+                $nextpage.done(function(statement){
+                   $('#story-content').html(statement.content);
+                   $('#page_num').html(statement.pageNum + " of " + statement.pageMax);
+                   $('#story-title').html(statement.chapFull);
+                   $('#chapter-title').html(statement.chapName);
+                });
+
+			    $nextpage.fail(function(){
+
+                });
+            }
+
+            function prevPage(){
+                var $nextpage = $.ajax({
+                    type: 'POST',
+                    url: '/view/ajax/prev_page/'
+                });
+
+                $nextpage.done(function(statement){
+                   $('#story-content').html(statement.content);
+                   $('#page_num').html(statement.pageNum + " of " + statement.pageMax);
+                   $('#story-title').html(statement.chapFull);
+                   $('#chapter-title').html(statement.chapName);
+                });
+
+			    $nextpage.fail(function(){
+
+                });
+            }
+
             $('#message').keydown(function(event){
                 if(event.keyCode == 13){
                     event.preventDefault();
@@ -98,6 +149,18 @@
 			    sendMessage();
             });
 
+			$('#next_page').click(function(event){
+			   nextPage();
+            });
+
+			$('#prev_page').click(function(event){
+			    prevPage();
+            });
+
+			$('#generate-log').click(function(event){
+			    generate_log();
+            });
+
 			window.onload = function () {init();}
 		});
 	</script>
@@ -107,23 +170,16 @@
 		<div class = 'story-container'>
 			<div class = 'story-box'>
 				<div class = 'story-header'>
-					<label class = 'story-title'>0% done - The Hundred Dresses / <b> Chapter 1 - Wanda </b></label>
+					<label class = 'story-title' id = "story-title">0% done - The Hundred Dresses / <b> Chapter 1 - Wanda </b></label>
 					<div class = 'dropdown'>
-					  <span class = 'dropbtn'>Select a Chapter</span>
-					  <div class = 'dropdown-content'>
-						<a href="#">Chapter 1</a>
-						<a href="#">Chapter 2</a>
-						<a href="#">Chapter 3</a>
-						<a href="#">Chapter 4</a>
-						<a href="#">Chapter 5</a>
-					  </div>
+					  <button class = 'dropbtn' id = 'generate-log'>GENERATE LOG FILE</button>
 					</div>
 					<!--<div class = 'login-btn bookmark-btn'>Bookmark</div>-->
 				</div>
 				
-				<label class = 'chapter-title'>Chapter 1 - Wanda</label>
+				<label class = 'chapter-title' id="chapter-title">Chapter 1 - Wanda</label>
 				
-				<div class = 'story-content'>
+				<div class = 'story-content' id="story-content">
 				    TODAY, Monday, Wanda Petronski was not in her seat. But nobody, not even Peggy and Madeline, the girls who started all the fun, noticed her absence. Usually Wanda sat in the next to the last seat in the last row in Room 13. She sat in the corner of the room where the rough boys who did not make good marks on their report cards sat; the corner of the room where there was most scuffling of feet, most roars of laughter when anything funny was said, and most mud and dirt on the floor.
                     <br>
                     <br>
@@ -137,9 +193,9 @@
 			
 			<div class = 'story-footer'>
 				<div class = 'page-progress'>
-					<label class = 'next-page previous-page'></label>
-					<label class = 'page-number'>Page 1 of 5</label>
-					<label class = 'next-page'></label>
+					<label class = 'next-page previous-page' id='prev_page'></label>
+					<label class = 'page-number' id="page_num">Page 1 of 53</label>
+					<label class = 'next-page' id='next_page'></label>
 				</div>
 			</div>
 		</div>
