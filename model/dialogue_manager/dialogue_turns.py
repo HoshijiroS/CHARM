@@ -712,6 +712,7 @@ def determineSentenceType(sequence):
                             generateFollowUp(sentence_answer, "state")
 
                     elif ansType == "location":
+                        print("answers: ", answers)
                         actor, action, loc, get_ans = answers
                         givenAnswers = []
                         givenAnswers.extend([actor.name])
