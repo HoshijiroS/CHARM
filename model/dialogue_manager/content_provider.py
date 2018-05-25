@@ -75,7 +75,7 @@ def determineVerbForm(actor, verb, tense):
 
 
 def confirmCharacter(actor, questType, person=None, relationship=None, action=None, location=None, item=None,
-                     propType=None):
+                     propType=None, prop=None):
     names = {}
     val = []
     for key, value in Entity.charList.items():
@@ -106,7 +106,7 @@ def confirmCharacter(actor, questType, person=None, relationship=None, action=No
         if questType == 2:
             return whatQuestion(Entity.charList[names[val[0]]], item, propType, action)
         if questType == 3:
-            return whyQuestion(Entity.charList[names[val[0]]], action, item)
+            return whyQuestion(Entity.charList[names[val[0]]], action, item, queriedProp=prop)
 
     elif match_length < 3:
         return "unknown", None
@@ -242,13 +242,16 @@ def whereQuestion(actor, action, location):
         return "unknown", None
 
 
-def whyQuestion(actor, action, item):
-    print("actor: ", actor, "action: ", action, "item: ", item)
+def whyQuestion(actor, action, item, queriedProp=None):
+    action = "_".join(action.split(" "))
+    #print("actor: ", actor, "action: ", action, "item: ", item, "queriedProp:", queriedProp)
     act, obj, act_event = actor.queryAction(action, item, None)
     des, des_obj, des_event = actor.queryDesire(action, item, None)
+    act_obj, attr, attr_event = actor.queryAttribute(action, item, None)
+    print("act_obj: ", act_obj, "attr: ", attr)
     state, state_event = actor.queryState(action, None)
 
-    print("state: ", state)
+    #print("act: ", act, "state: ", state, "des: ", des, "act_obj: ", act_obj)
 
     answer = ""
 
@@ -256,7 +259,7 @@ def whyQuestion(actor, action, item):
 
     cause_event = None
 
-    if state is None and des is None and act is not None:
+    if act:
         ans_event, actor, qType = ref.queryLookup(act_event)
 
         try:
@@ -267,7 +270,7 @@ def whyQuestion(actor, action, item):
         answer = act[0]
         cause_event = ref.queryRelations(ans_event, "cause")
 
-    if state is None and act is None and des is not None:
+    if des:
         ans_event, actor, qType = ref.queryLookup(act_event)
 
         try:
@@ -278,7 +281,7 @@ def whyQuestion(actor, action, item):
         answer = des[0]
         cause_event = ref.queryRelations(ans_event, "cause")
 
-    elif act is None and des is None and state is not None:
+    elif state:
         ans_event, actor, qType = ref.queryLookup(state_event)
 
         try:
@@ -289,19 +292,48 @@ def whyQuestion(actor, action, item):
         answer = state[0]
         cause_event = ref.queryRelations(ans_event, "cause")
 
+    elif act_obj:
+        ans_event, actor, qType = ref.queryLookup(attr_event)
+
+        try:
+            actor = Entity.charList[actor.lower()]
+        except Exception as e:
+            print("Error on assembleSentence on actor assignment: ", e)
+
+        answer = act_obj[0]
+        cause_event = ref.queryRelations(ans_event, "cause")
+
     propType = None
     prop = None
 
+    temp = None
     if cause_event:
         if type(cause_event) is list:
             for evs in cause_event:
                 print("events: ", evs)
                 if act:
                     temp = (actor, answer, obj, propType, prop)
+
                 elif des:
                     temp = (actor, answer, des_obj, propType, prop)
+
+                elif act_obj:
+                    out_app_prop = attr.queryProperty(queriedProp, "appearance", None)[0]
+                    out_per_prop = attr.queryProperty(queriedProp, "personality", None)[0]
+                    out_amt_prop = attr.queryProperty(queriedProp, "amount", None)[0]
+
+                    if out_app_prop:
+                        temp = (actor, answer, act_obj, "appearance", out_app_prop)
+
+                    if out_per_prop:
+                        temp = (actor, answer, act_obj, "personality", out_app_prop)
+
+                    if out_amt_prop:
+                        temp = (actor, answer, act_obj, "amount", out_app_prop)
+
                 else:
                     temp = (actor, answer)
+
                 container = assembleSentence(evs, answer=temp)
                 print("container: ", container)
                 if type(container) is list:
@@ -315,10 +347,27 @@ def whyQuestion(actor, action, item):
         else:
             if act:
                 temp = (actor, answer, obj, propType, prop)
+
             elif des:
                 temp = (actor, answer, des_obj, propType, prop)
+
+            elif act_obj:
+                out_app_prop = attr.queryProperty(queriedProp, "appearance", None)[0]
+                out_per_prop = attr.queryProperty(queriedProp, "personality", None)[0]
+                out_amt_prop = attr.queryProperty(queriedProp, "amount", None)[0]
+
+                if out_app_prop:
+                    temp = (actor, answer, act_obj, "appearance", out_app_prop)
+
+                if out_per_prop:
+                    temp = (actor, answer, act_obj, "personality", out_app_prop)
+
+                if out_amt_prop:
+                    temp = (actor, answer, act_obj, "amount", out_app_prop)
+
             else:
                 temp = (actor, answer)
+
             container = assembleSentence(cause_event, answer=temp)
             if type(container) is list:
                 for entries in container:
@@ -2008,7 +2057,11 @@ def generatePromptForActs(ansList):
         obj = formatMultipleItems(obj)
 
         sent_ans_actor = ans_actor.name
-        sent_actor = actor.name
+
+        if type(actor) is str:
+            sent_actor = actor
+        else:
+            sent_actor = actor.name
 
         poss = determinePossessiveForm(ans_actor)
         ans_act = determineVerbForm(actor, action, "past")
@@ -2133,7 +2186,11 @@ def generatePumpForActs(ansList):
                 obj = " " + obj
 
         sent_ans_actor = ans_actor.name
-        sent_actor = actor.name
+
+        if type(actor) is str:
+            sent_actor = actor
+        else:
+            sent_actor = actor.name
 
         poss = determinePossessiveForm(ans_actor)
         actor_poss = determinePossessiveForm(actor)
@@ -2209,7 +2266,11 @@ def generateElabForActs(ansList):
         obj = formatMultipleItems(obj)
 
         sent_ans_actor = ans_actor.name
-        sent_actor = actor.name
+
+        if type(actor) is str:
+            sent_actor = actor
+        else:
+            sent_actor = actor.name
 
         poss = determinePossessiveForm(ans_actor)
         ans_act = determineVerbForm(actor, action, "past")

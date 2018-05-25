@@ -44,6 +44,7 @@ def guessesExhausted():
     regSentence = True
     gotHints = False
     followUp = True
+    flip = True
     compMessage = [""]
     finalHintList = []
 
@@ -453,7 +454,7 @@ def determineSentenceType(sequence):
         regSentence = False
 
     if beg == "why" and end == "?":
-        temp.extend(parser.parseWhyMessage(charList, verbList, advList, itemList))
+        temp.extend(parser.parseWhyMessage(charList, verbList, advList, itemList, adjList))
         question = True
         followUp = False
         regSentence = False
@@ -470,7 +471,9 @@ def determineSentenceType(sequence):
     elif len(sequence) <= 3 and end == "." and regSentence:
         generateFollowUp(None, None)
         question = False
-        followUp = False
+        followUp = True
+        regSentence = False
+        flip = True
 
     if question is True:
         answerList = []
@@ -612,7 +615,12 @@ def determineSentenceType(sequence):
                         elif get_propType == "amount":
                             get_obj = get_prop + " " + get_obj
 
-                    sentence_answer = "I think " + get_actor.name + " " + get_act + " " + get_obj + " because "
+                    if type(get_actor) is str:
+                        get_actor = get_actor
+                    else:
+                        get_actor = get_actor.name
+
+                    sentence_answer = "I think " + get_actor + " " + get_act + " " + get_obj + " because "
 
                     if ansType == "action":
                         actor, act, out_obj, propType, prop, get_ans = answers
@@ -1006,6 +1014,7 @@ def determineSentenceType(sequence):
         #take hints to give
         if finalHintList != [[]] and finalHintList != []:
             print("true")
+            print("flip: ", flip)
             if flip:
                 r = random.choice(finalHintList)
                 finalHintList.remove(r)
