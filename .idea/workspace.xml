@@ -3,12 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="feb6c143-884b-4904-8969-3d7a3e6685ab" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model/dialogue_manager/content_provider.py" afterPath="$PROJECT_DIR$/model/dialogue_manager/content_provider.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model/dialogue_manager/dialogue_turns.py" afterPath="$PROJECT_DIR$/model/dialogue_manager/dialogue_turns.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model/dialogue_manager/sentence_parser.py" afterPath="$PROJECT_DIR$/model/dialogue_manager/sentence_parser.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model/story_world/classes/Character.py" afterPath="$PROJECT_DIR$/model/story_world/classes/Character.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model/story_world/classes/Item.py" afterPath="$PROJECT_DIR$/model/story_world/classes/Item.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model/story_world/story_scenes.py" afterPath="$PROJECT_DIR$/model/story_world/story_scenes.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/view/urls.py" afterPath="$PROJECT_DIR$/view/urls.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -157,8 +151,8 @@
       <file leaf-file-name="urls.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/view/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="275">
-              <caret line="11" column="73" lean-forward="true" selection-start-line="11" selection-start-column="73" selection-end-line="11" selection-end-column="73" />
+            <state relative-caret-position="150">
+              <caret line="16" column="19" lean-forward="true" selection-start-line="16" selection-start-column="19" selection-end-line="16" selection-end-column="19" />
               <folding>
                 <element signature="e#0#32#0" expanded="true" />
               </folding>
@@ -411,13 +405,13 @@
         <option value="$PROJECT_DIR$/view/templates/view/index.html" />
         <option value="$PROJECT_DIR$/model/story_world/story_content.py" />
         <option value="$PROJECT_DIR$/model/externals/logger.py" />
-        <option value="$PROJECT_DIR$/view/urls.py" />
         <option value="$PROJECT_DIR$/model/story_world/classes/Item.py" />
         <option value="$PROJECT_DIR$/model/story_world/classes/Character.py" />
         <option value="$PROJECT_DIR$/model/dialogue_manager/content_provider.py" />
         <option value="$PROJECT_DIR$/model/dialogue_manager/dialogue_turns.py" />
         <option value="$PROJECT_DIR$/model/dialogue_manager/sentence_parser.py" />
         <option value="$PROJECT_DIR$/model/story_world/story_scenes.py" />
+        <option value="$PROJECT_DIR$/view/urls.py" />
       </list>
     </option>
   </component>
@@ -949,7 +943,14 @@
       <option name="project" value="LOCAL" />
       <updated>1527231075482</updated>
     </task>
-    <option name="localTasksCounter" value="35" />
+    <task id="LOCAL-00035" summary="Added why questions for attributes.">
+      <created>1527330041115</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1527330041115</updated>
+    </task>
+    <option name="localTasksCounter" value="36" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -1034,7 +1035,8 @@
     <MESSAGE value="Added checking for more answer types." />
     <MESSAGE value="Added follow-up questions." />
     <MESSAGE value="Added conversation logger." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added conversation logger." />
+    <MESSAGE value="Added why questions for attributes." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added why questions for attributes." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1463,8 +1465,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/view/urls.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="275">
-          <caret line="11" column="73" lean-forward="true" selection-start-line="11" selection-start-column="73" selection-end-line="11" selection-end-column="73" />
+        <state relative-caret-position="150">
+          <caret line="16" column="19" lean-forward="true" selection-start-line="16" selection-start-column="19" selection-end-line="16" selection-end-column="19" />
           <folding>
             <element signature="e#0#32#0" expanded="true" />
           </folding>

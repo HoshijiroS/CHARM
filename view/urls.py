@@ -13,7 +13,7 @@ urlpatterns = [
 ]
 
 server.run_server()
-#scene.startScene1()
-scene.executeAll()
+scene.startScene1()
+#scene.executeAll()
 logger.log("---Chapter Progress", "Now on scene 1.---")
 #scene.printSentences()
