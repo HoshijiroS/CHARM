@@ -360,6 +360,8 @@ def populateDialogueTurns():
 
 def stop(sequence):
     tempResult = []
+    global answerList
+    global finalHintList
     global question
     global followUp
 
@@ -373,6 +375,8 @@ def stop(sequence):
         guessesExhausted()
         question = False
         followUp = False
+        answerList = []
+        finalHintList = []
 
 
 def determineSentenceType(sequence):
@@ -459,8 +463,6 @@ def determineSentenceType(sequence):
         followUp = False
         regSentence = False
 
-        print("temp in why: ", temp)
-
     if len(sequence) > 3 and end == "." and regSentence and \
             not set([x[0].lower() for x in sequence]).issuperset(set("i do n't want to talk anymore".split())):
         tempResult.extend(["I see.", "Tell me more.", "Okay."])
@@ -475,16 +477,16 @@ def determineSentenceType(sequence):
         question = False
         followUp = True
         regSentence = False
-        flip = True
+        flip = False
+        print("initial result: ", result)
 
     if question is True:
         answerList = []
-        print("temp in question: ", temp)
         answerList.extend(temp)
-        print("answerList in question: ", answerList)
 
     if question is True or followUp is True:
-        result = []
+        if question is True:
+            result = []
         wrongMessage = [""]
         incorrect = True
 
@@ -1215,7 +1217,7 @@ def determineSentenceType(sequence):
                     else:
                         sentences.append(actor.name + " " + act + " " + attr + sent_add + sent_prop)
 
-            print("initial result: ", result)
+            print("initial result 2: ", result)
             print("sentences: ", sentences)
             if sentences:
                 dummy = provider.formatMultipleItems(sentences)
