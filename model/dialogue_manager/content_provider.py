@@ -300,7 +300,9 @@ def whyQuestion(actor, action, item, queriedProp=None):
         except Exception as e:
             print("Error on assembleSentence on actor assignment: ", e)
 
+        print("act_obj: ", act_obj)
         answer = act_obj[0]
+        print()
         cause_event = ref.queryRelations(ans_event, "cause")
 
     propType = None
