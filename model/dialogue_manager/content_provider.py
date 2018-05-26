@@ -248,7 +248,6 @@ def whyQuestion(actor, action, item, queriedProp=None):
     act, obj, act_event = actor.queryAction(action, item, None)
     des, des_obj, des_event = actor.queryDesire(action, item, None)
     act_obj, attr, attr_event = actor.queryAttribute(action, item, None)
-    print("act_obj: ", act_obj, "attr: ", attr)
     state, state_event = actor.queryState(action, None)
 
     #print("act: ", act, "state: ", state, "des: ", des, "act_obj: ", act_obj)
@@ -300,9 +299,7 @@ def whyQuestion(actor, action, item, queriedProp=None):
         except Exception as e:
             print("Error on assembleSentence on actor assignment: ", e)
 
-        print("act_obj: ", act_obj)
         answer = act_obj[0]
-        print()
         cause_event = ref.queryRelations(ans_event, "cause")
 
     propType = None
@@ -312,28 +309,27 @@ def whyQuestion(actor, action, item, queriedProp=None):
     if cause_event:
         if type(cause_event) is list:
             for evs in cause_event:
-                print("events: ", evs)
                 if act:
                     temp = (actor, answer, obj, propType, prop)
 
-                elif des:
+                if des:
                     temp = (actor, answer, des_obj, propType, prop)
 
-                elif act_obj:
+                if act_obj:
                     out_app_prop = attr.queryProperty(queriedProp, "appearance", None)[0]
                     out_per_prop = attr.queryProperty(queriedProp, "personality", None)[0]
                     out_amt_prop = attr.queryProperty(queriedProp, "amount", None)[0]
 
                     if out_app_prop:
-                        temp = (actor, answer, act_obj, "appearance", out_app_prop)
+                        temp = (actor, answer, attr, "appearance", out_app_prop)
 
                     if out_per_prop:
-                        temp = (actor, answer, act_obj, "personality", out_app_prop)
+                        temp = (actor, answer, attr, "personality", out_per_prop)
 
                     if out_amt_prop:
-                        temp = (actor, answer, act_obj, "amount", out_app_prop)
+                        temp = (actor, answer, attr, "amount", out_amt_prop)
 
-                else:
+                if state:
                     temp = (actor, answer)
 
                 container = assembleSentence(evs, answer=temp)
@@ -350,24 +346,24 @@ def whyQuestion(actor, action, item, queriedProp=None):
             if act:
                 temp = (actor, answer, obj, propType, prop)
 
-            elif des:
+            if des:
                 temp = (actor, answer, des_obj, propType, prop)
 
-            elif act_obj:
+            if act_obj:
                 out_app_prop = attr.queryProperty(queriedProp, "appearance", None)[0]
                 out_per_prop = attr.queryProperty(queriedProp, "personality", None)[0]
                 out_amt_prop = attr.queryProperty(queriedProp, "amount", None)[0]
 
                 if out_app_prop:
-                    temp = (actor, answer, act_obj, "appearance", out_app_prop)
+                    temp = (actor, answer, attr, "appearance", out_app_prop)
 
                 if out_per_prop:
-                    temp = (actor, answer, act_obj, "personality", out_app_prop)
+                    temp = (actor, answer, attr, "personality", out_per_prop)
 
                 if out_amt_prop:
-                    temp = (actor, answer, act_obj, "amount", out_app_prop)
+                    temp = (actor, answer, attr, "amount", out_amt_prop)
 
-            else:
+            if state:
                 temp = (actor, answer)
 
             container = assembleSentence(cause_event, answer=temp)
@@ -385,6 +381,7 @@ def whyQuestion(actor, action, item, queriedProp=None):
                 # elif len(causeList) == 1:
                 #     return causeList[0]
 
+        print("causeList: ", causeList)
         return "cause", causeList
 
     return "unknown", None
@@ -439,6 +436,8 @@ def assembleSentence(event, genType=None, turnType=None, ansType=None, relType=N
         actor = Entity.locList[actor.lower()]
     except Exception as e:
         print("Error on assembleSentence on location assignment: ", e)
+
+    print("actor: ", actor)
 
     pronoun_obj = producePronoun(actor, genType="objPro")
     poss = determinePossessiveForm(actor)
@@ -748,20 +747,20 @@ def assembleSentence(event, genType=None, turnType=None, ansType=None, relType=N
 
             propType, out_prop = assembleProp(attr, scene + "ext")
 
-            print("scene + ext: ", scene + "ext")
-            print("item appearance attributes: ", attr.appProp)
-            print("item personality attributes: ", attr.perProp)
-            print("item amount attributes: ", attr.amtProp)
-            print("out_prop: ", out_prop)
+            #print("scene + ext: ", scene + "ext")
+            #print("item appearance attributes: ", attr.appProp)
+            #print("item personality attributes: ", attr.perProp)
+            #print("item amount attributes: ", attr.amtProp)
+            #print("out_prop: ", out_prop)
 
         elif type(out_attr) is item_type.Item:
             propType, out_prop = assembleProp(out_attr, scene + "ext")
 
-            print("scene + ext: ", scene + "ext")
-            print("item appearance attributes: ", out_attr.appProp)
-            print("item personality attributes: ", out_attr.perProp)
-            print("item amount attributes: ", out_attr.amtProp)
-            print("out_prop: ", out_prop)
+            #print("scene + ext: ", scene + "ext")
+            #print("item appearance attributes: ", out_attr.appProp)
+            #print("item personality attributes: ", out_attr.perProp)
+            #print("item amount attributes: ", out_attr.amtProp)
+            #print("out_prop: ", out_prop)
 
             attr = out_attr.name
 
@@ -2099,6 +2098,8 @@ def generatePromptForActs(ansList):
 
         resForChar = ""
         resForItem = ""
+        alt_resForChar = ""
+        alt_resForItem = ""
 
         if obj != "":
             try:
@@ -2115,7 +2116,7 @@ def generatePromptForActs(ansList):
                 prop = formatMultipleItems(prop)
 
             if propType == "appearance" or propType == "personality":
-                obj = " that is " + prop
+                obj = " " + obj + " that is " + prop
 
             elif propType == "amount":
                 obj = prop + " " + obj
@@ -2123,16 +2124,27 @@ def generatePromptForActs(ansList):
             else:
                 obj = " " + obj
 
-        if resForChar != "":
-            resForChar = " someone"
+        if resForChar:
+            resForChar = pres_ans_act + " someone"
 
-        if resForChar == "" and obj != "":
-            resForItem = " something"
+        if resForItem:
+            resForItem = pres_ans_act + " " + obj
 
-        hintTemplateA.extend([" What causes a person to " + pres_ans_act + resForChar + resForItem + "? Can you tell me?",
-                              " Do you know anyone who has " + pres_ans_act + resForChar + resForItem + " before? What happened?",
-                              " What is something that could make you " + pres_ans_act + resForChar + resForItem + "? Maybe that also made "
-                              + sent_actor + " " + pres_ans_act + obj + "."])
+        if resForChar:
+            alt_resForChar = "has " + ans_act + " someone"
+
+        if resForItem:
+            alt_resForItem = ans_act + " " + obj
+
+        if prop:
+            prop = " " + prop + " "
+        else:
+            prop = " "
+
+        hintTemplateA.extend([" What causes a person to " + resForChar + resForItem + "? Can you tell me?",
+                              " Do you know anyone who " + alt_resForChar + alt_resForItem + " before? What happened?",
+                              " What is something that could make you " + resForChar + resForItem + "? Maybe that also made "
+                              + sent_actor + " " + pres_ans_act + prop + obj + "."])
 
         hintTemplateB.extend([sent_actor + " " + ans_act + obj + " because of "
                               + actionWord + "."])
@@ -2179,7 +2191,7 @@ def generatePumpForActs(ansList):
                 prop = formatMultipleItems(prop)
 
             if propType == "appearance" or propType == "personality":
-                obj = " that is " + prop
+                obj = " " + obj + " that is " + prop
 
             elif propType == "amount":
                 obj = prop + " " + obj
@@ -2325,7 +2337,7 @@ def generateElabForActs(ansList):
                 prop = formatMultipleItems(prop)
 
             if propType == "appearance" or propType == "personality":
-                obj = obj + " that is " + prop
+                obj = " " + obj + " that is " + prop
 
             elif propType == "amount":
                 obj = prop + " " + obj
@@ -2333,10 +2345,10 @@ def generateElabForActs(ansList):
             else:
                 obj = " " + obj
 
-        if resForChar != "":
+        if resForChar:
             resForChar = " a person"
 
-        if resForChar == "" and obj != "":
+        if resForItem and obj != "":
             resForItem = " an item"
 
         if def_prop:

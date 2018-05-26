@@ -441,23 +441,25 @@ def determineSentenceType(sequence):
         followUp = False
         regSentence = False
 
-    if beg == "where" and end == "?":
+    elif beg == "where" and end == "?":
         temp.extend(parser.parseWhereMessage(charList, verbList))
         question = True
         followUp = False
         regSentence = False
 
-    if beg == "what" and end == "?":
+    elif beg == "what" and end == "?":
         temp.extend(parser.parseWhatMessage(sequence, posList, ofList, charList, andList, itemList))
         question = True
         followUp = False
         regSentence = False
 
-    if beg == "why" and end == "?":
+    elif beg == "why" and end == "?":
         temp.extend(parser.parseWhyMessage(charList, verbList, advList, itemList, adjList))
         question = True
         followUp = False
         regSentence = False
+
+        print("temp in why: ", temp)
 
     if len(sequence) > 3 and end == "." and regSentence and \
             not set([x[0].lower() for x in sequence]).issuperset(set("i do n't want to talk anymore".split())):
@@ -477,7 +479,9 @@ def determineSentenceType(sequence):
 
     if question is True:
         answerList = []
+        print("temp in question: ", temp)
         answerList.extend(temp)
+        print("answerList in question: ", answerList)
 
     if question is True or followUp is True:
         result = []
@@ -1014,8 +1018,6 @@ def determineSentenceType(sequence):
 
         #take hints to give
         if finalHintList != [[]] and finalHintList != []:
-            print("true")
-            print("flip: ", flip)
             if flip:
                 r = random.choice(finalHintList)
                 finalHintList.remove(r)
@@ -1040,19 +1042,14 @@ def determineSentenceType(sequence):
 
                     sentences.append("I think " + actor.name.title() + "'s " + out + " is " + char[0].name.title() + ".")
 
-                if ansType == "relationship_rel":
+                elif ansType == "relationship_rel":
                     actor, rel, char = ansList
 
                     out = provider.formatMultipleItems(rel)
 
                     sentences.append("I think " + char.name.title() + " is " + actor.name.title() + "'s " + out + ".")
 
-                if ansType == "location":
-                    actor, action, loc = ansList
-
-                    sentences.append("I think " + actor.name.title() + " " + action + " in " + loc + ".")
-
-                if ansType == "state":
+                elif ansType == "state":
                     actor, action, loc = ansList
 
                     sentences.append("I think " + actor.name.title() + " is " + action + " in " + loc + ".")
@@ -1218,6 +1215,8 @@ def determineSentenceType(sequence):
                     else:
                         sentences.append(actor.name + " " + act + " " + attr + sent_add + sent_prop)
 
+            print("initial result: ", result)
+            print("sentences: ", sentences)
             if sentences:
                 dummy = provider.formatMultipleItems(sentences)
                 generateFollowUp(dummy, None, exhausted="yes")
@@ -1359,6 +1358,7 @@ def generateFollowUpSentence():
         if state:
             current = random.choice(state)
             state, event = current
+            print("state[0]: ", state[0])
 
             followUpResult = ref.queryRelations(event, "cause")
 

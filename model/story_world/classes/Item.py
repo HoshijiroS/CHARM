@@ -57,46 +57,50 @@ class Item:
 
         if type_name is not None:
             if type_name == "personality":
-                #print("personality")
-                #print("scene_name: ", scene_name)
                 if scene_name is None:
                     for entity in self.perProp:
-                        for items in entity[0]:
-                            if items == prop_name:
+                        if type(entity[0]) is list:
+                            for items in entity[0]:
+                                if items == prop_name:
+                                    return entity[0], entity[1]
+                        else:
+                            if entity[0] == prop_name:
                                 return entity[0], entity[1]
 
-                elif scene_name:
-                    #print("scene in personality")
+                elif prop_name is None:
                     for entity in self.perProp:
-                        #print("entity[1]: ", entity[1])
                         if entity[1] == scene_name:
                             return entity[0], entity[1]
 
             elif type_name == "appearance":
-                #print("appearance")
                 if scene_name is None:
                     for entity in self.appProp:
-                        for items in entity[0]:
-                            if items == prop_name:
+                        if type(entity[0]) is list:
+                            for items in entity[0]:
+                                if items == prop_name:
+                                    return entity[0], entity[1]
+                        else:
+                            if entity[0] == prop_name:
                                 return entity[0], entity[1]
 
-                elif scene_name:
+                elif prop_name is None:
                     for entity in self.appProp:
-                        #print("entity[1]: ", entity[1])
                         if entity[1] == scene_name:
                             return entity[0], entity[1]
 
             elif type_name == "amount":
-                #print("amount")
                 if scene_name is None:
                     for entity in self.amtProp:
-                        for items in entity[0]:
-                            if items == prop_name:
+                        if type(entity[0]) is list:
+                            for items in entity[0]:
+                                if items == prop_name:
+                                    return entity[0], entity[1]
+                        else:
+                            if entity[0] == prop_name:
                                 return entity[0], entity[1]
 
-                elif scene_name:
+                elif prop_name is None:
                     for entity in self.amtProp:
-                        #print("entity[1]: ", entity[1])
                         if entity[1] == scene_name:
                             return entity[0], entity[1]
 

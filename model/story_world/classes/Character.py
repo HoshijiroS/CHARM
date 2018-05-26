@@ -95,8 +95,12 @@ class Character:
             if type_name == "personality":
                 if scene_name is None:
                     for entity in self.perProp:
-                        for items in entity[0]:
-                            if items == prop_name:
+                        if type(entity[0]) is list:
+                            for items in entity[0]:
+                                if items == prop_name:
+                                    return entity[0], entity[1]
+                        else:
+                            if entity[0] == prop_name:
                                 return entity[0], entity[1]
 
                 elif prop_name is None:
@@ -107,8 +111,12 @@ class Character:
             elif type_name == "appearance":
                 if scene_name is None:
                     for entity in self.appProp:
-                        for items in entity[0]:
-                            if items == prop_name:
+                        if type(entity[0]) is list:
+                            for items in entity[0]:
+                                if items == prop_name:
+                                    return entity[0], entity[1]
+                        else:
+                            if entity[0] == prop_name:
                                 return entity[0], entity[1]
 
                 elif prop_name is None:
@@ -119,8 +127,12 @@ class Character:
             elif type_name == "amount":
                 if scene_name is None:
                     for entity in self.amtProp:
-                        for items in entity[0]:
-                            if items == prop_name:
+                        if type(entity[0]) is list:
+                            for items in entity[0]:
+                                if items == prop_name:
+                                    return entity[0], entity[1]
+                        else:
+                            if entity[0] == prop_name:
                                 return entity[0], entity[1]
 
                 elif prop_name is None:
@@ -148,6 +160,8 @@ class Character:
         elif act_name and attr_name:
             for entity in self.attr:
                 for action in entity[0][1]:
+                    #print("entity[0][1]: ", entity[0][1])
+                    #print("action: ", action, "act_name: ", act_name)
                     if action == act_name and entity[1].name.lower() == attr_name:
                         return entity[0], entity[1], entity[2]
 

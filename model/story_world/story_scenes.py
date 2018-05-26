@@ -848,10 +848,10 @@ def startScene10():
         [Entity.charList["wanda"], Entity.charList["maddie"], Entity.charList["peggy"], Entity.charList["miss mason"]])
 
     ####
-    Entity.charList["maddie"].hasState(("shock", WordNet.getAdjList("shock")), scene_10.time + "ev1a")
+    Entity.charList["maddie"].hasState(("shocked", WordNet.getAdjList("shocked")), scene_10.time + "ev1a")
     lookup.append([scene_10.time + "ev1a", Entity.charList["maddie"].name, "state"])
 
-    Entity.charList["peggy"].hasState(("shock", WordNet.getAdjList("shock")), scene_10.time + "ev1b")
+    Entity.charList["peggy"].hasState(("shocked", WordNet.getAdjList("shocked")), scene_10.time + "ev1b")
     lookup.append([scene_10.time + "ev1b", Entity.charList["peggy"].name, "state"])
 
     Entity.locList["room 13"].hasAttribute(Entity.itemList["drawing"], ("post", WordNet.getVerbList("post")), scene_10.time + "inf1")
@@ -1111,11 +1111,15 @@ def startScene16():
     scene_16.hasCharacter([Entity.charList["wanda"], Entity.charList["maddie"], Entity.charList["peggy"]])
 
     ####
-    Entity.charList["peggy"].hasState((["carefree", "happy"], [WordNet.getAdjList("carefree"), WordNet.getAdjList("happy")]), scene_16.time + "ev1")
-    lookup.append([scene_16.time + "ev1", Entity.charList["peggy"].name, "state"])
+    Entity.charList["peggy"].hasState(("carefree", WordNet.getAdjList("carefree")), scene_16.time + "ev1a")
+    Entity.charList["peggy"].hasState(("happy", WordNet.getAdjList("happy")), scene_16.time + "ev1b")
+    lookup.append([scene_16.time + "ev1a", Entity.charList["peggy"].name, "state"])
+    lookup.append([scene_16.time + "ev1b", Entity.charList["peggy"].name, "state"])
 
-    Entity.charList["maddie"].hasState((["carefree", "happy"], [WordNet.getAdjList("carefree"), WordNet.getAdjList("happy")]), scene_16.time + "ev2")
-    lookup.append([scene_16.time + "ev2", Entity.charList["maddie"].name, "state"])
+    Entity.charList["maddie"].hasState(("carefree", WordNet.getAdjList("carefree")), scene_16.time + "ev2a")
+    Entity.charList["maddie"].hasState(("happy", WordNet.getAdjList("happy")), scene_16.time + "ev2b")
+    lookup.append([scene_16.time + "ev2a", Entity.charList["maddie"].name, "state"])
+    lookup.append([scene_16.time + "ev2b", Entity.charList["maddie"].name, "state"])
 
     Entity.charList["peggy"].hasAction(("send", WordNet.getVerbList("send")), Entity.itemList["friendly letter"].name, scene_16.time + "ev3")
     lookup.append([scene_16.time + "ev3", Entity.charList["peggy"].name, "action"])
@@ -1129,8 +1133,10 @@ def startScene16():
     Entity.charList["maddie"].hasAction(("reconcile", WordNet.getVerbList("reconcile")), Entity.charList["wanda"].name, scene_16.time + "ev6")
     lookup.append([scene_16.time + "ev6", Entity.charList["maddie"].name, "action"])
 
-    relations.causedBy(scene_16.time + "ev1", scene_16.time + "ev3")
-    relations.causedBy(scene_16.time + "ev2", scene_16.time + "ev4")
+    relations.causedBy(scene_16.time + "ev1a", scene_16.time + "ev3")
+    relations.causedBy(scene_16.time + "ev1b", scene_16.time + "ev3")
+    relations.causedBy(scene_16.time + "ev2a", scene_16.time + "ev4")
+    relations.causedBy(scene_16.time + "ev2b", scene_16.time + "ev4")
     relations.consequence(scene_16.time + "ev3", [scene_16.time + "ev5", scene_15.time + "ev7"])
     relations.consequence(scene_16.time + "ev4", [scene_16.time + "ev6", scene_15.time + "ev8"])
     ####

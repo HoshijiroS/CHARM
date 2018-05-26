@@ -7,21 +7,31 @@ def parseWhoMessage(sequence, posList, ofList, toList, charList):
     if [item for item in sequence if "VBZ" in item] or [item for item in sequence if "VBP" in item]:
         if posList:
             for index in posList:
-                output.append(
-                    cont_plan.confirmCharacter(sequence[index - 1][0], 0, relationship=sequence[index + 1][0]))
+                value = cont_plan.confirmCharacter(sequence[index - 1][0], 0, relationship=sequence[index + 1][0])
+
+                if value not in output:
+                    output.append(value)
 
         elif ofList:
             for index in ofList:
-                output.append(
-                    cont_plan.confirmCharacter(sequence[index + 1][0], 0, relationship=sequence[index - 1][0]))
+                value = cont_plan.confirmCharacter(sequence[index + 1][0], 0, relationship=sequence[index - 1][0])
+
+                if value not in output:
+                    output.append(value)
 
         elif toList:
             for index in toList:
-                output.append(cont_plan.confirmCharacter(sequence[index + 1][0], 0, person=sequence[index - 1][0]))
+                value = cont_plan.confirmCharacter(sequence[index + 1][0], 0, person=sequence[index - 1][0])
+
+                if value not in output:
+                    output.append(value)
 
         else:
             for character in charList:
-                output.append(cont_plan.confirmCharacter(character, 0))
+                value = cont_plan.confirmCharacter(character, 0)
+
+                if value not in output:
+                    output.append(value)
 
     return output
 
@@ -33,7 +43,12 @@ def parseWhereMessage(charList, verbList):
         if verbList:
             for character in charList:
                 for action in verbList:
-                    output.append(cont_plan.confirmCharacter(character, 1, action=action))
+                    value = cont_plan.confirmCharacter(character, 1, action=action)
+
+                    if value not in output:
+                        output.append(value)
+
+                    #output.append(cont_plan.confirmCharacter(character, 1, action=action))
 
     return output
 
@@ -43,26 +58,41 @@ def parseWhatMessage(sequence, posList, ofList, charList, andList, itemList):
 
     if [item for item in sequence if "name" in item]:
         for index in posList:
-            output.append(cont_plan.confirmCharacter(sequence[index - 1][0], 0, relationship=sequence[index + 1][0]))
+            value = cont_plan.confirmCharacter(sequence[index - 1][0], 0, relationship=sequence[index + 1][0])
+
+            if value not in output:
+                output.append(value)
 
         for index in ofList:
-            output.append(cont_plan.confirmCharacter(sequence[index + 1][0], 0, relationship=sequence[index - 1][0]))
+            value = cont_plan.confirmCharacter(sequence[index + 1][0], 0, relationship=sequence[index - 1][0])
+
+            if value not in output:
+                output.append(value)
 
     elif [item for item in sequence if "relationship" in item]:
         for index in andList:
-            output.append(cont_plan.confirmCharacter(sequence[index - 1][0], 0, person=sequence[index + 1][0]))
+            value = cont_plan.confirmCharacter(sequence[index - 1][0], 0, person=sequence[index + 1][0])
+
+            if value not in output:
+                output.append(value)
 
     elif [item for item in sequence if "appearance" in item] or [item for item in sequence if "look" in item]:
         if itemList:
             if posList:
                 for index in posList:
-                    output.append(cont_plan.confirmCharacter(sequence[index - 1][0], 2, item=sequence[index + 1][0],
-                                                             propType="appearance"))
+                    value = cont_plan.confirmCharacter(sequence[index - 1][0], 2, item=sequence[index + 1][0],
+                                                             propType="appearance")
+
+                    if value not in output:
+                        output.append(value)
 
             else:
                 for index in ofList:
-                    output.append(cont_plan.confirmCharacter(sequence[index + 1][0], 2, item=sequence[index - 1][0],
-                                                             propType="appearance"))
+                    value = cont_plan.confirmCharacter(sequence[index + 1][0], 2, item=sequence[index - 1][0],
+                                                             propType="appearance")
+
+                    if value not in output:
+                        output.append(value)
 
         else:
             try:
@@ -76,7 +106,10 @@ def parseWhatMessage(sequence, posList, ofList, charList, andList, itemList):
                 a = 1
 
             for character in charList:
-                output.append(cont_plan.confirmCharacter(character, 2, propType="appearance"))
+                value = cont_plan.confirmCharacter(character, 2, propType="appearance")
+
+                if value not in output:
+                    output.append(value)
 
     elif [item for item in sequence if "personality" in item] or [item for item in sequence if "like" in item]:
         try:
@@ -90,7 +123,10 @@ def parseWhatMessage(sequence, posList, ofList, charList, andList, itemList):
             a = 1
 
         for character in charList:
-            output.append(cont_plan.confirmCharacter(character, 2, propType="personality"))
+            value = cont_plan.confirmCharacter(character, 2, propType="personality")
+
+            if value not in output:
+                output.append(value)
 
     elif [item for item in sequence if "meaning" in item] and [item for item in sequence if "of" in item]:
         output.append(cont_plan.generateMeaningForWord(sequence, word="end"))
@@ -102,6 +138,7 @@ def parseWhatMessage(sequence, posList, ofList, charList, andList, itemList):
 
 
 def parseWhyMessage(charList, verbList, advList, itemList, adjList):
+    print("parse once. ")
     output = []
 
     verbList.extend(advList)
@@ -118,9 +155,13 @@ def parseWhyMessage(charList, verbList, advList, itemList, adjList):
                     getOutput = cont_plan.confirmCharacter(character, 3, action=action, item=object, prop=properties)
 
                 if type(getOutput) is list:
-                    output.extend(getOutput)
+                    if getOutput not in output:
+                        output.extend(getOutput)
 
                 else:
-                    output.append(getOutput)
+                    if getOutput not in output:
+                        output.append(getOutput)
+
+    #output = list(set(output))
 
     return output
