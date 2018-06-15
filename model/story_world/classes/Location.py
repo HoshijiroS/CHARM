@@ -76,6 +76,9 @@ class Location:
         # entity[1] = attribute
         # entity[2] = scene
 
+        if act_name:
+            act_name = "_".join(act_name.split(" "))
+
         if act_name is None and ev_name is None:
             for entity in self.attr:
                 if entity[1].name.lower() == attr_name.lower():

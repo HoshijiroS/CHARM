@@ -111,6 +111,9 @@ class Item:
         # entity[1] = object
         # entity[2] = scene
 
+        if act_name:
+            act_name = "_".join(act_name.split(" "))
+
         if scene_name is None:
             for entity in self.act:
                 for action in entity[0][1]:

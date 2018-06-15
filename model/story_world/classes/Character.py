@@ -147,6 +147,9 @@ class Character:
         # entity[1] = attribute
         # entity[2] = scene
 
+        if act_name:
+            act_name = "_".join(act_name.split(" "))
+
         if act_name is None and ev_name is None:
             for entity in self.attr:
                 if entity[1].name.lower() == attr_name.lower():
@@ -171,6 +174,9 @@ class Character:
         # entity[0] = actions
         # entity[1] = location
         # entity[2] = scene
+
+        if act_name:
+            act_name = "_".join(act_name.split(" "))
 
         if loc_name is None and act_name and not ev_name:
             # print("here")
@@ -203,11 +209,14 @@ class Character:
         # entity[1] = object
         # entity[2] = scene
 
+        if act_name:
+            act_name = "_".join(act_name.split(" "))
+
         if scene_name is None and object_name is not None:
             for entity in self.act:
                 for desire in entity[0][1]:
                     if desire == act_name:
-                        if entity[1].lower == object_name:
+                        if entity[1].lower == object_name.lower():
                             return entity[0], entity[1], entity[2]
         else:
             for entity in self.des:
@@ -221,15 +230,22 @@ class Character:
         # entity[1] = object
         # entity[2] = scene
 
+        if act_name:
+            act_name = "_".join(act_name.split(" "))
+
         if scene_name is None and object_name is not None:
             for entity in self.act:
                 for action in entity[0][1]:
+                    #print("action: ", action, "act_name: ", act_name)
                     if action == act_name:
                         if type(entity[1]) is str:
-                            if entity[1].lower() == object_name:
+                            #print("entity[1].lower() ", entity[1].lower(), "object_name: ", object_name)
+                            if entity[1].lower() == object_name.lower():
+                                #print("True act")
                                 return entity[0], entity[1], entity[2]
                         else:
-                            if entity[1].name.lower() == object_name:
+                            #print("entity[1].name.lower() ", entity[1].name.lower(), "object_name: ", object_name)
+                            if entity[1].name.lower() == object_name.lower():
                                 return entity[0], entity[1], entity[2]
 
         elif act_name is None:

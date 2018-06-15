@@ -5,6 +5,7 @@ import distance
 
 import model.externals.wordnet as WordNet
 import model.story_world.classes.Item as item_type
+import model.story_world.classes.Character as char_type
 import model.story_world.entities as Entity
 import model.story_world.story_scenes as ref
 from model.conjugator import conjugator
@@ -243,7 +244,6 @@ def whereQuestion(actor, action, location):
 
 
 def whyQuestion(actor, action, item, queriedProp=None):
-    action = "_".join(action.split(" "))
     #print("actor: ", actor, "action: ", action, "item: ", item, "queriedProp:", queriedProp)
     act, obj, act_event = actor.queryAction(action, item, None)
     des, des_obj, des_event = actor.queryDesire(action, item, None)
@@ -1517,6 +1517,7 @@ def generatePromptForAttr(ansList, correctAnswer):
 
 def generateElabForAttr(ansList):
     actor, act, attr, propType, prop = ansList
+    poss = determinePossessiveForm(actor)
     pronoun = producePronoun(actor)
     propDefs = []
 
@@ -1532,7 +1533,8 @@ def generateElabForAttr(ansList):
     hintChoices = []
 
     hintChoices.extend(["I think it's related to the " + attr + " " + actor.name + " " + act + ". Since " +
-                        pronoun + " " + act + " " + attr + " that is " + random.choice(propDefs) + ". "])
+                        pronoun + " " + act + " " + attr + " that is " + random.choice(propDefs) + ". "
+                        "Can you tell me more about " + actor.name + poss + attr + "?"])
 
     return hintChoices
 
@@ -1599,6 +1601,7 @@ def generateElabForItem(ansList):
     causeList = []
     hintChoices = []
     actor, act, item, out_prop = ansList
+    poss = determinePossessiveForm(actor)
     act, attr, event = actor.queryAttribute(None, item, None)
     cause_event = ref.queryRelations(event, "cause")
     reason_event = ref.queryRelations(event, "reason")
@@ -1646,7 +1649,8 @@ def generateElabForItem(ansList):
 
     for entries in causeList:
         hintChoices.append(
-            "I think it's because " + entries + ", the " + item + " " + actor.name + " " + act + " " + look + " a certain way.")
+            "I think it's because " + entries + ", the " + item + " " + actor.name + " " + act + " " + look + " a certain way. "
+            "Can you tell me more about " + actor.name + poss + item + "?")
 
     return hintChoices
 
@@ -1740,9 +1744,8 @@ def generateElabForAppearance(ansList):
 
             for entries in temp:
                 if def_prop:
-                    hintChoices.append(
-                        "you should describe " + actor.name + poss + "appearance. " + entries + " because " + pronoun_obj + " appearance is " +
-                        def_prop + ".")
+                    hintChoices.append(entries + " because " + pronoun_obj + " appearance is " +
+                        def_prop + ". How can you describe " + actor.name + poss + "appearance?")
 
     if causeList:
         for causes in causeList:
@@ -1758,7 +1761,8 @@ def generateElabForAppearance(ansList):
             for entries in temp:
                 if def_prop:
                     hintChoices.append(
-                        "since " + actor.name + poss + "appearance is " + def_prop + ", " + entries + ".")
+                        "since " + actor.name + poss + "appearance is " + def_prop + ", " + entries + ". "
+                        "How can you describe " + actor.name + poss + "appearance?")
 
     temp = []
     actor, out_prop = ansList
@@ -1778,7 +1782,7 @@ def generateElabForAppearance(ansList):
             if def_prop:
                 hintChoices.append(
                     entries + " because " + actor.name + poss + "appearance is " + def_prop
-                    + ". Describe " + actor.name + poss + "appearance.")
+                    + ". How can you describe " + actor.name + poss + "appearance?")
 
     return hintChoices
 
@@ -1849,6 +1853,7 @@ def generateElabForPersonality(ansList):
     hintChoices = []
     actor, out_prop = ansList
     pronoun_obj = producePronoun(actor, genType="objPro")
+    poss = determinePossessiveForm(actor)
 
     # if type(out_prop) is list:
     #    for items in out_prop
@@ -1892,9 +1897,8 @@ def generateElabForPersonality(ansList):
 
             for entries in temp:
                 if def_prop:
-                    hintChoices.append(
-                        "you should describe " + actor.name + "'s personality. " + entries + " because "
-                        + pronoun_obj + " personality is " + def_prop + ".")
+                    hintChoices.append(entries + " because "
+                        + pronoun_obj + " personality is " + def_prop + ". How can you describe " + actor.name + poss + " personality?")
 
     if causeList:
         for causes in causeList:
@@ -1911,9 +1915,8 @@ def generateElabForPersonality(ansList):
             for entries in temp:
                 if def_prop:
                     hintChoices.append([
-                        "Since " + actor.name + "'s personality is " + def_prop + ", " + entries + ".",
-                        "I think " + actor.name + "'s personality is " + def_prop + ", " + entries + ". Describe "
-                        + actor.name + "'s personality."
+                        "Since " + actor.name + "'s personality is " + def_prop + ", " + entries + ". How can you describe "
+                        + actor.name + poss + " personality?"
                     ])
 
     for props in out_prop:
@@ -1921,8 +1924,8 @@ def generateElabForPersonality(ansList):
 
         if def_prop:
             hintChoices.append(
-                "I think " + actor.name + "'s personality is " + def_prop + ". Describe "
-                + actor.name + "'s personality.")
+                "I think " + actor.name + "'s personality is " + def_prop + ". How can you describe "
+                + actor.name + poss + " personality?")
 
     return hintChoices
 
@@ -2098,8 +2101,10 @@ def generatePromptForActs(ansList):
 
         resForChar = ""
         resForItem = ""
+        resForLoc = ""
         alt_resForChar = ""
         alt_resForItem = ""
+        alt_resForLoc = ""
 
         if obj != "":
             try:
@@ -2109,6 +2114,11 @@ def generatePromptForActs(ansList):
 
             try:
                 resForItem = Entity.itemList[obj.lower()]
+            except Exception as e:
+                print("Error in promptActs: ", e)
+
+            try:
+                resForLoc = Entity.locList[obj.lower()]
             except Exception as e:
                 print("Error in promptActs: ", e)
 
@@ -2127,11 +2137,17 @@ def generatePromptForActs(ansList):
         if resForChar:
             resForChar = pres_ans_act + " someone"
 
+        if resForLoc:
+            resForLoc = pres_ans_act + " at the " + obj
+
         if resForItem:
             resForItem = pres_ans_act + " " + obj
 
         if resForChar:
             alt_resForChar = "has " + ans_act + " someone"
+
+        if resForLoc:
+            alt_resForLoc = "has " + ans_act + " at the " + obj
 
         if resForItem:
             alt_resForItem = ans_act + " " + obj
@@ -2141,9 +2157,9 @@ def generatePromptForActs(ansList):
         else:
             prop = " "
 
-        hintTemplateA.extend([" What causes a person to " + resForChar + resForItem + "? Can you tell me?",
-                              " Do you know anyone who " + alt_resForChar + alt_resForItem + " before? What happened?",
-                              " What is something that could make you " + resForChar + resForItem + "? Maybe that also made "
+        hintTemplateA.extend([" What causes a person to " + resForChar + resForItem + resForLoc + "? Can you tell me?",
+                              " Do you know anyone who " + alt_resForChar + alt_resForItem + alt_resForLoc + " before? What happened?",
+                              " What is something that could make you " + resForChar + resForItem + resForLoc + "? Maybe that also made "
                               + sent_actor + " " + pres_ans_act + prop + obj + "."])
 
         hintTemplateB.extend([sent_actor + " " + ans_act + obj + " because of "
@@ -2321,6 +2337,7 @@ def generateElabForActs(ansList):
 
         resForChar = ""
         resForItem = ""
+        resForLoc = ""
 
         if obj != "":
             try:
@@ -2330,6 +2347,11 @@ def generateElabForActs(ansList):
 
             try:
                 resForItem = Entity.itemList[obj.lower()]
+            except Exception as e:
+                print("Error in promptActs: ", e)
+
+            try:
+                resForLoc = Entity.locList[obj.lower()]
             except Exception as e:
                 print("Error in promptActs: ", e)
 
@@ -2351,10 +2373,14 @@ def generateElabForActs(ansList):
         if resForItem and obj != "":
             resForItem = " an item"
 
+        if resForLoc and obj != "":
+            resForLoc = " somewhere"
+
         if def_prop:
             hintChoices.append(
                 sent_actor + " " + ans_act + obj + " because of " + actionWord + ". "
-                + pres_ans_act.title() + " means " + def_prop + resForChar + resForItem + ".")
+                + pres_ans_act.title() + " means " + def_prop + resForChar + resForItem + resForLoc + ". "
+                "How does that explain " + ans_actor + poss + " actions?")
 
     return hintChoices
 

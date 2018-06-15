@@ -28,6 +28,7 @@ wanda.hasRelationship(students, "classmate")
 wanda.hasRelationship(miss_mason, "teacher")
 wanda.hasRelationship(svenson, "neighbor")
 wanda.hasRelationship(bill_byron, "classmate")
+wanda.hasRelationship(jack_beggles, "classmate")
 
 # Maddie#
 maddie.hasRelationship(peggy, ["best friend", "classmate"])

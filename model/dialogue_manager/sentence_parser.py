@@ -137,7 +137,7 @@ def parseWhatMessage(sequence, posList, ofList, charList, andList, itemList):
     return output
 
 
-def parseWhyMessage(charList, verbList, advList, itemList, adjList):
+def parseWhyMessage(charList, objList, verbList, advList, itemList, adjList):
     output = []
 
     verbList.extend(advList)
@@ -148,12 +148,11 @@ def parseWhyMessage(charList, verbList, advList, itemList, adjList):
         #print("character: ", character)
         for action in verbList:
             #print("action: ", action)
-            for obj in charList:
-                #print("object: ", object)
+            for obj in objList:
+                #print("object: ", obj)
                 if adjList:
                     for properties in adjList:
-                        value = cont_plan.confirmCharacter(character, 3, action=action, item=object, prop=properties)
-                        print("value: ", value)
+                        value = cont_plan.confirmCharacter(character, 3, action=action, item=obj, prop=properties)
 
                         if type(value) is list:
                             if value not in output:
