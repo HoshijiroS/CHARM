@@ -150,21 +150,19 @@ class Character:
         if act_name:
             act_name = "_".join(act_name.split(" "))
 
-        if act_name is None and ev_name is None:
+        if act_name is None and ev_name is None and attr_name:
             for entity in self.attr:
                 if entity[1].name.lower() == attr_name.lower():
                     return entity[0], entity[1], entity[2]
 
-        elif act_name is None and attr_name is None:
+        elif act_name is None and attr_name is None and ev_name:
             for entity in self.attr:
                 if entity[2] == ev_name:
                     return entity[0], entity[1], entity[2]
 
-        elif act_name and attr_name:
+        elif act_name and attr_name and ev_name is None:
             for entity in self.attr:
                 for action in entity[0][1]:
-                    #print("entity[0][1]: ", entity[0][1])
-                    #print("action: ", action, "act_name: ", act_name)
                     if action == act_name and entity[1].name.lower() == attr_name:
                         return entity[0], entity[1], entity[2]
 
@@ -216,7 +214,12 @@ class Character:
             for entity in self.act:
                 for desire in entity[0][1]:
                     if desire == act_name:
-                        if entity[1].lower == object_name.lower():
+                        if type(entity[1]) is str:
+                            comparator = entity[1].lower()
+                        else:
+                            comparator = entity[1].name.lower()
+
+                        if comparator == object_name.lower():
                             return entity[0], entity[1], entity[2]
         else:
             for entity in self.des:

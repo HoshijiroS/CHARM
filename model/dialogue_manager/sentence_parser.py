@@ -53,7 +53,7 @@ def parseWhereMessage(charList, verbList):
     return output
 
 
-def parseWhatMessage(sequence, posList, ofList, charList, andList, itemList):
+def parseWhatMessage(sequence, posList, ofList, charList, andList, itemList, special=None):
     output = []
 
     if [item for item in sequence if "name" in item]:
@@ -77,39 +77,52 @@ def parseWhatMessage(sequence, posList, ofList, charList, andList, itemList):
                 output.append(value)
 
     elif [item for item in sequence if "appearance" in item] or [item for item in sequence if "look" in item]:
-        if itemList:
-            if posList:
-                for index in posList:
-                    value = cont_plan.confirmCharacter(sequence[index - 1][0], 2, item=sequence[index + 1][0],
-                                                             propType="appearance")
+        if special == "true":
+            if itemList:
+                for characters in charList:
+                    if posList:
+                        for index in posList:
+                            value = cont_plan.confirmCharacter(characters, 2,
+                                                               item=sequence[index + 1][0],
+                                                               propType="appearance")
 
-                    if value not in output:
-                        output.append(value)
-
-            else:
-                for index in ofList:
-                    value = cont_plan.confirmCharacter(sequence[index + 1][0], 2, item=sequence[index - 1][0],
-                                                             propType="appearance")
-
-                    if value not in output:
-                        output.append(value)
+                            if value not in output:
+                                output.append(value)
 
         else:
-            try:
-                charList.remove("appearance")
-            except Exception as e:
-                a = 1
+            if itemList:
+                if posList:
+                    for index in posList:
+                        value = cont_plan.confirmCharacter(sequence[index - 1][0], 2, item=sequence[index + 1][0],
+                                                                 propType="appearance")
 
-            try:
-                charList.remove("look")
-            except Exception as e:
-                a = 1
+                        if value not in output:
+                            output.append(value)
 
-            for character in charList:
-                value = cont_plan.confirmCharacter(character, 2, propType="appearance")
+                else:
+                    for index in ofList:
+                        value = cont_plan.confirmCharacter(sequence[index + 1][0], 2, item=sequence[index - 1][0],
+                                                                 propType="appearance")
 
-                if value not in output:
-                    output.append(value)
+                        if value not in output:
+                            output.append(value)
+
+            else:
+                try:
+                    charList.remove("appearance")
+                except Exception as e:
+                    a = 1
+
+                try:
+                    charList.remove("look")
+                except Exception as e:
+                    a = 1
+
+                for character in charList:
+                    value = cont_plan.confirmCharacter(character, 2, propType="appearance")
+
+                    if value not in output:
+                        output.append(value)
 
     elif [item for item in sequence if "personality" in item] or [item for item in sequence if "like" in item]:
         try:
