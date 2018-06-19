@@ -79,8 +79,8 @@ def gotCorrectAnswer(preparedString, followUpSent):
 
 def resetWrongMessage():
     message = ["I don't think that's the answer, but you can try again. ",
-               "I don't think that's the answer. Let's try getting the right answer together. ",
-               "I don't think that's the answer. Let's try again! "]
+               "Let's try getting the right answer together. ",
+               "Let's try again! "]
 
     return message
 
@@ -1558,6 +1558,7 @@ def generateFollowUpSentence(followUpType=None, givenEvent=None, answer=None):
 
     answerList.append(output)
     sentence = provider.assembleSentence(event, genType="sentence")
+    print("event: ", event)
     print("sentence: ", sentence)
     populateDialogueTurns()
     print("finalHintList: ", finalHintList)
