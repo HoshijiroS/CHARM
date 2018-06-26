@@ -211,17 +211,20 @@ class Character:
             act_name = "_".join(act_name.split(" "))
 
         if scene_name is None and object_name is not None:
-            for entity in self.act:
-                for desire in entity[0][1]:
-                    if desire == act_name:
+            for entity in self.des:
+                for action in entity[0][1]:
+                    #print("action: ", action, "act_name: ", act_name)
+                    if action == act_name:
                         if type(entity[1]) is str:
-                            comparator = entity[1].lower()
+                            #print("entity[1].lower() ", entity[1].lower(), "object_name: ", object_name)
+                            if entity[1].lower() == object_name.lower():
+                                return entity[0], entity[1], entity[2]
                         else:
-                            comparator = entity[1].name.lower()
+                            #print("entity[1].name.lower() ", entity[1].name.lower(), "object_name: ", object_name)
+                            if entity[1].name.lower() == object_name.lower():
+                                return entity[0], entity[1], entity[2]
 
-                        if comparator == object_name.lower():
-                            return entity[0], entity[1], entity[2]
-        else:
+        elif act_name is None:
             for entity in self.des:
                 if entity[2] == scene_name:
                     return entity[0], entity[1], entity[2]

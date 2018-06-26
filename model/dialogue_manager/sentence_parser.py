@@ -153,9 +153,9 @@ def parseWhatMessage(sequence, posList, ofList, charList, andList, itemList, spe
 def parseWhyMessage(charList, objList, verbList, advList, itemList, adjList):
     output = []
 
-    verbList.extend(advList)
     charList.extend(itemList)
     adjList.extend(advList)
+    verbList.extend(adjList)
 
     for character in charList:
         #print("character: ", character)

@@ -1,5 +1,7 @@
 import random
 import re
+import inflect
+inflect = inflect.engine()
 
 import distance
 
@@ -36,7 +38,7 @@ def determinePossessiveForm(actor):
     poss = "'s "
 
     try:
-        if actor.gender == "collective":
+        if actor.gender == "collective" or actor.name.endsWith("s"):
             poss = "' "
     except Exception as e:
         print("Error on determinePossessive: ", e)
@@ -45,10 +47,10 @@ def determinePossessiveForm(actor):
 
 
 def determineVerbForm(actor, verb, tense):
-    if wordnet.synsets(verb, 'a'):
+    if len(wordnet.synsets(verb)) > 0 and getCommonPartOfSpeech(verb) == 'a':
         return verb
 
-    elif wordnet.synsets(verb, 'v'):
+    elif len(wordnet.synsets(verb)) > 0 and getCommonPartOfSpeech(verb) == 'v':
         if type(actor) is str:
             if actor == "plural":
                 if tense == "present":
@@ -63,7 +65,7 @@ def determineVerbForm(actor, verb, tense):
                     return conjugator.conjugate(verb, number=conjugator.SINGULAR, tense=conjugator.PAST_TENSE)
 
         else:
-            if actor.name.endswith('s'):
+            if inflect.singular_noun(actor.name.lower()):
                 if tense == "present":
                     return conjugator.conjugate(verb, number=conjugator.PLURAL, tense=conjugator.PRESENT_TENSE)
                 else:
@@ -228,23 +230,21 @@ def whereQuestion(actor, action, location):
         return "unknown", None
 
     if location is None and loc is not None:
-        action = determineVerbForm(actor, action[0], "past")
-
         if type(location) is str:
             # output = actor.name + " " + action[0] + " in " + loc
 
-            return "location", [actor, action, loc]
+            return "location", [actor, action[0], loc]
         else:
             # output = actor.name + " " + action[0] + " in " + loc.name
 
-            return "location", [actor, action, loc.name]
+            return "location", [actor, action[0], loc.name]
 
     else:  # output = "I don't know"
         return "unknown", None
 
 
 def whyQuestion(actor, action, item, queriedProp=None):
-    #print("actor: ", actor, "action: ", action, "item: ", item, "queriedProp:", queriedProp)
+    #print("actor: ", actor, "action: ", action, "item: ", item, "queriedProp: ", queriedProp)
     act, obj, act_event = actor.queryAction(action, item, None)
     des, des_obj, des_event = actor.queryDesire(action, item, None)
     act_obj, attr, attr_event = actor.queryAttribute(action, item, None)
@@ -294,7 +294,7 @@ def whyQuestion(actor, action, item, queriedProp=None):
         cause_event = ref.queryRelations(ans_event, "cause")
 
     if des:
-        ans_event, actor, qType = ref.queryLookup(act_event)
+        ans_event, actor, qType = ref.queryLookup(des_event)
 
         try:
             actor = Entity.charList[actor.lower()]
@@ -428,13 +428,13 @@ def whyQuestion(actor, action, item, queriedProp=None):
 
 
 def assembleProp(attr, in_event):
-    print("attribute in assembleProp: ", attr)
-    print("event in assemble: ", in_event)
+    #print("attribute in assembleProp: ", attr)
+    #print("event in assemble: ", in_event)
     appProp, event = attr.queryProperty(None, "appearance", in_event)
     amtProp, event = attr.queryProperty(None, "amount", in_event)
     perProp, event = attr.queryProperty(None, "personality", in_event)
 
-    print("appProp, perProp, amtProp: ", appProp, amtProp, perProp)
+    #print("appProp, perProp, amtProp: ", appProp, amtProp, perProp)
 
     if perProp is None and amtProp is None and appProp:
         out_app = formatMultipleItems(appProp)
@@ -457,6 +457,7 @@ def assembleProp(attr, in_event):
 def assembleSentence(event, genType=None, turnType=None, ansType=None, relType=None, answer=None):
     actor = ""
     qType = ""
+
     try:
         event, actor, qType = ref.queryLookup(event)
     except Exception as e:
@@ -477,20 +478,16 @@ def assembleSentence(event, genType=None, turnType=None, ansType=None, relType=N
     except Exception as e:
         print("Error on assembleSentence on location assignment: ", e)
 
-    print("actor: ", actor)
-
     pronoun_obj = producePronoun(actor, genType="objPro")
     poss = determinePossessiveForm(actor)
 
-    verb = "is"
+    if ansType == "location":
+        address = actor.queryLocation(None, None, event)[2]
 
-    try:
-        if actor.gender == "collective":
-            verb = "were"
+        if " room" in address or " row" in address:
+            ansType = "seat"
         else:
-            verb = "was"
-    except Exception as e:
-        print("Error in gender assembleSentence: ", e)
+            ansType = "address"
 
     if qType == "state":
         state, scene = actor.queryState(None, event)
@@ -505,16 +502,24 @@ def assembleSentence(event, genType=None, turnType=None, ansType=None, relType=N
 
         container = []
         if genType == "sentence":
-            if actor.gender == "collective":
-                actorName = "the " + actor.name
-            else:
+            if type(actor) is item_type.Item:
                 actorName = actor.name
 
-            if wordnet.synsets(verb, 'a'):
+            else:
+                if actor.gender == "collective":
+                    actorName = "the " + actor.name
+                else:
+                    actorName = actor.name
+
+            if len(wordnet.synsets(state[0])) > 0 and getCommonPartOfSpeech(state[0]) == 'a':
                 addVerb = determineVerbForm(actor, "be", "past")
-                container.append(actorName + " " + addVerb + " " + verb + " " + sent_state)
-            elif wordnet.synsets(verb, 'v'):
-                container.append(actorName + " " + verb + " " + sent_state)
+                container.append(actorName + " " + addVerb + " " + state[0])
+            elif len(wordnet.synsets(state[0])) > 0 and getCommonPartOfSpeech(state[0]) == 'v':
+                stateVerb = determineVerbForm(actor, state[0], "past")
+                container.append(actorName + " " + stateVerb)
+            else:
+                addVerb = determineVerbForm(actor, "be", "past")
+                container.append(actorName + " " + addVerb + " " + state[0])
 
             if turnType == "prompt":
                 container.extend([container[0] + " because of " + actor.name + poss +
@@ -567,7 +572,7 @@ def assembleSentence(event, genType=None, turnType=None, ansType=None, relType=N
         if propType == "appearance" or propType == "personality":
             verb = determineVerbForm("singular", "be", "present")
 
-            if out_obj.lower().endswith("s"):
+            if inflect.singular_noun(out_obj.lower()):
                 verb = determineVerbForm("plural", "be", "present")
 
             sentence_prop = out_obj + " that " + verb + " " + output_prop
@@ -579,10 +584,13 @@ def assembleSentence(event, genType=None, turnType=None, ansType=None, relType=N
         if genType == "sentence":
             if actor.gender == "collective":
                 actorName = "the " + actor.name
-                verb = determineVerbForm(actor, act, "past")
             else:
                 actorName = actor.name
-                verb = determineVerbForm(actor, act, "past")
+
+            verb = determineVerbForm(actor, out_act[0], "past")
+
+            if "not " in verb:
+                verb = "did " + out_act[0]
 
             container.append(actorName + " " + verb + " " + sentence_prop)
 
@@ -834,7 +842,7 @@ def assembleSentence(event, genType=None, turnType=None, ansType=None, relType=N
             sent_prop = formatMultipleItems(out_prop)
             verb = determineVerbForm("singular", "be", "present")
 
-            if attr.lower().endswith("s"):
+            if inflect.singular_noun(attr.lower()):
                 verb = determineVerbForm("plural", "be", "present")
 
             sent_add = " that " + verb + " "
@@ -848,6 +856,9 @@ def assembleSentence(event, genType=None, turnType=None, ansType=None, relType=N
                 actorName = "the " + actor.name
             else:
                 actorName = actor.name
+
+            if "not" in sent_act:
+                sent_act = "does " + act[0]
 
             if propType == "amount":
                 container.append(actorName + " " + sent_act + " " + sent_prop + " " + attr)
@@ -957,11 +968,11 @@ def assembleSentence(event, genType=None, turnType=None, ansType=None, relType=N
             container = []
             if genType == "sentence":
                 if actor.gender == "collective":
-                    verb = determineVerbForm(actor, "look", "present")
                     actorName = "the " + actor.name
                 else:
-                    verb = determineVerbForm(actor, "look", "present")
                     actorName = actor.name
+
+                verb = determineVerbForm(actor, "look", "present")
 
                 container.append(actorName + " " + verb + " " + out_prop)
 
@@ -1060,11 +1071,11 @@ def assembleSentence(event, genType=None, turnType=None, ansType=None, relType=N
             container = []
             if genType == "sentence":
                 if actor.gender == "collective":
-                    verb = determineVerbForm(actor, "be", "present")
                     actorName = "the " + actor.name
                 else:
-                    verb = determineVerbForm(actor, "be", "present")
                     actorName = actor.name
+
+                verb = determineVerbForm(actor, "be", "present")
 
                 container.append(actorName + " " + verb + " " + out_prop)
 
@@ -1138,9 +1149,213 @@ def assembleSentence(event, genType=None, turnType=None, ansType=None, relType=N
 
             return "actor_personality", [actor, prop]
 
-    # elif qType == "item_appearance":
-    #
-    # elif qType == "item_amount":
+    elif qType == "item_appearance":
+        prop = []
+
+        try:
+            act, attr, scene = actor.queryAttribute(None, None, event)
+        except Exception as e:
+            print("Error in assembleSentence item_appearance: ", e)
+
+        if attr:
+            if type(attr) is str:
+                attr = Entity.itemList[attr.lower()]
+
+            try:
+                prop = attr.queryProperty(None, "appearance", scene + "ext")
+            except Exception as e:
+                print("Error in assembleSentence item_appearance: ", e)
+
+        if prop:
+            out_prop = formatMultipleItems(prop)
+
+            container = []
+            if genType == "sentence":
+                if actor.gender == "collective":
+                    actorName = "the " + actor.name
+                else:
+                    actorName = actor.name
+
+                verb = determineVerbForm(actor, act, "past")
+                sent_attr = attr.name
+
+                container.append(actorName + " " + verb + " " + sent_attr + " that looks " + out_prop)
+
+                if turnType == "prompt":
+                    hintTemplateA = []
+                    hintTemplateB = []
+                    hintTemplateA.extend(
+                        [" Do you know anyone who " + verb + " " + sent_attr + " that looks " + out_prop + "? What is their " + ansType + "?",
+                         " What is the " + ansType + " of someone who " + verb + " " + sent_attr + " that looks " + out_prop + "?",
+                         " What about " + actor.name + "'s " + sent_attr + " makes " + pronoun_obj
+                         + " " + ansType + "?"
+                         ])
+
+                    poss = determinePossessiveForm(attr)
+
+                    if relType == "reason":
+                        hintTemplateB.extend(
+                            [container[0],
+                             container[0] + ". So maybe what causes " + pronoun_obj + " to "
+                             + verb + " " + out_prop + " " + sent_attr + " has something to do with " + pronoun_obj + " " + ansType + "."
+                             ])
+
+                    else:
+                        hintTemplateB.extend([
+                            actor.name + poss + ansType + " is caused by " + pronoun_obj
+                            + " " + sent_attr + poss + " appearance.",
+                            "maybe " + actor.name + poss + ansType
+                            + " has something to do with " + pronoun_obj + " " + sent_attr + poss + " appearance."
+                        ])
+
+                    for hints in hintTemplateA:
+                        if hintTemplateB:
+                            r = random.choice(hintTemplateB)
+                            hintTemplateB.remove(r)
+                            container.append(r + hints)
+                        else:
+                            container.append(container[0] + hints)
+
+                    return container
+
+                elif turnType == "pump":
+                    hintTemplateA = []
+                    hintTemplateB = []
+
+                    hintTemplateB.extend([" Say something about " + actor.name + poss + sent_attr + ".",
+                                          " Can you describe " + + actor.name + poss + sent_attr + "?",
+                                          " Tell me about " + actor.name + poss + sent_attr + "."])
+
+                    if relType == "reason":
+                        hintTemplateA.extend(
+                            [container[0] + ". What is the " + ansType + " of someone who " + verb + " " + out_prop + " " + sent_attr + "?",
+                             container[0] + " and " + pronoun_obj.title() + " " + sent_attr + " is the reason."])
+                    else:
+                        hintTemplateA.extend(
+                            [container[0] + ". What is the " + ansType + " of someone who " + verb + " " + out_prop + " " + sent_attr + "?",
+                             actor.name + poss + ansType + " causes " + pronoun_obj + " to " + verb + " " + out_prop + " " + sent_attr + "."])
+
+                    for hints in hintTemplateB:
+                        if hintTemplateA:
+                            r = random.choice(hintTemplateA)
+                            hintTemplateA.remove(r)
+                            container.append(r + hints)
+                        else:
+                            container.append(hints)
+
+                    return container
+
+                return container[0]
+
+            if answer:
+                return "item_appearance", [actor, act, attr, prop, answer]
+
+            return "item_appearance", [actor, act, attr, prop]
+
+    elif qType == "item_amount":
+        prop = []
+
+        try:
+            act, attr, scene = actor.queryAttribute(None, None, event)
+        except Exception as e:
+            print("Error in assembleSentence item_amount: ", e)
+
+        if attr:
+            if type(attr) is str:
+                attr = Entity.itemList[attr.lower()]
+
+            try:
+                prop = attr.queryProperty(None, "amount", scene + "ext")
+            except Exception as e:
+                print("Error in assembleSentence item_amount: ", e)
+
+        if prop:
+            out_prop = formatMultipleItems(prop)
+
+            container = []
+            if genType == "sentence":
+                if actor.gender == "collective":
+                    actorName = "the " + actor.name
+                else:
+                    actorName = actor.name
+
+                verb = determineVerbForm(actor, act, "past")
+                sent_attr = attr.name
+
+                container.append(actorName + " " + verb + " " + sent_attr + " " + out_prop)
+
+                if turnType == "prompt":
+                    hintTemplateA = []
+                    hintTemplateB = []
+                    hintTemplateA.extend(
+                        [
+                            " Do you know anyone who " + verb + " " + sent_attr + " " + out_prop + " " + sent_attr + "? What is their " + ansType + "?",
+                            " What is the " + ansType + " of someone who " + verb + " " + sent_attr + " " + out_prop + " " + sent_attr + "?",
+                            " What about " + actor.name + "'s " + sent_attr + " affects " + pronoun_obj
+                            + " " + ansType + "?"
+                            ])
+
+                    poss = determinePossessiveForm(attr)
+
+                    if relType == "reason":
+                        hintTemplateB.extend(
+                            [container[0],
+                             container[0] + ". So maybe what causes " + pronoun_obj + " to "
+                             + verb + " " + out_prop + " " + sent_attr + " has something to do with " + pronoun_obj + " " + ansType + "."
+                             ])
+
+                    else:
+                        hintTemplateB.extend([
+                            actor.name + poss + ansType + " is caused by the number of " + sent_attr + " " + pronoun_obj + " has.",
+                            "maybe " + actor.name + poss + ansType
+                            + " has something to do with the number of " + sent_attr + " " + pronoun_obj + " has."
+                        ])
+
+                    for hints in hintTemplateA:
+                        if hintTemplateB:
+                            r = random.choice(hintTemplateB)
+                            hintTemplateB.remove(r)
+                            container.append(r + hints)
+                        else:
+                            container.append(container[0] + hints)
+
+                    return container
+
+                elif turnType == "pump":
+                    hintTemplateA = []
+                    hintTemplateB = []
+
+                    hintTemplateB.extend([" Say something about " + actor.name + poss + sent_attr + ".",
+                                          " Can you describe " + + actor.name + poss + sent_attr + "?",
+                                          " Tell me about " + actor.name + poss + sent_attr + "."])
+
+                    if relType == "reason":
+                        hintTemplateA.extend(
+                            [container[
+                                 0] + ". What is the " + ansType + " of someone who " + verb + " " + out_prop + " " + sent_attr + "?",
+                             container[0] + " and " + pronoun_obj.title() + " " + sent_attr + " is the reason."])
+                    else:
+                        hintTemplateA.extend(
+                            [container[
+                                 0] + ". What is the " + ansType + " of someone who " + verb + " " + out_prop + " " + sent_attr + "?",
+                             actor.name + poss + ansType + " causes " + pronoun_obj + " to " + verb + " " + out_prop + " " + sent_attr + "."])
+
+                    for hints in hintTemplateB:
+                        if hintTemplateA:
+                            r = random.choice(hintTemplateA)
+                            hintTemplateA.remove(r)
+                            container.append(r + hints)
+                        else:
+                            container.append(hints)
+
+                    return container
+
+                return container[0]
+
+            if answer:
+                return "item_amount", [actor, act, attr, prop, answer]
+
+            return "item_amount", [actor, act, attr, prop]
 
     elif qType == "purpose":
         out_act = ""
@@ -1162,10 +1377,13 @@ def assembleSentence(event, genType=None, turnType=None, ansType=None, relType=N
 
         container = []
         if genType == "sentence":
-            if actor.name.endswith('s'):
+            if inflect.singular_noun(actor.name):
                 verb = determineVerbForm("plural", act, "past")
             else:
                 verb = determineVerbForm("singular", act, "past")
+
+            if "not " in verb:
+                verb = "did " + out_act[0]
 
             container.append(actor.name + " " + verb + " " + out_obj)
 
@@ -1271,8 +1489,6 @@ def assembleSentence(event, genType=None, turnType=None, ansType=None, relType=N
             a = 1
             # print("Error: ", e, " on ", time, " itemPurpose")
 
-        act = determineVerbForm(actor, out_act[0], "past")
-
         if type(loc) is str:
             loc = loc
         else:
@@ -1280,11 +1496,14 @@ def assembleSentence(event, genType=None, turnType=None, ansType=None, relType=N
 
         if genType == "sentence":
             if actor.gender == "collective":
-                verb = determineVerbForm(actor, act, "past")
                 actorName = "the " + actor.name
             else:
-                verb = determineVerbForm(actor, act, "past")
                 actorName = actor.name
+
+            verb = determineVerbForm(actor, out_act[0], "past")
+
+            if "not " in verb:
+                verb = "did " + out_act[0]
 
             return actorName + " " + verb + " at " + loc
 
@@ -1643,7 +1862,7 @@ def generateElabForAttr(ansList):
     if type(attr) is item_type.Item:
         attr = attr.name
 
-    if attr.lower().endswith("s"):
+    if inflect.singular_noun(attr.lower()):
         verb = determineVerbForm("plural", "be", "present")
 
     hintChoices = []
@@ -1794,6 +2013,110 @@ def generatePumpForItem(ansList):
     hintTemplateA.extend(
         [" So, what do you think is the appearance of " + actor.name + poss + attr + "?",
          " What does " + actor.name + poss + attr + " " + look + " like?"])
+
+    if cause_event:
+        if type(cause_event) is list:
+            for evs in cause_event:
+                events.append(ref.queryLookup(evs))
+        else:
+            events.append(ref.queryLookup(cause_event))
+
+    for evs in events:
+        event, actor, qType = evs
+
+        hintTemplateB.extend(
+            ["I think the reason why " + actor + poss + attr + " " + look + " like that is related to "
+             + pronoun + " " + qType + "."])
+
+        for hints in hintTemplateA:
+            r = random.choice(hintTemplateB)
+
+            hintChoices.append(r + hints)
+
+    return hintChoices
+
+
+def generateElabForAmtItem(ansList):
+    causeList = []
+    hintChoices = []
+    actor, act, item, out_prop = ansList
+    item = item.name
+    poss = determinePossessiveForm(actor)
+    act, attr, event = actor.queryAttribute(None, item, None)
+    cause_event = ref.queryRelations(event, "cause")
+    reason_event = ref.queryRelations(event, "reason")
+
+    wnl = WordNetLemmatizer()
+    act = wnl.lemmatize(act[0].replace("_", " "), 'v')
+    act = determineVerbForm(actor, act, "present")
+    if cause_event:
+        if type(cause_event) is list:
+            for evs in cause_event:
+                sent = assembleSentence(evs, genType="sentence")
+                if type(sent) is list:
+                    for entries in sent:
+                        causeList.append(entries)
+                else:
+                    causeList.append(sent)
+
+        else:
+            sent = assembleSentence(cause_event, genType="sentence")
+
+            if type(sent) is list:
+                for entries in sent:
+                    causeList.append(entries)
+            else:
+                causeList.append(sent)
+
+    if reason_event:
+        if type(reason_event) is list:
+            for evs in reason_event:
+                sent = assembleSentence(evs, genType="sentence")
+                if type(sent) is list:
+                    for entries in sent:
+                        causeList.append(entries)
+                else:
+                    causeList.append(sent)
+
+        else:
+            sent = assembleSentence(reason_event, genType="sentence")
+
+            if type(sent) is list:
+                for entries in sent:
+                    causeList.append(entries)
+            else:
+                causeList.append(sent)
+
+    look = determineVerbForm(actor, "be", "present")
+
+    for entries in causeList:
+        hintChoices.append(
+            "I think since " + entries + ", the " + item + " " + actor.name + " " + act + " " + look + " a certain way. "
+            "Can you tell me more about " + actor.name + poss + item + "?")
+
+    return hintChoices
+
+
+def generatePumpForAmtItem(ansList):
+    events = []
+    hintTemplateA = []
+    hintTemplateB = []
+    hintChoices = []
+    actor, act, item, out_prop = ansList
+    item = item.name
+    act, attr, event = actor.queryAttribute(None, item, None)
+    cause_event = ref.queryRelations(event, "cause")
+    pronoun = producePronoun(actor, genType="objPro")
+
+    poss = determinePossessiveForm(actor)
+    look = determineVerbForm(actor, "be", "present")
+
+    if type(attr) is not str:
+        attr = attr.name
+
+    hintTemplateA.extend(
+        [" So, what do you think is the appearance of " + actor.name + poss + attr + "?",
+         " What does " + actor.name + poss + attr + " like?"])
 
     if cause_event:
         if type(cause_event) is list:
@@ -2163,6 +2486,12 @@ def generatePromptForActs(ansList):
 
     for entries in ansList:
         ansType, answers = entries
+
+        ans_obj = ""
+        try:
+            ans_obj = answers[2]
+        except Exception as e:
+            print("error in ans_actor: ", e)
         ans_actor = answers[0]
 
         actor = ""
@@ -2180,13 +2509,43 @@ def generatePromptForActs(ansList):
             actor, action = answers[len(answers) - 1]
             stateVerb = action
 
-            if actor.gender == "collective":
-                verb = determineVerbForm(actor, "be", "past") + " "
-            else:
-                verb = determineVerbForm(actor, "be", "past") + " "
+            if len(wordnet.synsets(action)) > 0 and getCommonPartOfSpeech(action) == 'a':
+                if actor.gender == "collective":
+                    verb = determineVerbForm(actor, "be", "past") + " "
+                else:
+                    verb = determineVerbForm(actor, "be", "past") + " "
+
+        ans_act = determineVerbForm(actor, action, "past")
+
+        if type(obj) is str:
+            if len(wordnet.synsets(obj)) > 0 and getCommonPartOfSpeech(obj) == 'a':
+                ans_act = determineVerbForm(actor, action, "present")
 
         if type(obj) is item_type.Item:
             obj = obj.name
+
+        if len(wordnet.synsets(action)) > 0 and getCommonPartOfSpeech(action) == 'a':
+            specialVerb = "become " + action
+        elif len(wordnet.synsets(action)) > 0 and getCommonPartOfSpeech(action) == 'v':
+            if len(wordnet.synsets(obj)) > 0 and getCommonPartOfSpeech(obj) == 'a':
+                specialVerb = obj
+            else:
+                specialVerb = action + " " + obj
+                if prop:
+                    specialVerb = action + " " + prop + " " + obj
+        else:
+            specialVerb = action
+
+        if stateVerb != "":
+            stateVerb = stateVerb
+            wasVerb = determineVerbForm(actor, "be", "past")
+            stateWasVerb = wasVerb + " " + stateVerb
+
+        elif stateVerb == "":
+            if len(wordnet.synsets(obj)) > 0 and getCommonPartOfSpeech(obj) == 'a':
+                wasVerb = determineVerbForm(actor, "be", "present")
+                stateWasVerb = wasVerb + " " + obj
+                stateVerb = obj
 
         obj = formatMultipleItems(obj)
 
@@ -2197,19 +2556,25 @@ def generatePromptForActs(ansList):
         else:
             sent_actor = actor.name
 
-        action = wnl.lemmatize(action.replace("_", " "), 'v')
+        action = action.replace("_", " ")
         poss = determinePossessiveForm(ans_actor)
-        ans_act = determineVerbForm(actor, action, "past")
         pres_ans_act = determineVerbForm(actor, action, "present")
         have = determineVerbForm(ans_actor, "have", "present")
+
+        if "not" in ans_act:
+            ans_act = "did " + ans_act
+            pres_ans_act = "did " + pres_ans_act
 
         resForChar = ""
         resForItem = ""
         resForLoc = ""
+        ans_resForChar = ""
+        ans_resForItem = ""
+        ans_resForLoc = ""
         alt_resForChar = ""
         alt_resForItem = ""
         alt_resForLoc = ""
-        whAdd = " "
+        whAdd = "what "
 
         if obj != "":
             try:
@@ -2231,12 +2596,12 @@ def generatePromptForActs(ansList):
                 prop = formatMultipleItems(prop)
 
             if propType == "appearance" or propType == "personality":
-                verb = determineVerbForm("singular", "be", "past")
+                specVerb = determineVerbForm("singular", "be", "present")
 
-                if obj.lower().endswith("s"):
-                    verb = determineVerbForm("plural", "be", "past")
+                if inflect.singular_noun(obj.lower()):
+                    specVerb = determineVerbForm("plural", "be", "present")
 
-                obj = " " + obj + " that " + verb + " " + prop
+                obj = " " + obj + " that " + specVerb + " " + prop
 
             elif propType == "amount":
                 obj = prop + " " + obj
@@ -2244,16 +2609,29 @@ def generatePromptForActs(ansList):
             else:
                 obj = " " + obj
 
-        if resForChar:
-            resForChar = " a person"
+        if ans_obj != "":
+            try:
+                ans_resForChar = Entity.charList[ans_obj.lower()]
+            except Exception as e:
+                print("Error in promptActs: ", e)
+
+            try:
+                ans_resForItem = Entity.itemList[ans_obj.lower()]
+            except Exception as e:
+                print("Error in promptActs: ", e)
+
+            try:
+                ans_resForLoc = Entity.locList[ans_obj.lower()]
+            except Exception as e:
+                print("Error in promptActs: ", e)
+
+        if ans_resForChar != "":
             whAdd = "who "
 
-        if resForItem and obj != "":
-            resForItem = " an item"
+        elif ans_resForItem != "":
             whAdd = "what "
 
-        if resForLoc and obj != "":
-            resForLoc = " somewhere"
+        elif ans_resForLoc != "":
             whAdd = "where "
 
         if ansType == "action":
@@ -2262,7 +2640,7 @@ def generatePromptForActs(ansList):
         elif ansType == "desire":
             actionWord = whAdd + sent_ans_actor + " desired to " + answers[1][0]
 
-        elif ansType == "state" or ansType == "location":
+        elif ansType == "state":
             actionWord = sent_ans_actor + poss + ansType
 
         elif ansType == "actor_appearance":
@@ -2281,47 +2659,62 @@ def generatePromptForActs(ansList):
             actionWord = "the amount of items " + sent_ans_actor + " " + have
 
         elif ansType == "location":
-            actionWord = sent_ans_actor + poss + "location"
+            address = answers[2]
 
-            if prop:
-                prop = formatMultipleItems(prop)
-
-            if propType == "appearance" or propType == "personality":
-                verb = determineVerbForm("singular", "be", "present")
-
-                if obj.lower().endswith("s"):
-                    verb = determineVerbForm("plural", "be", "present")
-
-                obj = " " + obj + " that " + verb + " " + prop
-
-            elif propType == "amount":
-                obj = prop + " " + obj
-
+            if " room" in address or " row" in address:
+                addWord = "seat"
             else:
-                obj = " " + obj
+                addWord = "address"
 
-        if stateVerb != "":
-            stateVerb = " " + stateVerb
-            wasVerb = determineVerbForm(actor, "be", "past")
-            stateWasVerb = " " + wasVerb + " " + stateVerb
+            actionWord = sent_ans_actor + poss + addWord
 
-        else:
-            if resForChar:
-                resForChar = action + " someone"
-                alt_resForChar = "has " + ans_act + " someone"
+        if resForChar != "":
+            resForChar = action + " someone"
 
-            if resForLoc:
-                resForLoc = action + " at " + obj
-                alt_resForLoc = "has " + ans_act + " at " + obj
+            verbHas = "has " + ans_act
 
-            if resForItem:
-                resForItem = action + " " + obj
-                alt_resForItem = "has " + ans_act + " " + obj
+            dummy = " ".split(ans_act)
+            if "not " in ans_act and "did " in ans_act and len(dummy) > 1:
+                verbHas = "has " + "not " + dummy[len(dummy)-1]
 
-        hintTemplateA.extend([" What causes a person to " + stateVerb + resForChar + resForItem + resForLoc + "? Can you tell me?",
-                              " Do you know anyone who " + stateWasVerb + alt_resForChar + alt_resForItem + alt_resForLoc + " before? What happened?",
+            elif "did " in ans_act and "not " not in ans_act and len(dummy) > 1:
+                verbHas = "has " + dummy[len(dummy)-1]
+
+            print("verbHas: ", verbHas)
+            alt_resForChar = verbHas + " someone"
+
+        elif resForLoc != "":
+            resForLoc = action + " at " + obj
+
+            verbHas = "has " + ans_act
+
+            dummy = " ".split(ans_act)
+            if "not " in ans_act and "did " in ans_act and len(dummy) > 1:
+                verbHas = "has " + "not " + dummy[len(dummy)-1]
+
+            elif "did " in ans_act and "not " not in ans_act and len(dummy) > 1:
+                verbHas = "has " + dummy[len(dummy)-1]
+
+            alt_resForLoc = verbHas + " at " + obj
+
+        elif resForItem != "":
+            resForItem = action + " " + obj
+
+            verbHas = "has " + ans_act
+
+            dummy = " ".split(ans_act)
+            if "not " in ans_act and "did " in ans_act and len(dummy) > 1:
+                verbHas = "has " + "not " + dummy[len(dummy)-1]
+
+            elif "did " in ans_act and "not " not in ans_act and len(dummy) > 1:
+                verbHas = "has " + dummy[len(dummy)-1]
+
+            alt_resForItem = verbHas + " " + obj
+
+        hintTemplateA.extend([" What causes a person to " + specialVerb + "? Can you tell me?",
+                              " Do you know anyone who " + stateWasVerb + alt_resForChar + alt_resForItem + alt_resForLoc + "? What happened?",
                               " What is something that could make you " + stateVerb + resForChar + resForItem + resForLoc + "? Maybe that also made "
-                              + sent_actor + " " + pres_ans_act + obj + "."])
+                              + sent_actor + " " + action + obj + "."])
 
         hintTemplateB.extend([sent_actor + " " + verb + ans_act + obj + " because of "
                               + actionWord + "."])
@@ -2372,6 +2765,12 @@ def generatePumpForActs(ansList):
             else:
                 verb = determineVerbForm(actor, "be", "past") + " "
 
+        ans_act = determineVerbForm(actor, action, "past")
+
+        if type(obj) is str:
+            if len(wordnet.synsets(obj)) > 0 and getCommonPartOfSpeech(obj) == 'a':
+                ans_act = determineVerbForm(actor, action, "present")
+
         if type(obj) is item_type.Item:
             obj = obj.name
 
@@ -2382,12 +2781,12 @@ def generatePumpForActs(ansList):
                 prop = formatMultipleItems(prop)
 
             if propType == "appearance" or propType == "personality":
-                verb = determineVerbForm("singular", "be", "past")
+                specVerb = determineVerbForm("singular", "be", "present")
 
-                if obj.lower().endswith("s"):
-                    verb = determineVerbForm("plural", "be", "past")
+                if inflect.singular_noun(obj.lower()):
+                    specVerb = determineVerbForm("plural", "be", "present")
 
-                obj = " " + obj + " that " + verb + " " + prop
+                obj = " " + obj + " that " + specVerb + " " + prop
 
             elif propType == "amount":
                 obj = prop + " " + obj
@@ -2404,16 +2803,17 @@ def generatePumpForActs(ansList):
 
         poss = determinePossessiveForm(ans_actor)
         actor_poss = determinePossessiveForm(actor)
-        action = wnl.lemmatize(action.replace("_", " "), 'v')
-        ans_act = determineVerbForm(actor, action, "past")
+        action = action.replace("_", " ")
+
+        if "not " in ans_act:
+            ans_act = "did " + action
+
         have = determineVerbForm(ans_actor, "have", "present")
 
-        whAdd = " "
+        whAdd = "what "
         resForChar = ""
         resForItem = ""
         resForLoc = ""
-
-        print("ans_obj: ", ans_obj)
 
         if ans_obj:
             try:
@@ -2434,10 +2834,10 @@ def generatePumpForActs(ansList):
         if resForChar != "":
             whAdd = "who "
 
-        if resForItem != "" and ans_obj:
+        elif resForItem != "" and ans_obj:
             whAdd = "what "
 
-        if resForLoc != "" and ans_obj:
+        elif resForLoc != "" and ans_obj:
             whAdd = "where "
 
         if ansType == "action":
@@ -2445,8 +2845,9 @@ def generatePumpForActs(ansList):
 
         elif ansType == "desire":
             actionWord = whAdd + sent_ans_actor + " desired to " + answers[1][0]
+            ans_act = "desired to " + action
 
-        elif ansType == "state" or ansType == "location":
+        elif ansType == "state":
             actionWord = sent_ans_actor + poss + ansType
 
         elif ansType == "actor_appearance":
@@ -2465,7 +2866,14 @@ def generatePumpForActs(ansList):
             actionWord = "the amount of items " + sent_ans_actor + " " + have
 
         elif ansType == "location":
-            actionWord = sent_ans_actor + poss + "location"
+            address = answers[2]
+
+            if " room" in address or " row" in address:
+                addWord = "seat"
+            else:
+                addWord = "address"
+
+            actionWord = sent_ans_actor + poss + addWord
 
         hintTemplateA.extend([" Can you tell me about " + actionWord + "?",
                               " How does that affect " + sent_actor + actor_poss + "actions? "])
@@ -2509,6 +2917,12 @@ def generateElabForActs(ansList):
         elif len(answers[len(answers) - 1]) == 2:
             actor, action = answers[len(answers) - 1]
 
+        ans_act = determineVerbForm(actor, action, "past")
+
+        if type(obj) is str:
+            if len(wordnet.synsets(obj)) > 0 and getCommonPartOfSpeech(obj) == 'a':
+                ans_act = determineVerbForm(actor, action, "present")
+
         def_prop = WordNet.getDefinition(ans_action, verb="Yes")
 
         if type(obj) is item_type.Item:
@@ -2524,9 +2938,11 @@ def generateElabForActs(ansList):
             sent_actor = actor.name
 
         poss = determinePossessiveForm(ans_actor)
-        action = wnl.lemmatize(action.replace("_", " "), 'v')
-        ans_act = determineVerbForm(actor, action, "past")
+        action = action.replace("_", " ")
         have = determineVerbForm(ans_actor, "have", "present")
+
+        if "not" in ans_act:
+            ans_act = "did " + ans_act
 
         resForChar = ""
         resForItem = ""
@@ -2534,19 +2950,19 @@ def generateElabForActs(ansList):
 
         whAdd = " "
 
-        if ans_obj:
+        if obj != "":
             try:
-                resForChar = Entity.charList[ans_obj.lower()]
+                resForChar = Entity.charList[obj.lower()]
             except Exception as e:
                 print("Error in promptActs: ", e)
 
             try:
-                resForItem = Entity.itemList[ans_obj.lower()]
+                resForItem = Entity.itemList[obj.lower()]
             except Exception as e:
                 print("Error in promptActs: ", e)
 
             try:
-                resForLoc = Entity.locList[ans_obj.lower()]
+                resForLoc = Entity.locList[obj.lower()]
             except Exception as e:
                 print("Error in promptActs: ", e)
 
@@ -2556,7 +2972,7 @@ def generateElabForActs(ansList):
             if propType == "appearance" or propType == "personality":
                 verb = determineVerbForm("singular", "be", "present")
 
-                if obj.lower().endswith("s"):
+                if inflect.singular_noun(obj.lower()):
                     verb = determineVerbForm("plural", "be", "present")
 
                 obj = " " + obj + " that " + verb + " " + prop
@@ -2571,11 +2987,11 @@ def generateElabForActs(ansList):
             resForChar = " a person"
             whAdd = "who "
 
-        if resForItem != "" and ans_obj:
+        elif resForItem != "" and ans_obj:
             resForItem = " an item"
             whAdd = "what "
 
-        if resForLoc != "" and ans_obj:
+        elif resForLoc != "" and ans_obj:
             resForLoc = " somewhere"
             whAdd = "where "
 
@@ -2585,8 +3001,9 @@ def generateElabForActs(ansList):
 
         elif ansType == "desire":
             actionWord = whAdd + sent_ans_actor + " desired to " + answers[1][0]
+            ans_act = "desired to " + action
 
-        elif ansType == "state" or ansType == "location":
+        elif ansType == "state":
             actionWord = sent_ans_actor + poss + ansType
 
         elif ansType == "actor_appearance":
@@ -2605,7 +3022,14 @@ def generateElabForActs(ansList):
             actionWord = "the amount of items " + sent_ans_actor + " " + have
 
         elif ansType == "location":
-            actionWord = sent_ans_actor + poss + " location"
+            address = answers[2]
+
+            if " room" in address or " row" in address:
+                addWord = "seat"
+            else:
+                addWord = "address"
+
+            actionWord = sent_ans_actor + poss + addWord
 
         if def_prop:
             hintChoices.append(
@@ -2629,3 +3053,7 @@ def generateMeaningForWord(sequence, word=None):
 
     return hintChoices
 
+
+def getCommonPartOfSpeech(word):
+    L = [x.pos() for x in wordnet.synsets(word)]
+    return max(set(L), key = L.count)
