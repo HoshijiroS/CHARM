@@ -3,11 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="feb6c143-884b-4904-8969-3d7a3e6685ab" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model/dialogue_manager/content_provider.py" afterPath="$PROJECT_DIR$/model/dialogue_manager/content_provider.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model/dialogue_manager/dialogue_turns.py" afterPath="$PROJECT_DIR$/model/dialogue_manager/dialogue_turns.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model/dialogue_manager/sentence_parser.py" afterPath="$PROJECT_DIR$/model/dialogue_manager/sentence_parser.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model/story_world/classes/Character.py" afterPath="$PROJECT_DIR$/model/story_world/classes/Character.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/view/templates/view/index.html" afterPath="$PROJECT_DIR$/view/templates/view/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/view/static/css/components.css" afterPath="$PROJECT_DIR$/view/static/css/components.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/view/views.py" afterPath="$PROJECT_DIR$/view/views.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -17,22 +14,22 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/CHARM$Test__stanford_parser.coverage" NAME="Test: stanford_parser Coverage Results" MODIFIED="1517911071165" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/CHARM$Unittests_in_parser_test_py.coverage" NAME="Unittests in parser_test.py Coverage Results" MODIFIED="1517925625051" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/stanford_parser" />
     <SUITE FILE_PATH="coverage/CHARM$dialogue_turns.coverage" NAME="dialogue_turns Coverage Results" MODIFIED="1529915961523" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/model/dialogue_manager" />
     <SUITE FILE_PATH="coverage/CHARM$StoryWorld.coverage" NAME="CHARM Coverage Results" MODIFIED="1516294645365" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/model/Scenes" />
     <SUITE FILE_PATH="coverage/CHARM$Scenes.coverage" NAME="Scenes Coverage Results" MODIFIED="1517484331984" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/model/Story_World" />
-    <SUITE FILE_PATH="coverage/CHARM$Unittests_in_parser_test_py.coverage" NAME="Unittests in parser_test.py Coverage Results" MODIFIED="1517925625051" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/stanford_parser" />
+    <SUITE FILE_PATH="coverage/CHARM$Test__stanford_parser.coverage" NAME="Test: stanford_parser Coverage Results" MODIFIED="1517911071165" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
   </component>
   <component name="DjangoConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)">
     <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="450">
-      <file leaf-file-name="content_provider.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="content_provider.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/dialogue_manager/content_provider.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="366">
-              <caret line="2540" column="60" lean-forward="true" selection-start-line="2540" selection-start-column="60" selection-end-line="2540" selection-end-column="60" />
+            <state relative-caret-position="300">
+              <caret line="12" column="42" lean-forward="true" selection-start-line="12" selection-start-column="42" selection-end-line="12" selection-end-column="42" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
                 <element signature="e#432#835#0" expanded="false" />
@@ -65,9 +62,17 @@
                 <element signature="e#86647#89401#0" expanded="false" />
                 <element signature="e#89451#91095#0" expanded="false" />
                 <element signature="e#91143#92785#0" expanded="false" />
-                <marker date="1529935053243" expanded="false" signature="110213:110448" ph="..." />
-                <marker date="1529935053243" expanded="false" signature="110839:111168" ph="..." />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="components.css" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/view/static/css/components.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="572">
+              <caret line="430" column="0" lean-forward="true" selection-start-line="430" selection-start-column="0" selection-end-line="430" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -75,8 +80,8 @@
       <file leaf-file-name="Location.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/story_world/classes/Location.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="181">
-              <caret line="73" column="15" lean-forward="true" selection-start-line="73" selection-start-column="15" selection-end-line="73" selection-end-column="15" />
+            <state relative-caret-position="1825">
+              <caret line="73" column="15" lean-forward="false" selection-start-line="73" selection-start-column="15" selection-end-line="73" selection-end-column="15" />
               <folding />
             </state>
           </provider>
@@ -85,7 +90,7 @@
       <file leaf-file-name="sentence_parser.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/dialogue_manager/sentence_parser.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-20">
+            <state relative-caret-position="3925">
               <caret line="157" column="4" lean-forward="false" selection-start-line="157" selection-start-column="4" selection-end-line="157" selection-end-column="4" />
               <folding />
             </state>
@@ -95,7 +100,7 @@
       <file leaf-file-name="Character.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/story_world/classes/Character.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="945">
+            <state relative-caret-position="5100">
               <caret line="204" column="61" lean-forward="false" selection-start-line="204" selection-start-column="61" selection-end-line="204" selection-end-column="61" />
               <folding>
                 <element signature="e#6811#8018#0" expanded="false" />
@@ -109,7 +114,7 @@
       <file leaf-file-name="Item.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/story_world/classes/Item.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1105">
+            <state relative-caret-position="400">
               <caret line="16" column="13" lean-forward="true" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
               <folding>
                 <element signature="e#1440#3637#0" expanded="false" />
@@ -121,8 +126,8 @@
       <file leaf-file-name="dialogue_turns.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/dialogue_manager/dialogue_turns.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="341">
-              <caret line="94" column="0" lean-forward="true" selection-start-line="94" selection-start-column="0" selection-end-line="94" selection-end-column="0" />
+            <state relative-caret-position="2000">
+              <caret line="94" column="0" lean-forward="false" selection-start-line="94" selection-start-column="0" selection-end-line="94" selection-end-column="0" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
                 <element signature="e#1827#2017#0" expanded="false" />
@@ -180,17 +185,16 @@
                 <element signature="e#88065#88738#0" expanded="false" />
                 <element signature="e#88805#89272#0" expanded="false" />
                 <element signature="e#89338#89816#0" expanded="false" />
-                <marker date="1529934711179" expanded="false" signature="7158:7870" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/view/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-155">
-              <caret line="26" column="39" lean-forward="true" selection-start-line="26" selection-start-column="39" selection-end-line="26" selection-end-column="39" />
+            <state relative-caret-position="405">
+              <caret line="47" column="29" lean-forward="true" selection-start-line="47" selection-start-column="29" selection-end-line="47" selection-end-column="29" />
               <folding />
             </state>
           </provider>
@@ -209,8 +213,8 @@
       <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/view/templates/view/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="174">
-              <caret line="209" column="44" lean-forward="true" selection-start-line="209" selection-start-column="44" selection-end-line="209" selection-end-column="44" />
+            <state relative-caret-position="5225">
+              <caret line="209" column="44" lean-forward="false" selection-start-line="209" selection-start-column="44" selection-end-line="209" selection-end-column="44" />
               <folding />
             </state>
           </provider>
@@ -344,14 +348,12 @@
         <option value="$PROJECT_DIR$/model/conjugator/conjugator.py" />
         <option value="$PROJECT_DIR$/model/externals/wordnet.py" />
         <option value="$PROJECT_DIR$/CHARM/settings.py" />
-        <option value="$PROJECT_DIR$/view/views.py" />
         <option value="$PROJECT_DIR$/model/story_world/story_content.py" />
         <option value="$PROJECT_DIR$/model/externals/logger.py" />
         <option value="$PROJECT_DIR$/model/story_world/classes/Relations.py" />
         <option value="$PROJECT_DIR$/model/story_world/story_scenes.py" />
         <option value="$PROJECT_DIR$/model/story_world/entities.py" />
         <option value="$PROJECT_DIR$/model/story_world/classes/Location.py" />
-        <option value="$PROJECT_DIR$/view/static/css/components.css" />
         <option value="$PROJECT_DIR$/model/story_world/classes/Item.py" />
         <option value="$PROJECT_DIR$/model/dialogue_manager/sentence_parser.py" />
         <option value="$PROJECT_DIR$/model/story_world/classes/Character.py" />
@@ -359,6 +361,8 @@
         <option value="$PROJECT_DIR$/model/dialogue_manager/dialogue_turns.py" />
         <option value="$PROJECT_DIR$/view/urls.py" />
         <option value="$PROJECT_DIR$/model/dialogue_manager/content_provider.py" />
+        <option value="$PROJECT_DIR$/view/static/css/components.css" />
+        <option value="$PROJECT_DIR$/view/views.py" />
       </list>
     </option>
   </component>
@@ -412,6 +416,7 @@
     </navigator>
     <panes>
       <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -495,7 +500,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -505,17 +509,17 @@
     <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file://D:/University Files/THESIS/ECA/Thesis/CHARM/model/dialogue_manager/dialogue_turns.py" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Roscoe Alicbusan\PycharmProjects\CHARM\view\templates\view" />
+      <recent name="C:\Users\Roscoe Alicbusan\PycharmProjects\CHARM\view\static\js" />
+      <recent name="C:\Users\Roscoe Alicbusan\PycharmProjects\CHARM\view\static\css" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\University Files\THESIS\ECA\Thesis\CHARM\model\story_world\Classes" />
       <recent name="D:\University Files\THESIS\ECA\Thesis\CHARM\model\story_world" />
       <recent name="D:\University Files\THESIS\ECA\Thesis\CHARM\model\externals" />
       <recent name="D:\University Files\THESIS\ECA\Thesis\CHARM\model" />
       <recent name="D:\University Files\THESIS\ECA\Thesis\" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\Roscoe Alicbusan\PycharmProjects\CHARM\view\templates\view" />
-      <recent name="C:\Users\Roscoe Alicbusan\PycharmProjects\CHARM\view\static\js" />
-      <recent name="C:\Users\Roscoe Alicbusan\PycharmProjects\CHARM\view\static\css" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -535,10 +539,10 @@
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
         <env name="DJANGO_SETTINGS_MODULE" value="CHARM.settings" />
+        <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="C:\Users\Lynette\AppData\Local\Programs\Python\Python35-32\python.exe" />
+      <option name="SDK_HOME" value="C:\Users\ERDT\AppData\Local\Programs\Python\Python35\python.exe" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -646,8 +650,8 @@
       <item index="0" class="java.lang.String" itemvalue="Django server.CHARM" />
       <item index="1" class="java.lang.String" itemvalue="Django tests.Test: stanford_parser" />
       <item index="2" class="java.lang.String" itemvalue="Python.Scenes" />
-      <item index="3" class="java.lang.String" itemvalue="Python tests.Unittests in parser_test.py" />
-      <item index="4" class="java.lang.String" itemvalue="Python.dialogue_turns" />
+      <item index="3" class="java.lang.String" itemvalue="Python.dialogue_turns" />
+      <item index="4" class="java.lang.String" itemvalue="Python tests.Unittests in parser_test.py" />
     </list>
     <recent_temporary>
       <list size="4">
@@ -979,7 +983,7 @@
     </history-entry>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-11" y="-11" width="1942" height="1056" extended-state="6" />
+    <frame x="-11" y="-11" width="1942" height="1162" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15278515" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -988,11 +992,11 @@
       <window_info id="Database" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32931727" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32921347" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.28187135" sideWeight="0.45888594" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.28095734" sideWeight="0.45888594" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298647" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39954597" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39854318" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3299735" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="SVN Repositories" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32982457" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -1153,9 +1157,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="290">
           <caret line="46" column="15" lean-forward="false" selection-start-line="46" selection-start-column="15" selection-end-line="46" selection-end-column="15" />
-          <folding>
-            <element signature="e#0#31#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1214,13 +1215,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/view/static/css/components.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="395">
-          <caret line="442" column="1" lean-forward="false" selection-start-line="442" selection-start-column="1" selection-end-line="442" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/model/story_world/entities.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-2175">
@@ -1243,22 +1237,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python35-32/Lib/random.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6200">
-          <caret line="254" column="0" lean-forward="false" selection-start-line="254" selection-start-column="0" selection-end-line="254" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python35-32/Lib/site-packages/nltk/corpus/reader/wordnet.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="36800">
-          <caret line="1488" column="0" lean-forward="false" selection-start-line="1488" selection-start-column="0" selection-end-line="1488" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python35-32/Lib/random.py" />
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python35-32/Lib/site-packages/nltk/corpus/reader/wordnet.py" />
     <entry file="file://$PROJECT_DIR$/model/story_world/story_scenes.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="8625">
@@ -1287,25 +1267,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/view/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-155">
-          <caret line="26" column="39" lean-forward="true" selection-start-line="26" selection-start-column="39" selection-end-line="26" selection-end-column="39" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/view/templates/view/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="174">
-          <caret line="209" column="44" lean-forward="true" selection-start-line="209" selection-start-column="44" selection-end-line="209" selection-end-column="44" />
+        <state relative-caret-position="5225">
+          <caret line="209" column="44" lean-forward="false" selection-start-line="209" selection-start-column="44" selection-end-line="209" selection-end-column="44" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/model/story_world/classes/Item.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1105">
+        <state relative-caret-position="400">
           <caret line="16" column="13" lean-forward="true" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
           <folding>
             <element signature="e#1440#3637#0" expanded="false" />
@@ -1315,15 +1287,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/model/story_world/classes/Location.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="181">
-          <caret line="73" column="15" lean-forward="true" selection-start-line="73" selection-start-column="15" selection-end-line="73" selection-end-column="15" />
+        <state relative-caret-position="1825">
+          <caret line="73" column="15" lean-forward="false" selection-start-line="73" selection-start-column="15" selection-end-line="73" selection-end-column="15" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/model/story_world/classes/Character.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="945">
+        <state relative-caret-position="5100">
           <caret line="204" column="61" lean-forward="false" selection-start-line="204" selection-start-column="61" selection-end-line="204" selection-end-column="61" />
           <folding>
             <element signature="e#6811#8018#0" expanded="false" />
@@ -1333,17 +1305,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/.PyCharm2017.2/system/python_stubs/-820798839/builtins.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="192">
-          <caret line="276" column="4" lean-forward="false" selection-start-line="276" selection-start-column="4" selection-end-line="276" selection-end-column="4" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$USER_HOME$/.PyCharm2017.2/system/python_stubs/-820798839/builtins.py" />
     <entry file="file://$PROJECT_DIR$/model/dialogue_manager/sentence_parser.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-20">
+        <state relative-caret-position="3925">
           <caret line="157" column="4" lean-forward="false" selection-start-line="157" selection-start-column="4" selection-end-line="157" selection-end-column="4" />
           <folding />
         </state>
@@ -1351,8 +1316,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/model/dialogue_manager/dialogue_turns.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="341">
-          <caret line="94" column="0" lean-forward="true" selection-start-line="94" selection-start-column="0" selection-end-line="94" selection-end-column="0" />
+        <state relative-caret-position="2000">
+          <caret line="94" column="0" lean-forward="false" selection-start-line="94" selection-start-column="0" selection-end-line="94" selection-end-column="0" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
             <element signature="e#1827#2017#0" expanded="false" />
@@ -1410,7 +1375,6 @@
             <element signature="e#88065#88738#0" expanded="false" />
             <element signature="e#88805#89272#0" expanded="false" />
             <element signature="e#89338#89816#0" expanded="false" />
-            <marker date="1529934711179" expanded="false" signature="7158:7870" ph="..." />
           </folding>
         </state>
       </provider>
@@ -1425,8 +1389,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/model/dialogue_manager/content_provider.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="366">
-          <caret line="2540" column="60" lean-forward="true" selection-start-line="2540" selection-start-column="60" selection-end-line="2540" selection-end-column="60" />
+        <state relative-caret-position="300">
+          <caret line="12" column="42" lean-forward="true" selection-start-line="12" selection-start-column="42" selection-end-line="12" selection-end-column="42" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
             <element signature="e#432#835#0" expanded="false" />
@@ -1459,9 +1423,23 @@
             <element signature="e#86647#89401#0" expanded="false" />
             <element signature="e#89451#91095#0" expanded="false" />
             <element signature="e#91143#92785#0" expanded="false" />
-            <marker date="1529935053243" expanded="false" signature="110213:110448" ph="..." />
-            <marker date="1529935053243" expanded="false" signature="110839:111168" ph="..." />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/view/static/css/components.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="572">
+          <caret line="430" column="0" lean-forward="true" selection-start-line="430" selection-start-column="0" selection-end-line="430" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/view/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="405">
+          <caret line="47" column="29" lean-forward="true" selection-start-line="47" selection-start-column="29" selection-end-line="47" selection-end-column="29" />
+          <folding />
         </state>
       </provider>
     </entry>

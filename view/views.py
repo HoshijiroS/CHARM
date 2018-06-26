@@ -32,13 +32,13 @@ def process_message(request):
 
 def prev_page(request):
     chapName, chapFull, pageMax, pageNum, pageContents = story_content.getPrevPage()
-    data = {'content': pageContents, 'pageNum': pageNum, 'pageMax': pageMax, 'chapName': chapName, 'chapFull': chapFull}
+    data = {'content': pageContents, 'pageNum': "Page " + str(pageNum), 'pageMax': pageMax, 'chapName': chapName, 'chapFull': chapFull}
     return JsonResponse(data)
 
 
 def next_page(request):
     chapName, chapFull, pageMax, pageNum, pageContents = story_content.getNextPage()
-    data = {'content': pageContents, 'pageNum': pageNum, 'pageMax': pageMax, 'chapName': chapName, 'chapFull': chapFull}
+    data = {'content': pageContents, 'pageNum': "Page " + str(pageNum), 'pageMax': pageMax, 'chapName': chapName, 'chapFull': chapFull}
     return JsonResponse(data)
 
 

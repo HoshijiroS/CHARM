@@ -226,7 +226,7 @@ input, button {
 .page-progress {
 	position: relative;
 	margin: auto;
-	width: 530px;
+	width: 535px;
 	height: 55px;
 }
 
@@ -236,6 +236,7 @@ input, button {
 	color: #343434;
 	position: relative;
 	float: left;
+	margin: 0px 5px;
 }
 
 .next-page {
