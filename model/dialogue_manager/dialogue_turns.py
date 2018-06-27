@@ -871,9 +871,9 @@ def determineSentenceType(sequence):
                             else:
                                 actorName = actor
 
-                        state = " " + provider.determineVerbForm(actor, out_state, "past")
-                        if len(wordnet.synsets(out_state)) > 0 and provider.getCommonPartOfSpeech(out_state) == 'a':
-                            state = " " + provider.determineVerbForm(actor, "be", "past") + state
+                        state = " " + provider.determineVerbForm(actor, out_state[0], "past")
+                        if len(wordnet.synsets(out_state[0])) > 0 and provider.getCommonPartOfSpeech(out_state[0]) == 'a':
+                            state = " " + provider.determineVerbForm(actor, "be", "past") + out_state[0]
 
                         if set(sentence).issuperset(set(givenAnswers)) and verbPresent:
                             sentence_answer = sentence_answer + actorName + state
@@ -1318,8 +1318,12 @@ def determineSentenceType(sequence):
                     else:
                         actorName = actor
 
+                state = " " + provider.determineVerbForm(actor, out_state[0], "past")
+                if len(wordnet.synsets(out_state[0])) > 0 and provider.getCommonPartOfSpeech(out_state[0]) == 'a':
+                    state = " " + provider.determineVerbForm(actor, "be", "past") + out_state[0]
+
                 if set(sentence).issuperset(set(givenAnswers)) and verbPresent:
-                    sentence_answer = actorName + " is " + out_state
+                    sentence_answer = actorName + " is " + state
                     generateFollowUp(sentence_answer, "state")
 
             elif ansType == "actor_appearance":
