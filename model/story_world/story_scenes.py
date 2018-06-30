@@ -1173,7 +1173,7 @@ def startScene17():
     Entity.charList["miss mason"].hasAction(("receive", WordNet.getVerbList("receive")), Entity.itemList["letter"], scene_17.time + "ev1")
     lookup.append([scene_17.time + "ev1", Entity.charList["miss mason"].name, "action"])
 
-    Entity.itemList["letter"].hasPerProperty(["from Wanda"], scene_17.time + "ev1ext")
+    Entity.itemList["letter"].hasPerProperty("from Wanda", scene_17.time + "ev1ext")
     lookup.append([scene_17.time + "ev1ext", Entity.itemList["letter"].name, "perProperty"])
 
     Entity.charList["miss mason"].hasAction(("know", WordNet.getVerbList("know")), Entity.charList["wanda"].name + " new house", scene_17.time + "inf1")
