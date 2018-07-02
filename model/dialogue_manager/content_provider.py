@@ -2000,8 +2000,6 @@ def generateHintForItem(ansList):
             else:
                 causeList.append(sent)
 
-    look = determineVerbForm(actor, "look", "present")
-
     temp = []
     for items in out_prop:
         if "not" in items:
@@ -2011,14 +2009,15 @@ def generateHintForItem(ansList):
             cont = (items, WordNet.getSimilarAdjList(items, negator=None))
             temp.append(cont)
 
-    for entries in temp:
-        adj, synonyms = entries
+    for sentences in causeList:
+        for entries in temp:
+            adj, synonyms = entries
 
-        for synonym in synonyms:
-            if synonym != adj:
-                hintChoices.append(
-                    "I think since " + entries + ", the " + item + " " + actor.name + " " + act + " " + look
-                    + " like a word that has the synonym " + synonym + ".")
+            for synonym in synonyms:
+                if synonym != adj:
+                    hintChoices.append(
+                        "I think since " + sentences + ", the description for the " + item + " " + actor.name + " " + act
+                        + " is a word that has the synonym " + synonym + ".")
 
     return hintChoices
 
@@ -2079,9 +2078,10 @@ def generateElabForItem(ansList):
     def_prop = WordNet.getDefinition(out_prop)
 
     if def_prop:
-        hintChoices.append(
-            "I think since " + entries + ", the " + item + " " + actor.name + " " + act + " " + look +
-            " " + def_prop + ". What does the " + item + " " + actor.name + " " + act + " " + look + " like?")
+        for entries in causeList:
+            hintChoices.append(
+                "I think since " + entries + ", the " + item + " " + actor.name + " " + act + " " + look +
+                " " + def_prop + ". What does the " + item + " " + actor.name + " " + act + " " + look + " like?")
 
     return hintChoices
 
@@ -3126,6 +3126,7 @@ def generateMeaningForWord(sequence, word=None):
 
     return "meaning", "I did not see the meaning of that word in my dictionary. Maybe you should ask other people or" \
                       " check other dictionaries?"
+
 
 def getCommonPartOfSpeech(word):
     L = [x.pos() for x in wordnet.synsets(word)]
