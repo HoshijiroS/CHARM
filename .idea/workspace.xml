@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="feb6c143-884b-4904-8969-3d7a3e6685ab" name="Default" comment="Final fixes.">
+    <list default="true" id="feb6c143-884b-4904-8969-3d7a3e6685ab" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model/dialogue_manager/content_provider.py" afterPath="$PROJECT_DIR$/model/dialogue_manager/content_provider.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -27,8 +26,8 @@
       <file leaf-file-name="content_provider.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/model/dialogue_manager/content_provider.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="226">
-              <caret line="3115" column="20" lean-forward="true" selection-start-line="3115" selection-start-column="20" selection-end-line="3115" selection-end-column="20" />
+            <state relative-caret-position="417">
+              <caret line="600" column="44" lean-forward="true" selection-start-line="600" selection-start-column="44" selection-end-line="600" selection-end-column="44" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
                 <element signature="e#432#835#0" expanded="false" />
@@ -37,9 +36,9 @@
                 <element signature="e#2806#4047#0" expanded="false" />
                 <element signature="e#4100#4962#0" expanded="false" />
                 <element signature="e#8471#14764#0" expanded="false" />
-                <element signature="e#15725#61094#0" expanded="false" />
+                <element signature="e#14805#15619#0" expanded="false" />
+                <element signature="e#16876#19223#0" expanded="false" />
                 <element signature="e#17300#19112#0" expanded="false" />
-                <element signature="e#19261#25301#0" expanded="false" />
                 <element signature="e#25339#30483#0" expanded="false" />
                 <element signature="e#30524#36442#0" expanded="false" />
                 <element signature="e#32757#34805#0" expanded="false" />
@@ -91,8 +90,8 @@
       <file leaf-file-name="dialogue_turns.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/dialogue_manager/dialogue_turns.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="25">
-              <caret line="885" column="42" lean-forward="false" selection-start-line="885" selection-start-column="42" selection-end-line="885" selection-end-column="42" />
+            <state relative-caret-position="167">
+              <caret line="1185" column="15" lean-forward="false" selection-start-line="1185" selection-start-column="15" selection-end-line="1185" selection-end-column="15" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
                 <element signature="e#1827#2017#0" expanded="false" />
@@ -124,9 +123,9 @@
                 <element signature="e#25854#28265#0" expanded="false" />
                 <element signature="e#28337#30169#0" expanded="false" />
                 <element signature="e#30240#32254#0" expanded="false" />
+                <element signature="e#32328#33996#0" expanded="false" />
                 <element signature="e#34078#35740#0" expanded="false" />
                 <element signature="e#35823#37487#0" expanded="false" />
-                <element signature="e#37562#40209#0" expanded="false" />
                 <element signature="e#40290#42411#0" expanded="false" />
                 <element signature="e#42488#44592#0" expanded="false" />
                 <element signature="e#44657#46496#0" expanded="false" />
@@ -136,7 +135,6 @@
                 <element signature="e#51852#53592#0" expanded="false" />
                 <element signature="e#53658#55248#0" expanded="false" />
                 <element signature="e#55315#57069#0" expanded="false" />
-                <element signature="e#57128#59381#0" expanded="false" />
                 <element signature="e#77479#78591#0" expanded="false" />
                 <element signature="e#78611#81937#0" expanded="false" />
                 <element signature="e#82774#82914#0" expanded="false" />
@@ -260,7 +258,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>getCommonPartOfSpeech</find>
       <find>&quot;output: &quot;</find>
       <find>lock</find>
       <find>answer =</find>
@@ -290,6 +287,7 @@
       <find>split</find>
       <find>synonym</find>
       <find>&quot;past&quot;</find>
+      <find>inflect</find>
     </findStrings>
     <replaceStrings>
       <replace>]</replace>
@@ -390,8 +388,8 @@
         <option value="$PROJECT_DIR$/view/views.py" />
         <option value="$PROJECT_DIR$/model/story_world/story_scenes.py" />
         <option value="$PROJECT_DIR$/view/urls.py" />
-        <option value="$PROJECT_DIR$/model/dialogue_manager/dialogue_turns.py" />
         <option value="$PROJECT_DIR$/model/dialogue_manager/content_provider.py" />
+        <option value="$PROJECT_DIR$/model/dialogue_manager/dialogue_turns.py" />
       </list>
     </option>
   </component>
@@ -1006,7 +1004,14 @@
       <option name="project" value="LOCAL" />
       <updated>1530523343429</updated>
     </task>
-    <option name="localTasksCounter" value="44" />
+    <task id="LOCAL-00044" summary="Final fixes.">
+      <created>1530612687819</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1530612687820</updated>
+    </task>
+    <option name="localTasksCounter" value="45" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -1390,8 +1395,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/model/dialogue_manager/dialogue_turns.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="25">
-          <caret line="885" column="42" lean-forward="false" selection-start-line="885" selection-start-column="42" selection-end-line="885" selection-end-column="42" />
+        <state relative-caret-position="167">
+          <caret line="1185" column="15" lean-forward="false" selection-start-line="1185" selection-start-column="15" selection-end-line="1185" selection-end-column="15" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
             <element signature="e#1827#2017#0" expanded="false" />
@@ -1423,9 +1428,9 @@
             <element signature="e#25854#28265#0" expanded="false" />
             <element signature="e#28337#30169#0" expanded="false" />
             <element signature="e#30240#32254#0" expanded="false" />
+            <element signature="e#32328#33996#0" expanded="false" />
             <element signature="e#34078#35740#0" expanded="false" />
             <element signature="e#35823#37487#0" expanded="false" />
-            <element signature="e#37562#40209#0" expanded="false" />
             <element signature="e#40290#42411#0" expanded="false" />
             <element signature="e#42488#44592#0" expanded="false" />
             <element signature="e#44657#46496#0" expanded="false" />
@@ -1435,7 +1440,6 @@
             <element signature="e#51852#53592#0" expanded="false" />
             <element signature="e#53658#55248#0" expanded="false" />
             <element signature="e#55315#57069#0" expanded="false" />
-            <element signature="e#57128#59381#0" expanded="false" />
             <element signature="e#77479#78591#0" expanded="false" />
             <element signature="e#78611#81937#0" expanded="false" />
             <element signature="e#82774#82914#0" expanded="false" />
@@ -1457,8 +1461,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/model/dialogue_manager/content_provider.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="226">
-          <caret line="3115" column="20" lean-forward="true" selection-start-line="3115" selection-start-column="20" selection-end-line="3115" selection-end-column="20" />
+        <state relative-caret-position="417">
+          <caret line="600" column="44" lean-forward="true" selection-start-line="600" selection-start-column="44" selection-end-line="600" selection-end-column="44" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
             <element signature="e#432#835#0" expanded="false" />
@@ -1467,9 +1471,9 @@
             <element signature="e#2806#4047#0" expanded="false" />
             <element signature="e#4100#4962#0" expanded="false" />
             <element signature="e#8471#14764#0" expanded="false" />
-            <element signature="e#15725#61094#0" expanded="false" />
+            <element signature="e#14805#15619#0" expanded="false" />
+            <element signature="e#16876#19223#0" expanded="false" />
             <element signature="e#17300#19112#0" expanded="false" />
-            <element signature="e#19261#25301#0" expanded="false" />
             <element signature="e#25339#30483#0" expanded="false" />
             <element signature="e#30524#36442#0" expanded="false" />
             <element signature="e#32757#34805#0" expanded="false" />
