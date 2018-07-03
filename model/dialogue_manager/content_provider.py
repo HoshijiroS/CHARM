@@ -679,7 +679,7 @@ def assembleSentence(event, genType=None, turnType=None, ansType=None, relType=N
                     hintTemplateA.extend([container[0] + " and " + actor.name + " " + act + " " + sentence_prop
                                           + " because of " + pronoun_obj + " " + ansType + ".",
                                           container[
-                                              0] + " and " + pronoun_obj.title() + " " + ansType + " is the reason."])
+                                              0] + " and " + pronoun_obj + " " + ansType + " is the reason."])
 
                 else:
                     hintTemplateB.extend(
@@ -1797,7 +1797,7 @@ def generateHintForAppProp(ansList):
             if synonym != adj:
                 hintChoices.append(
                     "I think it's because " + actor.name + " is __. The word in the blank starts with " + adj[
-                        0] + " and its synonym is " + synonym + ". Can you complete the sentence?")
+                        0] + " and its synonym is '" + synonym + "'. Can you complete the sentence?")
 
     return hintChoices
 
@@ -1954,7 +1954,7 @@ def generateHintForItem(ansList):
     hintChoices = []
     actor, act, item, out_prop = ansList
     item = item.name
-    poss = determinePossessiveForm(actor)
+    pronoun_obj = producePronoun(actor)
     act, attr, event = actor.queryAttribute(None, item, None)
     cause_event = ref.queryRelations(event, "cause")
     reason_event = ref.queryRelations(event, "reason")
@@ -2016,8 +2016,8 @@ def generateHintForItem(ansList):
             for synonym in synonyms:
                 if synonym != adj:
                     hintChoices.append(
-                        "I think since " + sentences + ", the description for the " + item + " " + actor.name + " " + act
-                        + " is a word that has the synonym " + synonym + ".")
+                        "I think since " + sentences + ", the description for the " + item + " " + pronoun_obj + " " + act
+                        + " is a word that has the synonym '" + synonym + "'.")
 
     return hintChoices
 
@@ -2074,13 +2074,14 @@ def generateElabForItem(ansList):
                 causeList.append(sent)
 
     look = determineVerbForm(actor, "look", "present")
+    pronoun_obj = producePronoun(actor)
 
     def_prop = WordNet.getDefinition(out_prop)
 
     if def_prop:
         for entries in causeList:
             hintChoices.append(
-                "I think since " + entries + ", the " + item + " " + actor.name + " " + act + " " + look +
+                "I think since " + entries + ", the " + item + " " + pronoun_obj + " " + act + " " + look +
                 " " + def_prop + ". What does the " + item + " " + actor.name + " " + act + " " + look + " like?")
 
     return hintChoices
@@ -2138,10 +2139,11 @@ def generatePumpForItem(ansList):
                 causeList.append(sent)
 
     look = determineVerbForm(actor, "look", "present")
+    pronoun_obj = producePronoun(actor)
 
     for entries in causeList:
         hintChoices.append(
-            "I think since " + entries + ", the " + item + " " + actor.name + " " + act + " " + look + " a certain way. "
+            "I think since " + entries + ", the " + item + " " + pronoun_obj + " " + act + " " + look + " a certain way. "
             "Can you tell me more about " + actor.name + poss + item + "?")
 
     return hintChoices
@@ -2242,10 +2244,11 @@ def generatePumpForAmtItem(ansList):
                 causeList.append(sent)
 
     look = determineVerbForm(actor, "be", "present")
+    pronoun_obj = producePronoun(actor)
 
     for entries in causeList:
         hintChoices.append(
-            "I think since " + entries + ", the " + item + " " + actor.name + " " + act + " " + look + " a certain way. "
+            "I think since " + entries + ", the " + item + " " + pronoun_obj + " " + act + " " + look + " a certain way. "
             "Can you tell me more about " + actor.name + poss + item + "?")
 
     return hintChoices
@@ -2705,13 +2708,13 @@ def generatePromptForActs(ansList):
             whAdd = "where "
 
         if ansType == "action":
-            actionWord = whAdd + sent_ans_actor + " " + determineVerbForm(ans_actor, answers[1][0], "pastt")
+            actionWord = whAdd + sent_ans_actor + " " + determineVerbForm(ans_actor, answers[1][0], "past")
 
         elif ansType == "desire":
             actionWord = whAdd + sent_ans_actor + " desired to " + answers[1][0]
 
         elif ansType == "state":
-            actionWord = sent_ans_actor + poss + ansType
+            actionWord = sent_ans_actor + poss + "physical state"
 
         elif ansType == "actor_appearance":
             actionWord = sent_ans_actor + poss + "appearance"
@@ -2918,7 +2921,7 @@ def generatePumpForActs(ansList):
             ans_act = "desired to " + action
 
         elif ansType == "state":
-            actionWord = sent_ans_actor + poss + ansType
+            actionWord = sent_ans_actor + poss + "physical state"
 
         elif ansType == "actor_appearance":
             actionWord = sent_ans_actor + poss + "appearance"
@@ -3071,10 +3074,9 @@ def generateElabForActs(ansList):
 
         elif ansType == "desire":
             actionWord = whAdd + sent_ans_actor + " desired to " + answers[1][0]
-            ans_act = "desired to " + action
 
         elif ansType == "state":
-            actionWord = sent_ans_actor + poss + ansType
+            actionWord = sent_ans_actor + poss + "physical state"
 
         elif ansType == "actor_appearance":
             actionWord = sent_ans_actor + poss + "appearance"
@@ -3105,7 +3107,7 @@ def generateElabForActs(ansList):
             hintChoices.append(
                 sent_actor + " " + ans_act + obj + " because of " + actionWord + ". "
                 + action.title() + " means " + def_prop + resForChar + resForItem + resForLoc + ". "
-                "How does that explain " + ans_actor + poss + " actions?")
+                "How does that explain " + actionWord + "?")
 
     return hintChoices
 
