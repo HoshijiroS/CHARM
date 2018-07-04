@@ -365,9 +365,9 @@ def populateDialogueTurns():
             guessesNotExhausted = False
 
     if hintList:
-        if len(hintList) > 5:
+        if len(hintList) > 3:
             i = 0
-            while i < 5:
+            while i < 3:
                 r = random.choice(hintList)
                 hintList.remove(r)
                 finalHintList.append(r)
