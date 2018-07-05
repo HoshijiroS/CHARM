@@ -1009,6 +1009,9 @@ def determineSentenceType(sequence):
                             else:
                                 formatted_seq.append(words[0])
 
+                        if set(["do", "not", "have"]).issubset(set(formatted_seq)):
+                            formatted_seq.append("no")
+
                         sentence = [x.lower() for x in formatted_seq]
                         verbPresent = False
 
@@ -1424,9 +1427,9 @@ def determineSentenceType(sequence):
 
                 personality = provider.determineVerbForm(actor, "be", "present")
 
-                print("sentence: ", sentence)
-                print("givenAnsers: ", givenAnswers)
-                print(set(sentence).issubset(set(givenAnswers)))
+                #print("sentence: ", sentence)
+                #print("givenAnsers: ", givenAnswers)
+                #print(set(sentence).issubset(set(givenAnswers)))
                 if set(sentence).issubset(set(givenAnswers)):
                     sentence_answer = actorName + " " + personality + " " + out_prop
                     generateFollowUp(sentence_answer, "actor_personality")
@@ -1448,6 +1451,9 @@ def determineSentenceType(sequence):
                         formatted_seq.append(wnl.lemmatize(words[0]))
                     else:
                         formatted_seq.append(words[0])
+
+                if set(["do", "not", "have"]).issubset(set(formatted_seq)):
+                    formatted_seq.append("no")
 
                 sentence = [x.lower() for x in formatted_seq]
                 verbPresent = False
@@ -1866,7 +1872,7 @@ def determineSentenceType(sequence):
             result = []
             return dummy
     else:
-        return "Try asking me a question."
+        return "Could you rephrase that?"
 
 
 def getRandomActor():
