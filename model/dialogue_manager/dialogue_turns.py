@@ -8,11 +8,10 @@ from nltk.tree import ParentedTree
 
 import model.dialogue_manager.content_provider as provider
 import model.dialogue_manager.sentence_parser as parser
+import model.story_world.classes.Character as char_type
+import model.story_world.classes.Item as item_type
 import model.story_world.entities as Entity
 import model.story_world.story_scenes as ref
-
-import model.story_world.classes.Item as item_type
-import model.story_world.classes.Character as char_type
 
 incorrect = True
 question = False
@@ -230,6 +229,7 @@ def split_compound(tree, count, messages):
 def populateDialogueTurns():
     global answerList
     global finalHintList
+    global guessesNotExhausted
     global result
 
     finalHintList = []
@@ -294,26 +294,6 @@ def populateDialogueTurns():
                     ["I think " + entries + " What place in the story do you think this is?" for entries in
                      hintChoices])
 
-        # elif ansType == "appProperty":
-        #     hintChoices.extend(provider.generateHintForAppProp(ansList))
-        #     hintChoices.extend(provider.generatePumpForAppProp(ansList))
-        #     hintChoices.extend(provider.generatePromptForAppProp(correctAnswer))
-        #
-        #     if hintChoices:
-        #         if len(hintChoices) > 5:
-        #             i = 0
-        #             temp = []
-        #             while i < 5:
-        #                 r = random.choice(hintChoices)
-        #                 hintChoices.remove(r)
-        #                 temp.append(r)
-        #                 i = i + 1
-        #
-        #             hintList.extend(temp)
-        #
-        #         else:
-        #             hintList.extend(hintChoices)
-
         elif ansType == "attribute":
             hintChoices.extend(provider.generatePromptForAttr(ansList, correctAnswer))
             hintChoices.extend(provider.generateElabForAttr(ansList))
@@ -335,10 +315,18 @@ def populateDialogueTurns():
             hintList.extend(hintChoices)
 
         elif ansType == "item_appearance":
-            hintChoices.extend(provider.generatePumpForItem(ansList))
-            hintChoices.extend(provider.generatePromptForItem(ansList))
+            hintChoices.extend(provider.generatePumpForItem(ansList, "look"))
+            hintChoices.extend(provider.generatePromptForItem(ansList, "look"))
             hintChoices.extend(provider.generateHintForItem(ansList))
-            hintChoices.extend(provider.generateElabForItem(ansList))
+            hintChoices.extend(provider.generateElabForItem(ansList, "look"))
+
+            hintList.extend(hintChoices)
+
+        elif ansType == "item_personality":
+            hintChoices.extend(provider.generatePumpForItem(ansList, "be"))
+            hintChoices.extend(provider.generatePromptForItem(ansList, "be"))
+            hintChoices.extend(provider.generateHintForItem(ansList))
+            hintChoices.extend(provider.generateElabForItem(ansList, "be"))
 
             hintList.extend(hintChoices)
 
@@ -569,7 +557,8 @@ def determineSentenceType(sequence):
             skip = True
 
         else:
-            getRandomEvent("what", sequence=sequence, posList=posList, ofList=ofList, andList=andList, itemList=itemList)
+            getRandomEvent("what", sequence=sequence, posList=posList, ofList=ofList, andList=andList,
+                           itemList=itemList)
 
     elif beg == "why" and end == "?" and lock is False:
         dummyAnswer = parser.parseWhyMessage(charList, charList, verbList, advList, itemList, adjList)
@@ -587,7 +576,8 @@ def determineSentenceType(sequence):
 
         else:
             print("random event")
-            getRandomEvent("why", verbList=verbList, advList=advList, itemList=itemList, adjList=adjList, objList=charList)
+            getRandomEvent("why", verbList=verbList, advList=advList, itemList=itemList, adjList=adjList,
+                           objList=charList)
 
     if len(sequence) > 3 and end == "." and regSentence is True and \
             not set([x[0].lower() for x in sequence]).issuperset(set("i do n't want to talk anymore".split(" "))):
@@ -688,23 +678,6 @@ def determineSentenceType(sequence):
                             sentence_answer = actor.name + " " + action + " at " + loc
                             generateFollowUp(sentence_answer, "location")
 
-            # elif ansType == "appProperty":
-            #     actor, prop = ansList
-            #
-            #     if adjList:
-            #         for adjective in adjList:
-            #             for entries in prop:
-            #                 if entries == adjective:
-            #                     sentence_answer = actor.name + " is " + entries
-            #                     generateFollowUp(sentence_answer, "appProperty")
-            #
-            #     if advList:
-            #         for adverb in advList:
-            #             for entries in prop:
-            #                 if entries == adverb:
-            #                     sentence_answer = actor.name + " is " + entries
-            #                     generateFollowUp(sentence_answer, "appProperty")a
-
             elif ansType == "cause":
                 for entries in ansList:
                     ansType, answers = entries
@@ -745,7 +718,7 @@ def determineSentenceType(sequence):
                             if get_actor.gender == "collective":
                                 getActorName = "the " + getActorName
                         elif type(get_actor) is item_type.Item:
-                            if getActorName.endswith("s"):
+                            if getActorName.endswith("s") and not getActorName.endswith("ss"):
                                 getActorName = "the " + getActorName
                         else:
                             getActorName = get_actor
@@ -792,7 +765,7 @@ def determineSentenceType(sequence):
                                 if actor.gender == "collective":
                                     actorName = "the " + actorName
                             elif type(actor) is item_type.Item:
-                                if getActorName.endswith("s"):
+                                if getActorName.endswith("s") and not getActorName.endswith("ss"):
                                     actorName = "the " + actorName
                             else:
                                 actorName = actor
@@ -866,13 +839,14 @@ def determineSentenceType(sequence):
                                 if actor.gender == "collective":
                                     actorName = "the " + actorName
                             elif type(actor) is item_type.Item:
-                                if getActorName.endswith("s"):
+                                if getActorName.endswith("s") and not getActorName.endswith("ss"):
                                     actorName = "the " + actorName
                             else:
                                 actorName = actor
 
                         state = " " + provider.determineVerbForm(actor, out_state[0], "past")
-                        if len(wordnet.synsets(out_state[0])) > 0 and provider.getCommonPartOfSpeech(out_state[0]) == 'a':
+                        if len(wordnet.synsets(out_state[0])) > 0 and provider.getCommonPartOfSpeech(
+                                out_state[0]) == 'a':
                             state = " " + provider.determineVerbForm(actor, "be", "past") + out_state[0]
 
                         if set(sentence).issuperset(set(givenAnswers)) and verbPresent:
@@ -1009,7 +983,7 @@ def determineSentenceType(sequence):
                             else:
                                 formatted_seq.append(words[0])
 
-                        if set(["do", "not", "have"]).issubset(set(formatted_seq)):
+                        if {"do", "not", "have"}.issubset(set(formatted_seq)):
                             formatted_seq.append("no")
 
                         sentence = [x.lower() for x in formatted_seq]
@@ -1036,7 +1010,7 @@ def determineSentenceType(sequence):
                                 if actor.gender == "collective":
                                     actorName = "the " + actorName
                             elif type(actor) is item_type.Item:
-                                if getActorName.endswith("s"):
+                                if getActorName.endswith("s") and not getActorName.endswith("ss"):
                                     actorName = "the " + actorName
                             else:
                                 actorName = actor
@@ -1086,13 +1060,69 @@ def determineSentenceType(sequence):
                                 if actor.gender == "collective":
                                     actorName = "the " + actorName
                             elif type(actor) is item_type.Item:
-                                if getActorName.endswith("s"):
+                                if getActorName.endswith("s") and not getActorName.endswith("ss"):
                                     actorName = "the " + actorName
                             else:
                                 actorName = actor
 
+                        if item.name.endswith("s") and not item.name.endswith("ss"):
+                            look = provider.determineVerbForm("plural", "look", "present")
+                        else:
+                            look = "looks"
+
                         if set(sentence).issuperset(set(givenAnswers)):
-                            sentence_answer = actorName + " " + act + " a " + item.name + " that looks " + out_prop
+                            sentence_answer = actorName + " " + act + " a " + item.name + " that " + look + " " + out_prop
+                            generateFollowUp(sentence_answer, "item_appearance")
+
+                    elif ansType == "item_personality":
+                        actor, act, item, prop, get_ans = answers
+
+                        givenAnswers = []
+                        givenAnswers.append(wnl.lemmatize(item.name))
+
+                        if type(prop) is list:
+                            givenAnswers.extend(prop)
+                        else:
+                            givenAnswers.append(prop)
+
+                        out_prop = provider.formatMultipleItems(prop)
+
+                        givenAnswers = [x.lower().split(" ") for x in givenAnswers]
+                        givenAnswers = [item for sublist in givenAnswers for item in sublist]
+
+                        formatted_seq = []
+                        for words in sequence:
+                            if words[1] in verbTags:
+                                formatted_seq.append(wnl.lemmatize(words[0], 'v'))
+                            elif words[1] in nounTags:
+                                formatted_seq.append(wnl.lemmatize(words[0]))
+                            else:
+                                formatted_seq.append(words[0])
+
+                        sentence = [x.lower() for x in formatted_seq]
+
+                        act = provider.determineVerbForm(actor, act[0], "past")
+
+                        if type(actor) is str:
+                            actorName = actor
+                        else:
+                            actorName = actor.name
+                            if type(actor) is char_type.Character:
+                                if actor.gender == "collective":
+                                    actorName = "the " + actorName
+                            elif type(actor) is item_type.Item:
+                                if getActorName.endswith("s") and not getActorName.endswith("ss"):
+                                    actorName = "the " + actorName
+                            else:
+                                actorName = actor
+
+                        if item.name.endswith("s") and not item.name.endswith("ss"):
+                            look = provider.determineVerbForm("plural", "be", "present")
+                        else:
+                            look = "is"
+
+                        if set(sentence).issuperset(set(givenAnswers)):
+                            sentence_answer = actorName + " " + act + " a " + item.name + " that " + look + " " + out_prop
                             generateFollowUp(sentence_answer, "item_appearance")
 
                     elif ansType == "item_amount":
@@ -1132,7 +1162,7 @@ def determineSentenceType(sequence):
                                 if actor.gender == "collective":
                                     actorName = "the " + actorName
                             elif type(actor) is item_type.Item:
-                                if getActorName.endswith("s"):
+                                if getActorName.endswith("s") and not getActorName.endswith("ss"):
                                     actorName = "the " + actorName
                             else:
                                 actorName = actor
@@ -1153,6 +1183,7 @@ def determineSentenceType(sequence):
                     givenAnswers.append(prop)
 
                 out_prop = provider.formatMultipleItems(prop)
+
                 givenAnswers = [x.lower().split(" ") for x in givenAnswers]
                 givenAnswers = [item for sublist in givenAnswers for item in sublist]
 
@@ -1177,13 +1208,69 @@ def determineSentenceType(sequence):
                         if actor.gender == "collective":
                             actorName = "the " + actorName
                     elif type(actor) is item_type.Item:
-                        if getActorName.endswith("s"):
+                        if getActorName.endswith("s") and not getActorName.endswith("ss"):
                             actorName = "the " + actorName
                     else:
                         actorName = actor
 
+                if item.name.endswith("s") and not item.name.endswith("ss"):
+                    look = provider.determineVerbForm("plural", "look", "present")
+                else:
+                    look = "looks"
+
                 if set(sentence).issuperset(set(givenAnswers)):
-                    sentence_answer = actorName + " " + act + " a " + item.name + " that looks " + out_prop
+                    sentence_answer = actorName + " " + act + " a " + item.name + " that " + look + " " + out_prop
+                    generateFollowUp(sentence_answer, "item_appearance")
+
+            elif ansType == "item_personality":
+                actor, act, item, prop = ansList
+
+                givenAnswers = []
+                givenAnswers.append(wnl.lemmatize(item.name))
+
+                if type(prop) is list:
+                    givenAnswers.extend(prop)
+                else:
+                    givenAnswers.append(prop)
+
+                out_prop = provider.formatMultipleItems(prop)
+
+                givenAnswers = [x.lower().split(" ") for x in givenAnswers]
+                givenAnswers = [item for sublist in givenAnswers for item in sublist]
+
+                formatted_seq = []
+                for words in sequence:
+                    if words[1] in verbTags:
+                        formatted_seq.append(wnl.lemmatize(words[0], 'v'))
+                    elif words[1] in nounTags:
+                        formatted_seq.append(wnl.lemmatize(words[0]))
+                    else:
+                        formatted_seq.append(words[0])
+
+                sentence = [x.lower() for x in formatted_seq]
+
+                act = provider.determineVerbForm(actor, act[0], "past")
+
+                if type(actor) is str:
+                    actorName = actor
+                else:
+                    actorName = actor.name
+                    if type(actor) is char_type.Character:
+                        if actor.gender == "collective":
+                            actorName = "the " + actorName
+                    elif type(actor) is item_type.Item:
+                        if getActorName.endswith("s") and not getActorName.endswith("ss"):
+                            actorName = "the " + actorName
+                    else:
+                        actorName = actor
+
+                if item.name.endswith("s") and not item.name.endswith("ss"):
+                    look = provider.determineVerbForm("plural", "be", "present")
+                else:
+                    look = "is"
+
+                if set(sentence).issuperset(set(givenAnswers)):
+                    sentence_answer = actorName + " " + act + " a " + item.name + " that " + look + " " + out_prop
                     generateFollowUp(sentence_answer, "item_appearance")
 
             elif ansType == "item_amount":
@@ -1198,6 +1285,7 @@ def determineSentenceType(sequence):
                     givenAnswers.append(prop)
 
                 out_prop = provider.formatMultipleItems(prop)
+
                 givenAnswers = [x.lower().split(" ") for x in givenAnswers]
                 givenAnswers = [item for sublist in givenAnswers for item in sublist]
 
@@ -1222,7 +1310,7 @@ def determineSentenceType(sequence):
                         if actor.gender == "collective":
                             actorName = "the " + actorName
                     elif type(actor) is item_type.Item:
-                        if getActorName.endswith("s"):
+                        if getActorName.endswith("s") and not getActorName.endswith("ss"):
                             actorName = "the " + actorName
                     else:
                         actorName = actor
@@ -1264,7 +1352,7 @@ def determineSentenceType(sequence):
                         if actor.gender == "collective":
                             actorName = "the " + actorName
                     elif type(actor) is item_type.Item:
-                        if getActorName.endswith("s"):
+                        if getActorName.endswith("s") and not getActorName.endswith("ss"):
                             actorName = "the " + actorName
                     else:
                         actorName = actor
@@ -1338,7 +1426,7 @@ def determineSentenceType(sequence):
                         if actor.gender == "collective":
                             actorName = "the " + actorName
                     elif type(actor) is item_type.Item:
-                        if getActorName.endswith("s"):
+                        if getActorName.endswith("s") and not getActorName.endswith("ss"):
                             actorName = "the " + actorName
                     else:
                         actorName = actor
@@ -1380,7 +1468,7 @@ def determineSentenceType(sequence):
                         if actor.gender == "collective":
                             actorName = "the " + actorName
                     elif type(actor) is item_type.Item:
-                        if getActorName.endswith("s"):
+                        if getActorName.endswith("s") and not getActorName.endswith("ss"):
                             actorName = "the " + actorName
                     else:
                         actorName = actor
@@ -1388,7 +1476,7 @@ def determineSentenceType(sequence):
                 appearance = provider.determineVerbForm(actor, "look", "present")
 
                 if set(sentence).issubset(set(givenAnswers)):
-                    sentence_answer = actorName + " " + appearance +  " " + out_prop
+                    sentence_answer = actorName + " " + appearance + " " + out_prop
                     generateFollowUp(sentence_answer, "actor_appearance")
 
             elif ansType == "actor_personality":
@@ -1420,16 +1508,16 @@ def determineSentenceType(sequence):
                         if actor.gender == "collective":
                             actorName = "the " + actorName
                     elif type(actor) is item_type.Item:
-                        if getActorName.endswith("s"):
+                        if getActorName.endswith("s") and not getActorName.endswith("ss"):
                             actorName = "the " + actorName
                     else:
                         actorName = actor
 
                 personality = provider.determineVerbForm(actor, "be", "present")
 
-                #print("sentence: ", sentence)
-                #print("givenAnsers: ", givenAnswers)
-                #print(set(sentence).issubset(set(givenAnswers)))
+                # print("sentence: ", sentence)
+                # print("givenAnsers: ", givenAnswers)
+                # print(set(sentence).issubset(set(givenAnswers)))
                 if set(sentence).issubset(set(givenAnswers)):
                     sentence_answer = actorName + " " + personality + " " + out_prop
                     generateFollowUp(sentence_answer, "actor_personality")
@@ -1452,7 +1540,7 @@ def determineSentenceType(sequence):
                     else:
                         formatted_seq.append(words[0])
 
-                if set(["do", "not", "have"]).issubset(set(formatted_seq)):
+                if {"do", "not", "have"}.issubset(set(formatted_seq)):
                     formatted_seq.append("no")
 
                 sentence = [x.lower() for x in formatted_seq]
@@ -1479,7 +1567,7 @@ def determineSentenceType(sequence):
                         if actor.gender == "collective":
                             actorName = "the " + actorName
                     elif type(actor) is item_type.Item:
-                        if getActorName.endswith("s"):
+                        if getActorName.endswith("s") and not getActorName.endswith("ss"):
                             actorName = "the " + actorName
                     else:
                         actorName = actor
@@ -1503,7 +1591,7 @@ def determineSentenceType(sequence):
             if finalHintList != [[]] and finalHintList != []:
                 r = random.choice(finalHintList)
                 finalHintList.remove(r)
-                
+
                 if first is True:
                     result.append(random.choice(compMessage) + r)
                     first = False
@@ -1522,7 +1610,7 @@ def determineSentenceType(sequence):
 
                     else:
                         sentence_answer = random.choice(wrongMessage)
-                        
+
                     result.append(sentence_answer + r)
 
             # give answer since guesses exhausted
@@ -1555,7 +1643,7 @@ def determineSentenceType(sequence):
                             if actor.gender == "collective":
                                 actorName = "the " + actorName
                         elif type(actor) is item_type.Item:
-                            if actorName.endswith("s"):
+                            if actorName.endswith("s") and not getActorName.endswith("ss"):
                                 actorName = "the " + actorName
 
                         verb = " " + provider.determineVerbForm(actor, out_state, "past")
@@ -1569,6 +1657,7 @@ def determineSentenceType(sequence):
 
                         sent_prop = ""
                         sent_add = ""
+                        sentence = ""
 
                         for entries in ansList:
                             ansType, answers = entries
@@ -1590,7 +1679,7 @@ def determineSentenceType(sequence):
 
                             if type(get_obj) is str:
                                 if len(wordnet.synsets(get_obj)) > 0 and provider.getCommonPartOfSpeech(get_obj) == 'a':
-                                    get_act = provider.determineVerbForm(actor, "be", "present")
+                                    get_act = provider.determineVerbForm(get_actor, "be", "present")
 
                             if get_obj != "":
                                 if type(get_obj) is str:
@@ -1616,7 +1705,7 @@ def determineSentenceType(sequence):
                                     if actor.gender == "collective":
                                         actorName = "the " + actorName
                                 elif type(actor) is item_type.Item:
-                                    if actorName.endswith("s"):
+                                    if actorName.endswith("s") and not actorName.endswith("ss"):
                                         actorName = "the " + actorName
 
                                 temp.append(actorName + " " + act + " " + out_obj)
@@ -1642,11 +1731,12 @@ def determineSentenceType(sequence):
                                     if actor.gender == "collective":
                                         actorName = "the " + actorName
                                 elif type(actor) is item_type.Item:
-                                    if actorName.endswith("s"):
+                                    if actorName.endswith("s") and not actorName.endswith("ss"):
                                         actorName = "the " + actorName
 
                                 verb = " " + provider.determineVerbForm(actor, out_state, "past")
-                                if len(wordnet.synsets(out_state)) > 0 and provider.getCommonPartOfSpeech(out_state) == 'a':
+                                if len(wordnet.synsets(out_state)) > 0 and provider.getCommonPartOfSpeech(
+                                        out_state) == 'a':
                                     verb = " " + provider.determineVerbForm(actor, "be", "past") + verb
 
                                 temp.append(actorName + verb)
@@ -1696,12 +1786,16 @@ def determineSentenceType(sequence):
                                     if actor.gender == "collective":
                                         actorName = "the " + actorName
                                 elif type(actor) is item_type.Item:
-                                    if actorName.endswith("s"):
+                                    if actorName.endswith("s") and not actorName.endswith("ss"):
                                         actorName = "the " + actorName
 
                                 if out_prop:
                                     sent_prop = provider.formatMultipleItems(out_prop)
-                                    sent_add = " that is "
+
+                                    if attr.endswith("s") and not attr.endswith("ss"):
+                                        sent_add = " that are "
+                                    else:
+                                        sent_add = " that is "
 
                                 if propType == "amount":
                                     temp.append(actorName + " " + act + " " + sent_prop + " " + attr)
@@ -1715,7 +1809,28 @@ def determineSentenceType(sequence):
                                 act = act[0].replace("_", " ")
                                 act = provider.determineVerbForm(actor, act, "past")
 
-                                temp.append(actor.name + " " + act + " a " + item.name + " that is " + out_prop)
+                                if item.name.endswith("s") and not item.name.endswith("ss"):
+                                    look = provider.determineVerbForm("plural", "look", "present")
+                                else:
+                                    look = "looks"
+
+                                temp.append(
+                                    actor.name + " " + act + " a " + item.name + " that " + look + " " + out_prop)
+
+                            elif ansType == "item_personality":
+                                actor, act, item, prop, get_ans = answers
+
+                                out_prop = provider.formatMultipleItems(prop)
+                                act = act[0].replace("_", " ")
+                                act = provider.determineVerbForm(actor, act, "past")
+
+                                if item.name.endswith("s") and not item.name.endswith("ss"):
+                                    look = provider.determineVerbForm("plural", "be", "present")
+                                else:
+                                    look = "is"
+
+                                temp.append(
+                                    actor.name + " " + act + " a " + item.name + " that " + look + " " + out_prop)
 
                             elif ansType == "item_amount":
                                 actor, act, item, prop, get_ans = answers
@@ -1731,7 +1846,7 @@ def determineSentenceType(sequence):
                                 if get_actor.gender == "collective":
                                     getActorName = "the " + getActorName
                             elif type(get_actor) is item_type.Item:
-                                if getActorName.endswith("s"):
+                                if getActorName.endswith("s") and not getActorName.endswith("ss"):
                                     getActorName = "the " + getActorName
 
                             sentence = getActorName + " " + get_act + " " + get_obj + " because "
@@ -1746,7 +1861,26 @@ def determineSentenceType(sequence):
                         act = act[0].replace("_", " ")
                         act = provider.determineVerbForm(actor, act, "past")
 
-                        sentences.append(actor.name + " " + act + " a " + item.name + " that is " + out_prop)
+                        if item.name.endswith("s") and not item.name.endswith("ss"):
+                            look = provider.determineVerbForm("plural", "look" "present")
+                        else:
+                            look = "looks"
+
+                        sentences.append(actor.name + " " + act + " a " + item.name + " that " + look + " " + out_prop)
+
+                    elif ansType == "item_personality":
+                        actor, act, item, prop = ansList
+
+                        out_prop = provider.formatMultipleItems(prop)
+                        act = act[0].replace("_", " ")
+                        act = provider.determineVerbForm(actor, act, "past")
+
+                        if item.name.endswith("s") and not item.name.endswith("ss"):
+                            look = provider.determineVerbForm("plural", "be", "present")
+                        else:
+                            look = "is"
+
+                        sentences.append(actor.name + " " + act + " a " + item.name + " that " + look + " " + out_prop)
 
                     elif ansType == "item_amount":
                         actor, act, item, prop = ansList
@@ -1777,7 +1911,7 @@ def determineSentenceType(sequence):
                             if actor.gender == "collective":
                                 actorName = "the " + actorName
                         elif type(actor) is item_type.Item:
-                            if actorName.endswith("s"):
+                            if actorName.endswith("s") and not actorName.endswith("ss"):
                                 actorName = "the " + actorName
 
                         sentences.append(actorName + " " + act + " " + out_obj)
@@ -1836,7 +1970,11 @@ def determineSentenceType(sequence):
 
                         if out_prop:
                             sent_prop = provider.formatMultipleItems(out_prop)
-                            sent_add = " that is "
+
+                            if attr.endswith("s") and not attr.endswith("ss"):
+                                sent_add = " that are "
+                            else:
+                                sent_add = " that is "
                         else:
                             sent_prop = ""
                             sent_add = ""
@@ -1846,7 +1984,7 @@ def determineSentenceType(sequence):
                             if actor.gender == "collective":
                                 actorName = "the " + actorName
                         elif type(actor) is item_type.Item:
-                            if actorName.endswith("s"):
+                            if actorName.endswith("s") and not actorName.endswith("ss"):
                                 actorName = "the " + actorName
 
                         if propType == "amount":
@@ -1888,7 +2026,6 @@ def generateFollowUpSentence(followUpType=None, givenEvent=None, answer=None):
     output_choices = []
 
     causeList = []
-    followUpResult = None
 
     print("givenEvent: ", givenEvent)
     if followUpType:
@@ -2027,12 +2164,15 @@ def generateFollowUpSentence(followUpType=None, givenEvent=None, answer=None):
     print("output_choices: ", output_choices)
 
     output = None
+    event = None
     while not output:
         event, output = random.choice(output_choices)
         print("output: ", output)
 
     answerList.append(output)
     sentence = provider.assembleSentence(event, genType="sentence")
+    print("event: ", event)
+    print("sentence: ", sentence)
     populateDialogueTurns()
     print("finalHintList: ", finalHintList)
     print("answerList: ", answerList)
@@ -2125,7 +2265,7 @@ def generateFollowUp(answer, questType, exhausted=None, event=None, specialAnswe
         question = False
         skip = False
 
-    # print("gotHints: ", gotHints, "question: ", question, "skip: ", skip)
+        # print("gotHints: ", gotHints, "question: ", question, "skip: ", skip)
 
 
 def parse_message(message):
@@ -2150,7 +2290,6 @@ def parse_message(message):
 
 def getRandomEvent(genType, sequence=None, posList=None, ofList=None, toList=None, verbList=None, advList=None,
                    itemList=None, adjList=None, andList=None, objList=None):
-
     wnl = WordNetLemmatizer()
 
     dummyAnswer = []
@@ -2170,7 +2309,7 @@ def getRandomEvent(genType, sequence=None, posList=None, ofList=None, toList=Non
 
     elif genType == "what":
         dummyAnswer.extend(parser.parseWhatMessage(sequence, posList, ofList, charList, andList, itemList,
-                                              special="true"))
+                                                   special="true"))
 
     dummyAnswer = cleanList(dummyAnswer)
 
@@ -2266,7 +2405,7 @@ def getRandomEvent(genType, sequence=None, posList=None, ofList=None, toList=Non
 
                 if followUpResult:
                     sentence = "I don't know the answer to that, but I do know the appearance of the " + \
-                           item.name + " " + actor.name + " " + act
+                               item.name + " " + actor.name + " " + act
 
                     specAns = (actor, act, item, "appearance", prop)
 
